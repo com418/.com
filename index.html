@@ -29,23 +29,6 @@
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased font-sans min-h-screen pb-12">
 
-    <!-- Mobile Browser Chrome Simulation Bar -->
-    <div class="bg-slate-900 text-slate-300 text-xs px-4 py-2 flex items-center justify-between border-b border-slate-800">
-        <div class="flex items-center space-x-3">
-            <button class="hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
-            <button class="hover:text-white"><i class="fa-solid fa-chevron-left text-sm"></i></button>
-            <button class="hover:text-white"><i class="fa-solid fa-chevron-right text-sm opacity-45"></i></button>
-        </div>
-        <div class="bg-slate-800 px-4 py-1 rounded-full text-slate-200 text-center flex items-center space-x-2 max-w-xs truncate shadow-inner">
-            <i class="fa-solid fa-lock text-[10px] text-emerald-400"></i>
-            <span class="truncate">web.oakbridgecu.com</span>
-        </div>
-        <div class="flex items-center space-x-3">
-            <button class="hover:text-white"><i class="fa-solid fa-share-nodes"></i></button>
-            <button class="hover:text-white"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-        </div>
-    </div>
-
     <!-- App Main Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
         <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -61,13 +44,6 @@
 
             <!-- Center/Right: Actions & Profile -->
             <div class="flex items-center space-x-3 sm:space-x-4">
-                <!-- Theme/Settings pill -->
-                <div class="hidden sm:flex items-center bg-slate-100 p-1 rounded-full border border-slate-200 space-x-1">
-                    <button class="p-1.5 rounded-full text-slate-500 hover:text-slate-800"><i class="fa-solid fa-sun text-xs"></i></button>
-                    <button class="p-1.5 rounded-full bg-white text-amber-600 shadow-sm"><i class="fa-solid fa-moon text-xs"></i></button>
-                    <button class="p-1.5 rounded-full text-slate-500 hover:text-slate-800"><i class="fa-solid fa-palette text-xs"></i></button>
-                </div>
-
                 <!-- Notification Bell -->
                 <button id="notifBtn" class="relative p-2 text-slate-600 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 rounded-full border border-slate-200 transition">
                     <i class="fa-regular fa-bell text-base"></i>
@@ -105,7 +81,7 @@
             <p class="text-slate-500 text-sm">Good Evening, Lorenzo Parker</p>
         </div>
 
-        <!-- Total Balance & Summary Card (Matching Image Reference) -->
+        <!-- Total Balance & Summary Card -->
         <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden border border-slate-700">
             <!-- Background Decorative Glow -->
             <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -199,7 +175,7 @@
 
         <!-- Secondary Grid: Card Management & Quick Financial Chart -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Virtual Card Widget (Option 3) -->
+            <!-- Virtual Card Widget -->
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-4">
@@ -240,7 +216,7 @@
                 </div>
             </div>
 
-            <!-- Spending Insights Chart (Option 5) -->
+            <!-- Spending Insights Chart -->
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 md:col-span-2 flex flex-col justify-between">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-900">Cash Flow & Spending</h3>
@@ -252,7 +228,7 @@
             </div>
         </div>
 
-        <!-- Transaction History Section (Option 2) -->
+        <!-- Transaction History Section -->
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h3 class="font-bold text-slate-900">Recent Transactions</h3>
@@ -277,7 +253,6 @@
                         </tr>
                     </thead>
                     <tbody id="transactionTableBody" class="divide-y divide-slate-100 text-sm">
-                        <!-- Default empty state or placeholder transaction -->
                         <tr>
                             <td colspan="4" class="py-8 text-center text-slate-400 text-xs">
                                 No recent transactions found. Use the transfer button above to test deposits or wires.
@@ -290,7 +265,106 @@
 
     </main>
 
-    <!-- Transfer & Wire Modal (Option 1) -->
+    <!-- Sidebar Navigation Drawer (Matches Reference Image) -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden"></div>
+    <div id="sidebarDrawer" class="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
+        <div>
+            <!-- Sidebar Header -->
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center space-x-2">
+                    <div class="bg-red-700 text-white p-2 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-building-columns text-sm"></i>
+                    </div>
+                    <span class="font-bold text-slate-900">Oakbridge CU</span>
+                </div>
+                <button id="closeSidebar" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Sidebar Navigation Links -->
+            <div class="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-120px)] text-sm">
+                <div>
+                    <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-2 px-3">Main</p>
+                    <nav class="space-y-1">
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-red-50 text-red-700 font-semibold">
+                            <i class="fa-solid fa-house w-5"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-clock-rotate-left w-5"></i>
+                            <span>Account Summary</span>
+                        </a>
+                        <a href="#" id="sidebarTransferLink" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-arrow-right-arrow-left w-5"></i>
+                                <span>Transfer</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-money-check-dollar w-5"></i>
+                            <span>Deposit Check</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-brands fa-bitcoin w-5"></i>
+                            <span>Deposit Crypto</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div>
+                    <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-2 px-3">Services</p>
+                    <nav class="space-y-1">
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-hand-holding-dollar w-5"></i>
+                            <span>Loans</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-credit-card w-5"></i>
+                            <span>Cards</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div>
+                    <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-2 px-3">Account</p>
+                    <nav class="space-y-1">
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-shield-halved w-5"></i>
+                            <span>KYC Verification</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-user w-5"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-gear w-5"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-circle-check w-5"></i>
+                            <span>Account Status</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium">
+                            <i class="fa-solid fa-headset w-5"></i>
+                            <span>Support</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Footer Sign Out -->
+        <div class="p-4 border-t border-slate-100 bg-slate-50">
+            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-semibold">
+                <i class="fa-solid fa-right-from-bracket w-5"></i>
+                <span>Sign Out</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Transfer & Wire Modal -->
     <div id="transferModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-6 relative animate-in fade-in zoom-in duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
@@ -341,7 +415,7 @@
         </div>
     </div>
 
-    <!-- Notification Drawer / Center (Option 4) -->
+    <!-- Notification Drawer -->
     <div id="notificationDrawer" class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 flex flex-col">
         <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
             <h3 class="font-bold text-slate-900 flex items-center space-x-2">
@@ -376,20 +450,24 @@
 
     <!-- Script Logic -->
     <script>
-        // State
         let accountBalance = 0.00;
         let transactions = [];
         let isBalanceVisible = true;
         let isCardLocked = false;
 
-        // Elements
         const totalBalanceDisplay = document.getElementById('totalBalanceDisplay');
         const accountBalanceDisplay = document.getElementById('accountBalanceDisplay');
         const toggleBalanceBtn = document.getElementById('toggleBalanceVisibility');
         const profileMenuBtn = document.getElementById('profileMenuBtn');
         const profileDropdown = document.getElementById('profileDropdown');
         
-        // Modals & Drawers
+        // Sidebar elements
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebarDrawer = document.getElementById('sidebarDrawer');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const sidebarTransferLink = document.getElementById('sidebarTransferLink');
+
         const transferModal = document.getElementById('transferModal');
         const openTransferModal = document.getElementById('openTransferModal');
         const closeTransferModal = document.getElementById('closeTransferModal');
@@ -413,7 +491,26 @@
         const transactionTableBody = document.getElementById('transactionTableBody');
         const transactionSearch = document.getElementById('transactionSearch');
 
-        // Toggle Balance Visibility
+        // Sidebar Toggles
+        function openSidebarDrawer() {
+            sidebarDrawer.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
+        }
+        function closeSidebarDrawer() {
+            sidebarDrawer.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        }
+
+        menuBtn.addEventListener('click', openSidebarDrawer);
+        closeSidebar.addEventListener('click', closeSidebarDrawer);
+        sidebarOverlay.addEventListener('click', closeSidebarDrawer);
+
+        sidebarTransferLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeSidebarDrawer();
+            transferModal.classList.remove('hidden');
+        });
+
         toggleBalanceBtn.addEventListener('click', () => {
             isBalanceVisible = !isBalanceVisible;
             if (isBalanceVisible) {
@@ -431,7 +528,6 @@
             return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
-        // Profile Dropdown Toggle
         profileMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             profileDropdown.classList.toggle('hidden');
@@ -440,7 +536,6 @@
             profileDropdown.classList.add('hidden');
         });
 
-        // Transfer Modal Toggles
         openTransferModal.addEventListener('click', () => transferModal.classList.remove('hidden'));
         closeTransferModal.addEventListener('click', () => transferModal.classList.add('hidden'));
         cancelTransferBtn.addEventListener('click', () => transferModal.classList.add('hidden'));
@@ -453,7 +548,6 @@
             }
         });
 
-        // Handle Transfer Form Submission
         transferForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('transferAmount').value);
@@ -462,11 +556,8 @@
 
             if (isNaN(amount) || amount <= 0) return;
 
-            // Update balance (Adding to balance for deposit/transfer testing simulation or subtracting if withdrawal)
-            // Here we treat positive input as deposit/funding or general balance addition for demo convenience
             accountBalance += amount;
 
-            // Record transaction
             const newTx = {
                 description: memo,
                 category: type.toUpperCase(),
@@ -477,22 +568,18 @@
             transactions.unshift(newTx);
             renderTransactions();
 
-            // Update UI displays
             if (isBalanceVisible) {
                 totalBalanceDisplay.textContent = formatCurrency(accountBalance);
                 accountBalanceDisplay.textContent = formatCurrency(accountBalance);
             }
 
-            // Close modal & reset form
             transferModal.classList.add('hidden');
             transferForm.reset();
             routingFieldContainer.classList.add('hidden');
 
-            // Add notification alert
             addNotification('Transfer Successful', `Successfully processed transfer of ${formatCurrency(amount)}.`);
         });
 
-        // Render Transactions List
         function renderTransactions(filter = '') {
             if (transactions.length === 0) {
                 transactionTableBody.innerHTML = `
@@ -531,7 +618,6 @@
             renderTransactions(e.target.value);
         });
 
-        // Notifications Drawer Toggles
         notifBtn.addEventListener('click', () => notifDrawer.classList.remove('translate-x-full'));
         closeNotifDrawer.addEventListener('click', () => notifDrawer.classList.add('translate-x-full'));
         markAllRead.addEventListener('click', () => {
@@ -554,7 +640,6 @@
             list.prepend(item);
         }
 
-        // Card Lock Toggle
         toggleCardLock.addEventListener('click', () => {
             isCardLocked = !isCardLocked;
             if (isCardLocked) {
@@ -572,7 +657,6 @@
             }
         });
 
-        // Chart.js Initialization
         const ctx = document.getElementById('spendingChart').getContext('2d');
         const spendingChart = new Chart(ctx, {
             type: 'line',
