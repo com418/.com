@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Oakbridge Credit Union</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            navy: '#1e293b',
+                            primary: '#b91c1c', // Oakbridge red
+                            hover: '#991b1b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans min-h-screen pb-12">
+
+    <!-- Mobile Browser Chrome Simulation Bar -->
+    <div class="bg-slate-900 text-slate-300 text-xs px-4 py-2 flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center space-x-3">
+            <button class="hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+            <button class="hover:text-white"><i class="fa-solid fa-chevron-left text-sm"></i></button>
+            <button class="hover:text-white"><i class="fa-solid fa-chevron-right text-sm opacity-45"></i></button>
+        </div>
+        <div class="bg-slate-800 px-4 py-1 rounded-full text-slate-200 text-center flex items-center space-x-2 max-w-xs truncate shadow-inner">
+            <i class="fa-solid fa-lock text-[10px] text-emerald-400"></i>
+            <span class="truncate">web.oakbridgecu.com</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button class="hover:text-white"><i class="fa-solid fa-share-nodes"></i></button>
+            <button class="hover:text-white"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </div>
+    </div>
+
+    <!-- App Main Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Left: Logo & Menu -->
+            <div class="flex items-center space-x-4">
+                <div class="bg-red-700 text-white p-2.5 rounded-lg shadow-md flex items-center justify-center">
+                    <i class="fa-solid fa-building-columns text-lg"></i>
+                </div>
+                <button id="menuBtn" class="text-slate-600 hover:text-slate-900 text-xl p-1 focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Center/Right: Actions & Profile -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <!-- Theme/Settings pill -->
+                <div class="hidden sm:flex items-center bg-slate-100 p-1 rounded-full border border-slate-200 space-x-1">
+                    <button class="p-1.5 rounded-full text-slate-500 hover:text-slate-800"><i class="fa-solid fa-sun text-xs"></i></button>
+                    <button class="p-1.5 rounded-full bg-white text-amber-600 shadow-sm"><i class="fa-solid fa-moon text-xs"></i></button>
+                    <button class="p-1.5 rounded-full text-slate-500 hover:text-slate-800"><i class="fa-solid fa-palette text-xs"></i></button>
+                </div>
+
+                <!-- Notification Bell -->
+                <button id="notifBtn" class="relative p-2 text-slate-600 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 rounded-full border border-slate-200 transition">
+                    <i class="fa-regular fa-bell text-base"></i>
+                    <span id="notifBadge" class="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full ring-2 ring-white"></span>
+                </button>
+
+                <!-- Profile Dropdown Trigger -->
+                <div class="relative">
+                    <button id="profileMenuBtn" class="flex items-center space-x-2 focus:outline-none">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Lorenzo Parker" class="w-9 h-9 rounded-full object-cover border-2 border-slate-300">
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-500 hidden sm:inline-block"></i>
+                    </button>
+                    <!-- Dropdown content -->
+                    <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 text-sm">
+                        <div class="px-4 py-2 border-b border-slate-100">
+                            <p class="font-bold text-slate-900">Lorenzo Parker</p>
+                            <p class="text-xs text-slate-500">Personal Banking</p>
+                        </div>
+                        <a href="#settings" class="block px-4 py-2 text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-gear mr-2 text-slate-400"></i> Settings</a>
+                        <a href="#security" class="block px-4 py-2 text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-shield-halved mr-2 text-slate-400"></i> Security</a>
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <a href="#logout" class="block px-4 py-2 text-red-600 hover:bg-red-50"><i class="fa-solid fa-right-from-bracket mr-2"></i> Log out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+
+        <!-- Greeting & Title -->
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h1>
+            <p class="text-slate-500 text-sm">Good Evening, Lorenzo Parker</p>
+        </div>
+
+        <!-- Total Balance & Summary Card (Matching Image Reference) -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden border border-slate-700">
+            <!-- Background Decorative Glow -->
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                <div>
+                    <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Total Balance</span>
+                    <div class="flex items-center space-x-3 mt-1">
+                        <h2 id="totalBalanceDisplay" class="text-3xl sm:text-4xl font-extrabold tracking-tight">$0.00</h2>
+                        <button id="toggleBalanceVisibility" class="text-slate-400 hover:text-white transition focus:outline-none">
+                            <i class="fa-solid fa-eye text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <button id="openTransferModal" class="bg-slate-700/80 hover:bg-slate-600 text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 border border-slate-600 shadow transition backdrop-blur-sm">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        <span>Transfer</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card Sub-Details Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-700/60 text-sm">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-credit-card text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400">Linked Cards</p>
+                        <p class="font-semibold text-slate-200">1 Card Active</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-user text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400">Account Holder</p>
+                        <p class="font-semibold text-slate-200">Lorenzo Parker</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-globe text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400">IP Address</p>
+                        <p class="font-semibold text-slate-200">10.30.162.149</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Breakdown Card -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900">Current Account</h3>
+                        <p class="text-xs text-slate-500">Checking Account</p>
+                    </div>
+                </div>
+                <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Primary</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2 text-sm">
+                <div>
+                    <span class="text-xs text-slate-400 block">Account Number</span>
+                    <span class="font-mono font-bold text-slate-800">2015961076</span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 block">Available Balance</span>
+                    <span id="accountBalanceDisplay" class="font-bold text-emerald-600">$0.00</span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 block">Account Type</span>
+                    <span class="font-medium text-slate-800">Current Account</span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 block">Status</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                        Active
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secondary Grid: Card Management & Quick Financial Chart -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Virtual Card Widget (Option 3) -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-slate-900">Virtual Debit Card</h3>
+                        <span id="cardStatusBadge" class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium">Unlocked</span>
+                    </div>
+
+                    <!-- Visual Card Mockup -->
+                    <div class="bg-gradient-to-r from-slate-900 to-indigo-900 rounded-xl p-5 text-white shadow-md relative overflow-hidden mb-4">
+                        <div class="flex justify-between items-start mb-6">
+                            <i class="fa-solid fa-wifi text-lg opacity-80"></i>
+                            <span class="font-bold tracking-widest text-xs uppercase text-slate-300">Oakbridge</span>
+                        </div>
+                        <p id="cardNumberDisplay" class="font-mono text-sm tracking-widest mb-4">•••• •••• •••• 4092</p>
+                        <div class="flex justify-between text-xs text-slate-300">
+                            <div>
+                                <span class="block text-[9px] uppercase opacity-70">Card Holder</span>
+                                <span class="font-medium">Lorenzo Parker</span>
+                            </div>
+                            <div>
+                                <span class="block text-[9px] uppercase opacity-70">Expires</span>
+                                <span class="font-medium">09/28</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                    <button id="toggleCardLock" class="text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-lock text-slate-500" id="cardLockIcon"></i>
+                        <span id="cardLockText">Lock Card</span>
+                    </button>
+                    <button id="viewCardDetailsBtn" class="text-xs font-medium text-red-600 hover:text-red-700 flex items-center space-x-1">
+                        <i class="fa-solid fa-eye"></i>
+                        <span>Show CVV</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Spending Insights Chart (Option 5) -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 md:col-span-2 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-900">Cash Flow & Spending</h3>
+                    <span class="text-xs text-slate-400">Current Month</span>
+                </div>
+                <div class="h-48 relative flex items-center justify-center">
+                    <canvas id="spendingChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction History Section (Option 2) -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h3 class="font-bold text-slate-900">Recent Transactions</h3>
+                <!-- Search & Filters -->
+                <div class="flex items-center space-x-2">
+                    <div class="relative">
+                        <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                        <input type="text" id="transactionSearch" placeholder="Search history..." class="bg-slate-50 border border-slate-200 text-xs rounded-xl pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 w-48 sm:w-60">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Table / List -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-100 text-xs text-slate-400 uppercase tracking-wider">
+                            <th class="py-3 font-semibold">Description</th>
+                            <th class="py-3 font-semibold">Category</th>
+                            <th class="py-3 font-semibold">Date</th>
+                            <th class="py-3 font-semibold text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody" class="divide-y divide-slate-100 text-sm">
+                        <!-- Default empty state or placeholder transaction -->
+                        <tr>
+                            <td colspan="4" class="py-8 text-center text-slate-400 text-xs">
+                                No recent transactions found. Use the transfer button above to test deposits or wires.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Transfer & Wire Modal (Option 1) -->
+    <div id="transferModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-6 relative animate-in fade-in zoom-in duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <h3 class="font-bold text-lg text-slate-900">New Transfer / Wire</h3>
+                <button id="closeTransferModal" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="transferForm" class="space-y-4 text-sm">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Transfer Type</label>
+                    <select id="transferType" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <option value="internal">Internal Account Transfer</option>
+                        <option value="ach">Domestic ACH Transfer</option>
+                        <option value="wire">Same-Day Wire Transfer</option>
+                    </select>
+                </div>
+
+                <div id="recipientFieldContainer">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Recipient Name / Bank</label>
+                    <input type="text" id="recipientName" placeholder="e.g., Chase Bank / John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+
+                <div id="routingFieldContainer" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Routing Number (9 digits)</label>
+                    <input type="text" id="routingNumber" placeholder="021000021" maxlength="9" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500 font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Amount ($ USD)</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-slate-400 font-bold">$</span>
+                        <input type="number" id="transferAmount" step="0.01" min="1" placeholder="0.00" required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-4 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500 font-bold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Memo / Reference Note</label>
+                    <input type="text" id="transferMemo" placeholder="e.g. Monthly Savings / Invoice #402" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+
+                <div class="pt-4 flex items-center justify-end space-x-3">
+                    <button type="button" id="cancelTransferBtn" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl font-medium">Cancel</button>
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-xl font-medium shadow-md transition">Complete Transfer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Drawer / Center (Option 4) -->
+    <div id="notificationDrawer" class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 flex flex-col">
+        <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+            <h3 class="font-bold text-slate-900 flex items-center space-x-2">
+                <i class="fa-regular fa-bell text-red-600"></i>
+                <span>Notifications</span>
+            </h3>
+            <button id="closeNotifDrawer" class="text-slate-400 hover:text-slate-600 p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="p-4 border-b border-slate-100 flex justify-between items-center text-xs">
+            <span class="text-slate-500">Unread Alerts</span>
+            <button id="markAllRead" class="text-red-600 font-semibold hover:underline">Mark all as read</button>
+        </div>
+        <div id="notifList" class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs">
+            <div class="p-4 hover:bg-slate-50 transition cursor-pointer">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-slate-800">Security Login</span>
+                    <span class="text-[10px] text-slate-400">10m ago</span>
+                </div>
+                <p class="text-slate-600">New login detected from IP 10.30.162.149 (Android Chrome).</p>
+            </div>
+            <div class="p-4 hover:bg-slate-50 transition cursor-pointer">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-slate-800">Account Verified</span>
+                    <span class="text-[10px] text-slate-400">2h ago</span>
+                </div>
+                <p class="text-slate-600">Your Oakbridge CU checking profile is fully authenticated.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        // State
+        let accountBalance = 0.00;
+        let transactions = [];
+        let isBalanceVisible = true;
+        let isCardLocked = false;
+
+        // Elements
+        const totalBalanceDisplay = document.getElementById('totalBalanceDisplay');
+        const accountBalanceDisplay = document.getElementById('accountBalanceDisplay');
+        const toggleBalanceBtn = document.getElementById('toggleBalanceVisibility');
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        // Modals & Drawers
+        const transferModal = document.getElementById('transferModal');
+        const openTransferModal = document.getElementById('openTransferModal');
+        const closeTransferModal = document.getElementById('closeTransferModal');
+        const cancelTransferBtn = document.getElementById('cancelTransferBtn');
+        const transferForm = document.getElementById('transferForm');
+        const transferType = document.getElementById('transferType');
+        const routingFieldContainer = document.getElementById('routingFieldContainer');
+        const recipientFieldContainer = document.getElementById('recipientFieldContainer');
+
+        const notifBtn = document.getElementById('notifBtn');
+        const notifBadge = document.getElementById('notifBadge');
+        const notifDrawer = document.getElementById('notificationDrawer');
+        const closeNotifDrawer = document.getElementById('closeNotifDrawer');
+        const markAllRead = document.getElementById('markAllRead');
+
+        const toggleCardLock = document.getElementById('toggleCardLock');
+        const cardLockIcon = document.getElementById('cardLockIcon');
+        const cardLockText = document.getElementById('cardLockText');
+        const cardStatusBadge = document.getElementById('cardStatusBadge');
+
+        const transactionTableBody = document.getElementById('transactionTableBody');
+        const transactionSearch = document.getElementById('transactionSearch');
+
+        // Toggle Balance Visibility
+        toggleBalanceBtn.addEventListener('click', () => {
+            isBalanceVisible = !isBalanceVisible;
+            if (isBalanceVisible) {
+                totalBalanceDisplay.textContent = formatCurrency(accountBalance);
+                accountBalanceDisplay.textContent = formatCurrency(accountBalance);
+                toggleBalanceBtn.innerHTML = '<i class="fa-solid fa-eye text-lg"></i>';
+            } else {
+                totalBalanceDisplay.textContent = '••••••••';
+                accountBalanceDisplay.textContent = '••••••••';
+                toggleBalanceBtn.innerHTML = '<i class="fa-solid fa-eye-slash text-lg"></i>';
+            }
+        });
+
+        function formatCurrency(amount) {
+            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Profile Dropdown Toggle
+        profileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+        });
+        window.addEventListener('click', () => {
+            profileDropdown.classList.add('hidden');
+        });
+
+        // Transfer Modal Toggles
+        openTransferModal.addEventListener('click', () => transferModal.classList.remove('hidden'));
+        closeTransferModal.addEventListener('click', () => transferModal.classList.add('hidden'));
+        cancelTransferBtn.addEventListener('click', () => transferModal.classList.add('hidden'));
+
+        transferType.addEventListener('change', (e) => {
+            if (e.target.value === 'wire' || e.target.value === 'ach') {
+                routingFieldContainer.classList.remove('hidden');
+            } else {
+                routingFieldContainer.classList.add('hidden');
+            }
+        });
+
+        // Handle Transfer Form Submission
+        transferForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const memo = document.getElementById('transferMemo').value || 'Wire / Transfer';
+            const type = transferType.value;
+
+            if (isNaN(amount) || amount <= 0) return;
+
+            // Update balance (Adding to balance for deposit/transfer testing simulation or subtracting if withdrawal)
+            // Here we treat positive input as deposit/funding or general balance addition for demo convenience
+            accountBalance += amount;
+
+            // Record transaction
+            const newTx = {
+                description: memo,
+                category: type.toUpperCase(),
+                date: 'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                amount: amount,
+                isDeposit: true
+            };
+            transactions.unshift(newTx);
+            renderTransactions();
+
+            // Update UI displays
+            if (isBalanceVisible) {
+                totalBalanceDisplay.textContent = formatCurrency(accountBalance);
+                accountBalanceDisplay.textContent = formatCurrency(accountBalance);
+            }
+
+            // Close modal & reset form
+            transferModal.classList.add('hidden');
+            transferForm.reset();
+            routingFieldContainer.classList.add('hidden');
+
+            // Add notification alert
+            addNotification('Transfer Successful', `Successfully processed transfer of ${formatCurrency(amount)}.`);
+        });
+
+        // Render Transactions List
+        function renderTransactions(filter = '') {
+            if (transactions.length === 0) {
+                transactionTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="py-8 text-center text-slate-400 text-xs">
+                            No recent transactions found. Use the transfer button above to test deposits or wires.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const filtered = transactions.filter(tx => tx.description.toLowerCase().includes(filter.toLowerCase()) || tx.category.toLowerCase().includes(filter.toLowerCase()));
+
+            if (filtered.length === 0) {
+                transactionTableBody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-slate-400 text-xs">No matching transactions found.</td></tr>`;
+                return;
+            }
+
+            transactionTableBody.innerHTML = filtered.map(tx => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="py-3 font-medium text-slate-800 flex items-center space-x-2">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </div>
+                        <span>${tx.description}</span>
+                    </td>
+                    <td class="py-3"><span class="bg-slate-100 text-slate-600 text-[10px] px-2 py-0.5 rounded-md font-semibold">${tx.category}</span></td>
+                    <td class="py-3 text-slate-500 text-xs">${tx.date}</td>
+                    <td class="py-3 text-right font-bold text-emerald-600">+${formatCurrency(tx.amount)}</td>
+                </tr>
+            `).join('');
+        }
+
+        transactionSearch.addEventListener('input', (e) => {
+            renderTransactions(e.target.value);
+        });
+
+        // Notifications Drawer Toggles
+        notifBtn.addEventListener('click', () => notifDrawer.classList.remove('translate-x-full'));
+        closeNotifDrawer.addEventListener('click', () => notifDrawer.classList.add('translate-x-full'));
+        markAllRead.addEventListener('click', () => {
+            notifBadge.classList.add('hidden');
+            addNotification('Notifications Cleared', 'All alerts marked as read.');
+        });
+
+        function addNotification(title, message) {
+            notifBadge.classList.remove('hidden');
+            const list = document.getElementById('notifList');
+            const item = document.createElement('div');
+            item.className = 'p-4 hover:bg-slate-50 transition cursor-pointer';
+            item.innerHTML = `
+                <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-slate-800">${title}</span>
+                    <span class="text-[10px] text-slate-400">Just now</span>
+                </div>
+                <p class="text-slate-600">${message}</p>
+            `;
+            list.prepend(item);
+        }
+
+        // Card Lock Toggle
+        toggleCardLock.addEventListener('click', () => {
+            isCardLocked = !isCardLocked;
+            if (isCardLocked) {
+                cardLockIcon.className = "fa-solid fa-unlock text-slate-500";
+                cardLockText.textContent = "Unlock Card";
+                cardStatusBadge.textContent = "Locked";
+                cardStatusBadge.className = "text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-medium";
+                addNotification('Card Locked', 'Your virtual debit card was locked for security.');
+            } else {
+                cardLockIcon.className = "fa-solid fa-lock text-slate-500";
+                cardLockText.textContent = "Lock Card";
+                cardStatusBadge.textContent = "Unlocked";
+                cardStatusBadge.className = "text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium";
+                addNotification('Card Unlocked', 'Your virtual debit card is now unlocked.');
+            }
+        });
+
+        // Chart.js Initialization
+        const ctx = document.getElementById('spendingChart').getContext('2d');
+        const spendingChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Cash Flow Activity ($)',
+                    data: [0, 0, 0, 0],
+                    borderColor: '#b91c1c',
+                    backgroundColor: 'rgba(185, 28, 28, 0.05)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                    x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                }
+            }
+        });
+    </script>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6aaeb520a09adf344381b520/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+</body>
+</html>
