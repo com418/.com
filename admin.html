@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashflowbank - Admin Management Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased h-full flex flex-col p-6">
+
+    <div class="max-w-5xl mx-auto w-full space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold">Cashflowbank Admin Portal</h1>
+                    <p class="text-xs text-slate-400">Review pending customer accounts and manage institutional liquidity</p>
+                </div>
+            </div>
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Back to Client Portal
+            </a>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                <p class="text-xs text-slate-400">Total Registered Users</p>
+                <h3 id="statTotal" class="text-2xl font-black mt-1 text-white">0</h3>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                <p class="text-xs text-slate-400">Pending Approvals</p>
+                <h3 id="statPending" class="text-2xl font-black mt-1 text-amber-400">0</h3>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                <p class="text-xs text-slate-400">Approved Accounts</p>
+                <h3 id="statApproved" class="text-2xl font-black mt-1 text-emerald-400">0</h3>
+            </div>
+        </div>
+
+        <!-- User Management Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+            <h3 class="font-bold text-white text-base">Client Accounts & Approvals</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-[11px] text-slate-400 uppercase tracking-wider">
+                            <th class="py-3 font-semibold">Client Name</th>
+                            <th class="py-3 font-semibold">Email</th>
+                            <th class="py-3 font-semibold">Account Type</th>
+                            <th class="py-3 font-semibold">Country</th>
+                            <th class="py-3 font-semibold">Status</th>
+                            <th class="py-3 font-semibold text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUserTableBody" class="divide-y divide-slate-800 text-sm">
+                        <!-- Populated dynamically via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderAdminTable() {
+            let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
+            const tableBody = document.getElementById('adminUserTableBody');
+            tableBody.innerHTML = '';
+
+            let total = users.length;
+            let pending = users.filter(u => u.status === 'pending').length;
+            let approved = users.filter(u => u.status === 'approved').length;
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statPending').textContent = pending;
+            document.getElementById('statApproved').textContent = approved;
+
+            if(users.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">No users registered yet.</td></tr>`;
+                return;
+            }
+
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/50 transition";
+                
+                const statusBadge = u.status === 'approved' 
+                    ? `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full text-xs font-semibold">Approved</span>`
+                    : `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-full text-xs font-semibold">Pending Approval</span>`;
+
+                tr.innerHTML = `
+                    <td class="py-3.5 font-medium text-white">${u.firstName} ${u.lastName}</td>
+                    <td class="py-3.5 text-slate-300 text-xs">${u.email}</td>
+                    <td class="py-3.5 text-blue-400 font-medium">${u.accountType}</td>
+                    <td class="py-3.5 text-slate-300">${u.country}</td>
+                    <td class="py-3.5">${statusBadge}</td>
+                    <td class="py-3.5 text-right space-x-2">
+                        ${u.status !== 'approved' ? `<button onclick="approveUser(${u.id})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">Approve</button>` : ''}
+                        <button onclick="deleteUser(${u.id})" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function approveUser(id) {
+            let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
+            const idx = users.findIndex(u => u.id === id);
+            if(idx !== -1) {
+                users[idx].status = 'approved';
+                localStorage.setItem('cashflow_users', JSON.stringify(users));
+                renderAdminTable();
+            }
+        }
+
+        function deleteUser(id) {
+            if(confirm('Are you sure you want to delete this account?')) {
+                let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
+                users = users.filter(u => u.id !== id);
+                localStorage.setItem('cashflow_users', JSON.stringify(users));
+                renderAdminTable();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', renderAdminTable);
+    </script>
+</body>
+</html>
