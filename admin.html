@@ -30,7 +30,7 @@
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <h1 class="text-2xl font-black text-white">Client Accounts Management</h1>
-                    <p class="text-sm text-gray-400">Approve pending applications, manage balances, and fund accounts securely.</p>
+                    <p class="text-sm text-gray-400">Approve pending applications, manage balances, freeze accounts, and fund users securely.</p>
                 </div>
                 <button onclick="loadClients()" class="bg-slate-800 hover:bg-slate-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-slate-700 flex items-center space-x-2">
                     <span>Refresh Data</span>
@@ -87,7 +87,7 @@
     <!-- Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
@@ -137,7 +137,13 @@
 
                 querySnapshot.forEach((documentSnap) => {
                     const data = documentSnap.data();
-                    const isPending = data.status === "Pending Approval";
+                    const status = data.status || "Active";
+                    const isPending = status === "Pending Approval";
+                    const isFrozen = status === "Frozen";
+
+                    let statusBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/25";
+                    if (isPending) statusBadgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/25";
+                    if (isFrozen) statusBadgeClass = "bg-red-500/10 text-red-400 border border-red-500/25";
 
                     tableBody.innerHTML += `
                         <tr class="hover:bg-slate-800/50 transition">
@@ -153,12 +159,14 @@
                                 $${Number(data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
                             </td>
                             <td class="py-3 px-6">
-                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${isPending ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}">
-                                    ${data.status || 'Active'}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${statusBadgeClass}">
+                                    ${status}
                                 </span>
                             </td>
                             <td class="py-3 px-6 text-right space-x-2">
-                                ${isPending ? `<button onclick="approveClient('${data.accountNumber}')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Approve</button>` : ''}
+                                ${isPending ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Active')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Approve</button>` : ''}
+                                ${isFrozen ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Active')" class="bg-sky-700 hover:bg-sky-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Unfreeze</button>` : ''}
+                                ${!isFrozen && !isPending ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Frozen')" class="bg-zinc-700 hover:bg-zinc-600 text-gray-200 px-3 py-1 rounded text-xs font-semibold transition">Freeze</button>` : ''}
                                 <button onclick="openFundModal('${data.accountNumber}')" class="bg-red-700 hover:bg-red-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Fund</button>
                             </td>
                         </tr>`;
@@ -170,15 +178,15 @@
             }
         }
 
-        window.approveClient = async function(accId) {
-            showLoading("Approving client account...");
+        window.updateClientStatus = async function(accId, newStatus) {
+            showLoading(`Updating status to ${newStatus}...`);
             try {
-                await setDoc(doc(db, "clients", accId), { status: "Active" }, { merge: true });
+                await setDoc(doc(db, "clients", accId), { status: newStatus }, { merge: true });
                 hideLoading();
                 loadClients();
             } catch (err) {
                 hideLoading();
-                alert("Approval action failed.");
+                alert("Failed to update account status.");
             }
         }
 
@@ -190,23 +198,20 @@
             showLoading("Processing deposit transaction...");
             try {
                 const clientRef = doc(db, "clients", selectedAccountId);
-                const clientSnap = await getDocs(collection(db, "clients")); // Can also use direct getDoc
-                // Fetch specific client current balance safely
-                import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js").then(async ({ getDoc }) => {
-                    const snap = await getDoc(clientRef);
-                    if (snap.exists()) {
-                        const currentData = snap.data();
-                        const newBalance = (currentData.balance || 0) + amount;
-                        const today = new Date().toISOString().split('T')[0];
-                        const depositTx = { description: "Admin Deposit / Funding", date: today, amount: amount };
+                const snap = await getDoc(clientRef);
+                
+                if (snap.exists()) {
+                    const currentData = snap.data();
+                    const newBalance = (currentData.balance || 0) + amount;
+                    const today = new Date().toISOString().split('T')[0];
+                    const depositTx = { description: "Admin Deposit / Funding", date: today, amount: amount };
 
-                        await setDoc(clientRef, { balance: newBalance, transactions: arrayUnion(depositTx) }, { merge: true });
-                        hideLoading();
-                        closeFundModal();
-                        loadClients();
-                        alert(`Successfully funded account ${selectedAccountId} with $${amount.toFixed(2)}!`);
-                    }
-                });
+                    await setDoc(clientRef, { balance: newBalance, transactions: arrayUnion(depositTx) }, { merge: true });
+                    hideLoading();
+                    closeFundModal();
+                    loadClients();
+                    alert(`Successfully funded account ${selectedAccountId} with $${amount.toFixed(2)}!`);
+                }
             } catch (err) {
                 hideLoading();
                 alert("Failed to fund account.");
