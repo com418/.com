@@ -214,7 +214,7 @@
             try {
                 const today = new Date().toISOString().split('T')[0];
                 const tx = { description: "Payment Received", date: today, amount: newBal - currentBal };
-                await setDoc(doc(db, "clients", accountNumber), { balance: newBal, transactions: arrayUnion(tx) }, { merge: true });
+                await setDoc(doc(db, "clients", accountNumber), { balance: newBal, history: arrayUnion(tx) }, { merge: true });
                 hideLoading();
                 loadAdminClients();
                 alert("Balance updated successfully!");
