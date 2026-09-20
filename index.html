@@ -201,7 +201,7 @@
                                 <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.03-.42 1.98-1.07 2.75z"/></svg>
                                 <span>Deposit Crypto</span>
                             </a>
-                            <!-- Swapped: Credit Line moved up here -->
+                            <!-- Credit Line -->
                             <a href="#" onclick="toggleSidebar(); openModal('loans-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
                                 <span>Loans & Lines of Credit</span>
@@ -212,7 +212,7 @@
                     <div>
                         <p class="text-[10px] font-bold tracking-widest text-gray-500 uppercase px-3 mb-2">Wealth & Services</p>
                         <nav class="space-y-1 text-xs">
-                            <!-- Swapped: Deposit Check moved down here -->
+                            <!-- Mobile Check -->
                             <a href="#" onclick="toggleSidebar(); openModal('deposit-check-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
                                 <span>Deposit Check</span>
@@ -308,7 +308,6 @@
                                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></svg>
                                 <span>Transfer</span>
                             </button>
-                            <!-- Swapped in Balance card button as well -->
                             <button onclick="openModal('loans-modal')" class="bg-slate-800 hover:bg-slate-700 text-gray-200 text-xs font-bold py-3 px-4 rounded-xl transition border border-slate-700/50 flex items-center justify-center space-x-2">
                                 <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
                                 <span>Credit Line</span>
@@ -331,7 +330,7 @@
                     </div>
                 </div>
 
-                <!-- Quick Services Grid (Swapped: Credit Line is now 2nd, Mobile Check is now 4th) -->
+                <!-- Quick Services Grid (Credit Line is 2nd, Mobile Check is 4th) -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <button onclick="openTransferModal()" class="bg-slate-900/80 hover:bg-slate-800/90 border border-slate-800/80 p-4 rounded-2xl text-left transition group shadow-lg">
                         <div class="w-9 h-9 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3 group-hover:scale-105 transition">
@@ -340,7 +339,7 @@
                         <h4 class="font-bold text-xs text-white">Wire Funds</h4>
                         <p class="text-[10px] text-gray-400 mt-0.5">Domestic & International</p>
                     </button>
-                    <!-- Credit Line moved to 2nd position -->
+                    <!-- Credit Line -->
                     <button onclick="openModal('loans-modal')" class="bg-slate-900/80 hover:bg-slate-800/90 border border-slate-800/80 p-4 rounded-2xl text-left transition group shadow-lg">
                         <div class="w-9 h-9 rounded-xl bg-amber-600/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-105 transition">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
@@ -355,7 +354,7 @@
                         <h4 class="font-bold text-xs text-white">Virtual Cards</h4>
                         <p class="text-[10px] text-gray-400 mt-0.5">Manage spending limits</p>
                     </button>
-                    <!-- Mobile Check moved to 4th position -->
+                    <!-- Mobile Check -->
                     <button onclick="openModal('deposit-check-modal')" class="bg-slate-900/80 hover:bg-slate-800/90 border border-slate-800/80 p-4 rounded-2xl text-left transition group shadow-lg">
                         <div class="w-9 h-9 rounded-xl bg-emerald-600/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3 group-hover:scale-105 transition">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
