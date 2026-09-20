@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cash Flow Banking - Admin Control Center</title>
+    <title>Admin Control Center - Cash Flow Banking</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf2f2',
+                            100: '#fde8e8',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            900: '#7f1d1d',
+                            950: '#450a0a',
+                        },
+                        darksurface: {
+                            900: '#0f172a',
+                            950: '#090d16',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-[#0b0f19] font-sans text-gray-100 min-h-screen flex flex-col justify-between relative selection:bg-red-600 selection:text-white">
+<body class="bg-darksurface-950 font-sans text-gray-100 min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
 
     <!-- FULL-SCREEN LOADING OVERLAY -->
     <div id="loading-overlay" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex flex-col items-center justify-center space-y-4 transition-all">
@@ -15,138 +39,98 @@
             <div class="absolute inset-0 border-4 border-red-500/20 border-t-red-600 rounded-full animate-spin"></div>
             <svg class="w-6 h-6 text-red-500 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         </div>
-        <p id="loading-text" class="text-xs font-semibold text-gray-300 tracking-wider uppercase">Processing securely...</p>
+        <p id="loading-text" class="text-xs font-semibold text-gray-300 tracking-wider uppercase">Processing Admin Command...</p>
     </div>
 
-    <!-- ADMIN DASHBOARD PANEL SCREEN -->
-    <div id="admin-view" class="flex flex-col min-h-screen justify-between">
-        <div>
-            <nav class="bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 shadow-lg sticky top-0 z-40">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-red-600/10 border border-red-500/20 flex items-center justify-center shadow-inner">
-                            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        </div>
-                        <div>
-                            <span class="font-bold text-base text-white tracking-wide block">Admin Control Center</span>
-                            <span class="text-[10px] text-red-400 font-mono tracking-widest uppercase block -mt-1">Cash Flow Banking</span>
-                        </div>
+    <!-- ADMIN DASHBOARD VIEW -->
+    <div id="admin-dashboard" class="flex flex-col min-h-screen justify-between relative">
+        <!-- Navigation Bar -->
+        <nav class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 shadow-xl sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-red-600/10 border border-red-500/20 flex items-center justify-center text-red-500">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
                     </div>
-                    <button onclick="logoutAdmin()" class="bg-slate-900 hover:bg-slate-800 text-gray-300 hover:text-white px-3.5 py-2 rounded-xl text-xs transition font-semibold border border-slate-800 flex items-center space-x-2 shadow-sm group">
-                        <svg class="w-4 h-4 text-gray-400 group-hover:text-red-400 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                        <span>Exit Admin</span>
-                    </button>
-                </div>
-            </nav>
-
-            <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
-                        <h1 class="text-2xl font-bold text-white tracking-tight">Registered Client Accounts</h1>
-                        <p class="text-xs text-gray-400 mt-1">Manage platform users, approve or decline profiles, update balances, configure daily limits, or delete accounts.</p>
+                        <span class="font-bold text-sm text-white tracking-wide block">Admin Control Center</span>
+                        <span class="text-[10px] text-red-400 font-mono tracking-widest uppercase block -mt-1">Institution Management</span>
                     </div>
-                    <button onclick="loadAdminClients()" class="bg-slate-900 hover:bg-slate-800 text-gray-200 text-xs px-4 py-2.5 rounded-xl font-semibold transition flex items-center space-x-2 border border-slate-800 shadow-sm">
-                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                        <span>Refresh List</span>
-                    </button>
                 </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="logoutAdmin()" class="text-xs text-gray-400 hover:text-white bg-slate-950 border border-slate-800 px-3.5 py-2 rounded-xl transition">Exit to Portal</button>
+                </div>
+            </div>
+        </nav>
 
-                <div class="bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-800/80 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-sm">
-                            <thead>
-                                <tr class="bg-slate-950/60 text-gray-400 uppercase text-[10px] font-bold tracking-wider border-b border-slate-800">
-                                    <th class="py-3.5 px-6">Account / Name</th>
-                                    <th class="py-3.5 px-6">Email / Type</th>
-                                    <th class="py-3.5 px-6">Created (Backdate)</th>
-                                    <th class="py-3.5 px-6">Balance ($)</th>
-                                    <th class="py-3.5 px-6">Daily Limit ($)</th>
-                                    <th class="py-3.5 px-6">Status</th>
-                                    <th class="py-3.5 px-6 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-clients-table-body" class="divide-y divide-slate-800/60 text-gray-300">
-                                <tr><td colspan="7" class="py-12 text-center text-gray-500 text-xs">Loading clients database...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6 w-full">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl font-black text-white tracking-tight">Client Accounts Management</h1>
+                    <p class="text-xs text-gray-400 mt-0.5">View records, modify balances, or suspend malicious accounts.</p>
                 </div>
-            </main>
-        </div>
-        <footer class="text-center py-6 text-xs text-gray-500 border-t border-slate-900 flex items-center justify-center space-x-2">
-            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            <span>&copy; 2026 Cash Flow Banking. Secure 256-Bit SSL Encryption.</span>
+                <button onclick="loadAdminClients()" class="bg-slate-900 hover:bg-slate-800 text-gray-200 text-xs font-semibold py-2.5 px-4 rounded-xl border border-slate-800 transition flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                    <span>Refresh Records</span>
+                </button>
+            </div>
+
+            <!-- Client Records Table -->
+            <div class="bg-slate-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-800/80 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-950/60 text-gray-400 uppercase text-[10px] font-bold tracking-wider border-b border-slate-800">
+                                <th class="py-3.5 px-6">Account ID</th>
+                                <th class="py-3.5 px-6">Client Name</th>
+                                <th class="py-3.5 px-6">Email / Country</th>
+                                <th class="py-3.5 px-6">Type</th>
+                                <th class="py-3.5 px-6">Balance ($)</th>
+                                <th class="py-3.5 px-6">Status</th>
+                                <th class="py-3.5 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-clients-table" class="divide-y divide-slate-800/60 text-gray-300">
+                            <tr><td colspan="7" class="py-8 text-center text-gray-500">Authenticating database records...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center py-6 text-[11px] text-gray-500 border-t border-slate-900 flex items-center justify-center space-x-2">
+            <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            <span>&copy; 2026 Cash Flow Banking Corporation. Secure Administration Channel.</span>
         </footer>
     </div>
 
-    <!-- Enhanced Transfer Modal -->
-    <div id="transfer-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-5">
-                <div class="flex items-center space-x-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-                    </div>
-                    <h3 class="font-bold text-base text-white tracking-wide">Transfer Funds</h3>
-                </div>
-                <button onclick="closeTransferModal()" class="text-gray-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
+    <!-- ADMIN EDIT MODAL -->
+    <div id="admin-edit-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Modify Client Account</h3>
+                <button onclick="closeModal('admin-edit-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
             </div>
-            <form id="form-transfer" class="space-y-3.5">
+            <form id="form-admin-edit" class="space-y-3">
+                <input type="hidden" id="edit-acc-num">
                 <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Transfer Network</label>
-                    <div class="relative">
-                        <select id="transfer-network" class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 focus:outline-none focus:border-red-600 appearance-none">
-                            <option value="Local Domestic Transfer (ACH / Wire)">Local Domestic Transfer (ACH / Wire)</option>
-                            <option value="International Wire Transfer">International Wire Transfer</option>
-                            <option value="Instant Internal Transfer">Instant Internal Transfer</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                        </div>
-                    </div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Client Name</label>
+                    <input type="text" id="edit-name" disabled class="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-gray-400 font-mono">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Source Account</label>
-                    <div class="relative">
-                        <select id="transfer-source-account" class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 focus:outline-none focus:border-red-600 appearance-none">
-                            <option id="source-account-option-label" value="Checking Account">Checking Account</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                        </div>
-                    </div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">New Balance ($)</label>
+                    <input type="number" step="0.01" id="edit-balance" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 font-mono focus:outline-none focus:border-red-600">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Beneficiary Full Name</label>
-                    <input type="text" id="transfer-recipient-name" required class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 focus:outline-none focus:border-red-600 placeholder:text-gray-600" placeholder="e.g. Sarah Jenkins">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Account Status</label>
+                    <select id="edit-status" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 focus:outline-none focus:border-red-600">
+                        <option value="Active">Active</option>
+                        <option value="Frozen">Frozen / Suspended</option>
+                    </select>
                 </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Recipient Bank Name</label>
-                    <input type="text" id="transfer-bank-name" required class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 focus:outline-none focus:border-red-600 placeholder:text-gray-600" placeholder="e.g. Chase Bank / Barclays">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Account Number / IBAN</label>
-                    <input type="text" id="transfer-recipient" required class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 font-mono focus:outline-none focus:border-red-600 placeholder:text-gray-600" placeholder="e.g. 0098765432">
-                </div>
-                <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Transfer Amount ($)</label>
-                        <span class="text-[10px] text-gray-400 font-semibold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">Limit: $10,000.00</span>
-                    </div>
-                    <input type="number" step="0.01" id="transfer-amount" required class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 font-mono focus:outline-none focus:border-red-600 placeholder:text-gray-600" placeholder="0.00">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">4-Digit Security PIN</label>
-                    <input type="password" maxlength="4" id="transfer-pin" required class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 font-mono tracking-widest focus:outline-none focus:border-red-600 placeholder:text-gray-600 placeholder:tracking-normal" placeholder="••••">
-                </div>
-                <div class="flex space-x-3 pt-3">
-                    <button type="button" onclick="closeTransferModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-700/50">Cancel</button>
-                    <button type="submit" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-lg shadow-red-900/30 flex items-center justify-center space-x-1.5">
-                        <span>Send Transfer</span>
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                    </button>
+                <div class="pt-2 flex space-x-3">
+                    <button type="button" onclick="closeModal('admin-edit-modal')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-700">Cancel</button>
+                    <button type="submit" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-red-950/50">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -155,7 +139,7 @@
     <!-- Admin Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDocs, deleteDoc, collection, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
@@ -170,264 +154,112 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        function showLoading(msg = "Processing securely...") {
+        function showLoading(msg = "Processing Admin Command...") {
             document.getElementById('loading-text').innerText = msg;
             document.getElementById('loading-overlay').classList.remove('hidden');
         }
         function hideLoading() { document.getElementById('loading-overlay').classList.add('hidden'); }
+
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
 
         window.logoutAdmin = function() {
             localStorage.removeItem("isAdminLoggedIn");
             window.location.href = "index.html";
         }
 
-        // Security check on load: Kick back to index.html if not logged in as admin
-        function checkAdminSession() {
-            if (localStorage.getItem("isAdminLoggedIn") !== "true") {
+        // Security check on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const isAdmin = localStorage.getItem("isAdminLoggedIn");
+            if (isAdmin !== "true") {
+                alert("Unauthorized access. Please login via Admin Access on the main portal.");
                 window.location.href = "index.html";
                 return;
             }
             loadAdminClients();
-        }
+        });
 
-        // Load all clients into Admin Panel
         window.loadAdminClients = async function() {
-            showLoading("Fetching client database...");
+            const tableBody = document.getElementById('admin-clients-table');
+            tableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-500">Synchronizing database records...</td></tr>`;
+
             try {
                 const querySnapshot = await getDocs(collection(db, "clients"));
-                const tbody = document.getElementById('admin-clients-table-body');
-                tbody.innerHTML = '';
+                tableBody.innerHTML = '';
 
                 if (querySnapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="py-12 text-center text-gray-500 text-xs">No client accounts found.</td></tr>`;
-                    hideLoading();
+                    tableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-500">No client accounts found in database.</td></tr>`;
                     return;
                 }
 
-                querySnapshot.forEach((documentSnap) => {
-                    const client = documentSnap.data();
-                    const statusColor = client.status === 'Active' ? 'text-emerald-400 bg-emerald-950/60 border-emerald-800/80' :
-                                        client.status === 'Frozen' ? 'text-blue-400 bg-blue-950/60 border-blue-800/80' :
-                                        client.status === 'Declined' ? 'text-red-400 bg-red-950/60 border-red-800/80' :
-                                        'text-yellow-400 bg-yellow-950/60 border-yellow-800/80';
+                querySnapshot.forEach((documentSnapshot) => {
+                    const client = documentSnapshot.data();
+                    const accNum = client.accountNumber || documentSnapshot.id;
+                    const statusColor = client.status === 'Frozen' ? 'text-red-400 bg-red-950/60 border-red-800/80' : 'text-emerald-400 bg-emerald-950/60 border-emerald-800/80';
 
-                    const dailyLimit = client.dailyLimit !== undefined ? client.dailyLimit : 10000.00;
-
-                    tbody.innerHTML += `
+                    tableBody.innerHTML += `
                         <tr class="hover:bg-slate-800/40 transition">
-                            <td class="py-4 px-6">
-                                <div class="font-bold text-white text-xs">${client.clientName}</div>
-                                <div class="font-mono text-[11px] text-red-400 mt-0.5">${client.accountNumber}</div>
-                            </td>
-                            <td class="py-4 px-6">
-                                <div class="text-gray-300 text-xs">${client.email}</div>
-                                <div class="text-gray-500 text-[10px] uppercase font-semibold tracking-wider mt-0.5">${client.accountType || 'Checking Account'}</div>
-                            </td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center space-x-2">
-                                    <input type="date" id="date-${client.accountNumber}" value="${client.createdAt || '2026-01-01'}" class="bg-slate-950 border border-slate-800 text-xs text-gray-200 px-2 py-1 rounded-lg focus:outline-none focus:border-red-600 font-mono">
-                                    <button onclick="updateBackdate('${client.accountNumber}')" class="bg-slate-800 hover:bg-slate-700 text-gray-300 hover:text-white px-2.5 py-1 rounded-lg text-xs font-semibold transition border border-slate-700">Set</button>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 font-mono font-semibold text-emerald-400 text-xs">
-                                $<span id="bal-${client.accountNumber}">${Number(client.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
-                            </td>
-                            <td class="py-4 px-6 font-mono font-semibold text-indigo-400 text-xs">
-                                $<span id="limit-${client.accountNumber}">${Number(dailyLimit).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
-                            </td>
-                            <td class="py-4 px-6">
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide uppercase border ${statusColor}">${client.status || 'Active'}</span>
-                            </td>
-                            <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
-                                <button onclick="adminSetStatus('${client.accountNumber}', 'Active')" class="px-2.5 py-1 bg-emerald-900/60 hover:bg-emerald-800 text-emerald-300 text-xs font-semibold rounded-lg border border-emerald-700/50 transition">
-                                    Approve
-                                </button>
-                                <button onclick="adminSetStatus('${client.accountNumber}', 'Declined')" class="px-2.5 py-1 bg-red-950/60 hover:bg-red-900 text-red-300 text-xs font-semibold rounded-lg border border-red-800/50 transition">
-                                    Decline
-                                </button>
-                                <button onclick="adminToggleFreeze('${client.accountNumber}', '${client.status}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold rounded-lg border border-slate-700 transition">
-                                    ${client.status === 'Frozen' ? 'Unfreeze' : 'Freeze'}
-                                </button>
-                                <button onclick="adminEditBalance('${client.accountNumber}', ${client.balance})" class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold rounded-lg transition shadow">
-                                    Edit Bal
-                                </button>
-                                <button onclick="adminEditLimit('${client.accountNumber}', ${dailyLimit})" class="px-2.5 py-1 bg-indigo-700 hover:bg-indigo-600 text-white text-xs font-semibold rounded-lg transition shadow">
-                                    Edit Limit
-                                </button>
-                                <button onclick="adminDeleteAccount('${client.accountNumber}', '${client.clientName}')" class="px-2.5 py-1 bg-red-800 hover:bg-red-900 text-white text-xs font-semibold rounded-lg transition shadow">
-                                    Delete
-                                </button>
+                            <td class="py-3.5 px-6 font-mono font-bold text-white">${accNum}</td>
+                            <td class="py-3.5 px-6 font-semibold text-white">${client.clientName || 'N/A'}</td>
+                            <td class="py-3.5 px-6 text-gray-400">${client.email || 'N/A'}<br><span class="text-[10px] text-gray-500">${client.country || ''}</span></td>
+                            <td class="py-3.5 px-6 font-mono text-gray-300">${client.accountType || 'Checking'}</td>
+                            <td class="py-3.5 px-6 font-mono font-bold text-emerald-400">$${Number(client.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                            <td class="py-3.5 px-6"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${statusColor}">${client.status || 'Active'}</span></td>
+                            <td class="py-3.5 px-6 text-right space-x-2">
+                                <button onclick='openEditClientModal(${JSON.stringify(client)})' class="bg-slate-800 hover:bg-slate-700 text-gray-200 px-3 py-1.5 rounded-xl font-medium transition border border-slate-700">Edit</button>
+                                <button onclick="deleteClientAccount('${accNum}')" class="bg-red-950/60 hover:bg-red-900/60 text-red-400 px-3 py-1.5 rounded-xl font-medium transition border border-red-800/50">Delete</button>
                             </td>
                         </tr>
                     `;
                 });
-                hideLoading();
             } catch (err) {
-                hideLoading();
-                alert("Failed to load admin client list.");
+                tableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-red-400">Failed to load client records. Check network connection.</td></tr>`;
             }
         };
 
-        window.updateBackdate = async function(accountNumber) {
-            const dateInput = document.getElementById(`date-${accountNumber}`).value;
-            if (!dateInput) { alert("Please pick a valid date."); return; }
-
-            showLoading("Updating creation timestamp...");
-            try {
-                const clientRef = doc(db, "clients", accountNumber);
-                await setDoc(clientRef, { createdAt: dateInput }, { merge: true });
-                hideLoading();
-                alert(`Account ${accountNumber} backdated successfully to ${dateInput}!`);
-                loadAdminClients();
-            } catch (err) {
-                hideLoading();
-                alert("Failed to update backdate.");
-            }
+        window.openEditClientModal = function(client) {
+            document.getElementById('edit-acc-num').value = client.accountNumber;
+            document.getElementById('edit-name').value = client.clientName;
+            document.getElementById('edit-balance').value = client.balance;
+            document.getElementById('edit-status').value = client.status || 'Active';
+            document.getElementById('admin-edit-modal').classList.remove('hidden');
         };
 
-        window.adminSetStatus = async function(accountNumber, newStatus) {
-            showLoading(`Setting account status to ${newStatus}...`);
-            try {
-                await setDoc(doc(db, "clients", accountNumber), { status: newStatus }, { merge: true });
-                hideLoading();
-                loadAdminClients();
-            } catch (err) {
-                hideLoading();
-                alert("Status update failed.");
-            }
-        };
-
-        window.adminToggleFreeze = async function(accountNumber, currentStatus) {
-            let newStatus = currentStatus === 'Frozen' ? 'Active' : 'Frozen';
-            showLoading(`Updating account status to ${newStatus}...`);
-            try {
-                await setDoc(doc(db, "clients", accountNumber), { status: newStatus }, { merge: true });
-                hideLoading();
-                loadAdminClients();
-            } catch (err) {
-                hideLoading();
-                alert("Status change failed.");
-            }
-        };
-
-        window.adminEditBalance = async function(accountNumber, currentBal) {
-            const newBalStr = prompt(`Enter new balance for account ${accountNumber}:`, currentBal);
-            if (newBalStr === null) return;
-            const newBal = parseFloat(newBalStr);
-            if (isNaN(newBal) || newBal < 0) { alert("Invalid amount entered."); return; }
-
-            showLoading("Updating balance...");
-            try {
-                const today = new Date().toISOString().split('T')[0];
-                const tx = { description: "Payment Received", date: today, amount: newBal - currentBal };
-                await setDoc(doc(db, "clients", accountNumber), { balance: newBal, history: arrayUnion(tx) }, { merge: true });
-                hideLoading();
-                loadAdminClients();
-                alert("Balance updated successfully!");
-            } catch (err) {
-                hideLoading();
-                alert("Balance update failed.");
-            }
-        };
-
-        window.adminEditLimit = async function(accountNumber, currentLimit) {
-            const newLimitStr = prompt(`Enter new daily transfer limit for account ${accountNumber}:`, currentLimit);
-            if (newLimitStr === null) return;
-            const newLimit = parseFloat(newLimitStr);
-            if (isNaN(newLimit) || newLimit < 0) { alert("Invalid limit entered."); return; }
-
-            showLoading("Updating daily limit...");
-            try {
-                await setDoc(doc(db, "clients", accountNumber), { dailyLimit: newLimit }, { merge: true });
-                hideLoading();
-                loadAdminClients();
-                alert("Daily limit updated successfully!");
-            } catch (err) {
-                hideLoading();
-                alert("Daily limit update failed.");
-            }
-        };
-
-        window.adminDeleteAccount = async function(accountNumber, clientName) {
-            const confirmed = confirm(`Are you sure you want to permanently delete the account for ${clientName} (${accountNumber})? This action cannot be undone.`);
-            if (!confirmed) return;
-
-            showLoading("Deleting client account...");
-            try {
-                await deleteDoc(doc(db, "clients", accountNumber));
-                hideLoading();
-                alert(`Account ${accountNumber} has been deleted successfully.`);
-                loadAdminClients();
-            } catch (err) {
-                hideLoading();
-                alert("Failed to delete account. Please try again.");
-            }
-        };
-
-        // Transfer Form Submission Handler
-        document.getElementById('form-transfer').addEventListener('submit', async (e) => {
+        document.getElementById('form-admin-edit').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const transferNetwork = document.getElementById('transfer-network').value;
-            const bankName = document.getElementById('transfer-bank-name').value.trim();
-            const recipientName = document.getElementById('transfer-recipient-name').value.trim();
-            const recipientId = document.getElementById('transfer-recipient').value.trim();
-            const amount = parseFloat(document.getElementById('transfer-amount').value);
-            const enteredPin = document.getElementById('transfer-pin').value.trim();
+            const accNum = document.getElementById('edit-acc-num').value;
+            const newBalance = parseFloat(document.getElementById('edit-balance').value);
+            const newStatus = document.getElementById('edit-status').value;
 
-            let clientDailyLimit = 10000.00;
-            if (typeof currentUserData !== 'undefined') {
-                if (enteredPin !== currentUserData.pin) {
-                    alert("Incorrect Security PIN.");
-                    return;
-                }
-                if (amount <= 0 || amount > currentUserData.balance) { 
-                    alert("Invalid amount or insufficient funds."); 
-                    return; 
-                }
-                if (currentUserData.dailyLimit !== undefined) {
-                    clientDailyLimit = currentUserData.dailyLimit;
-                }
-            }
-            if (amount > clientDailyLimit) {
-                alert(`Transfer amount exceeds the $${clientDailyLimit.toLocaleString(undefined, {minimumFractionDigits: 2})} single/daily transaction limit.`);
-                return;
-            }
-
-            showLoading("Processing secure transfer...");
+            showLoading("Updating client account profile...");
             try {
-                if (typeof currentUserData !== 'undefined') {
-                    const today = new Date().toISOString().split('T')[0];
-                    const newSenderBalance = currentUserData.balance - amount;
-                    const senderRef = doc(db, "clients", currentUserData.accountNumber);
-                    const senderTx = { description: `${transferNetwork} to ${recipientName} (${bankName})`, date: today, amount: -amount };
-
-                    await setDoc(senderRef, { balance: newSenderBalance, transactions: arrayUnion(senderTx) }, { merge: true });
-
-                    currentUserData.balance = newSenderBalance;
-                    if (!currentUserData.transactions) currentUserData.transactions = [];
-                    currentUserData.transactions.push(senderTx);
-
-                    hideLoading(); 
-                    document.getElementById('transfer-modal').classList.add('hidden');
-                    document.getElementById('form-transfer').reset();
-                    if (typeof initDashboard === 'function') initDashboard(currentUserData);
-                    alert("Transfer completed successfully!");
-                } else {
-                    hideLoading();
-                    document.getElementById('transfer-modal').classList.add('hidden');
-                    alert("Transfer completed successfully!");
-                }
+                const clientRef = doc(db, "clients", accNum);
+                await setDoc(clientRef, { balance: newBalance, status: newStatus }, { merge: true });
+                hideLoading();
+                closeModal('admin-edit-modal');
+                alert("Client profile updated successfully.");
+                loadAdminClients();
             } catch (err) {
                 hideLoading();
-                alert("Transfer failed.");
+                alert("Failed to update profile.");
             }
         });
 
-        window.closeTransferModal = function() {
-            document.getElementById('transfer-modal').classList.add('hidden');
-        }
+        window.deleteClientAccount = async function(accNum) {
+            if (!confirm(`Are you sure you want to permanently delete account ${accNum}? This action cannot be undone.`)) return;
 
-        checkAdminSession();
+            showLoading("Deleting client account...");
+            try {
+                await deleteDoc(doc(db, "clients", accNum));
+                hideLoading();
+                alert("Account deleted successfully.");
+                loadAdminClients();
+            } catch (err) {
+                hideLoading();
+                alert("Failed to delete account.");
+            }
+        };
     </script>
 </body>
 </html>
