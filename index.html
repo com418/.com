@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cash Flow Banking - Secure Portal</title>
+    <title>Cash Flow Banking - Client Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -20,9 +20,7 @@
         <p id="loading-text" class="text-sm font-semibold text-gray-700 tracking-wide">Processing securely...</p>
     </div>
 
-    <!-- ========================================== -->
-    <!-- VIEW 1: AUTHENTICATION SCREEN (Login/Signup) -->
-    <!-- ========================================== -->
+    <!-- VIEW 1: AUTHENTICATION SCREEN -->
     <div id="auth-view" class="flex flex-col min-h-screen justify-between">
         <header class="bg-red-900 text-white shadow-md py-4">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -30,7 +28,7 @@
                     <svg class="w-7 h-7 text-red-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     <span class="font-bold text-xl tracking-wide">Cash Flow Banking</span>
                 </div>
-                <button onclick="openAdminLoginModal()" class="text-xs text-red-200 hover:text-white underline font-medium">Admin Portal</button>
+                <a href="admin.html" class="text-xs text-red-200 hover:text-white underline font-medium">Admin Portal</a>
             </div>
         </header>
 
@@ -87,18 +85,12 @@
         <footer class="text-center py-6 text-xs text-gray-400">&copy; 2026 Cash Flow Banking. Secure 256-Bit SSL Encryption.</footer>
     </div>
 
-
-    <!-- ========================================== -->
-    <!-- VIEW 2: CLIENT DASHBOARD SCREEN             -->
-    <!-- ========================================== -->
+    <!-- VIEW 2: CLIENT DASHBOARD SCREEN -->
     <div id="dashboard-view" class="hidden flex flex-col min-h-screen justify-between">
         <div>
             <nav class="bg-red-900 text-white shadow-md sticky top-0 z-40">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
                     <div class="flex items-center space-x-3">
-                        <button onclick="toggleSidebar()" class="text-red-200 hover:text-white p-1 rounded-lg hover:bg-red-800 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                        </button>
                         <span class="font-bold text-xl tracking-wide">Cash Flow Banking</span>
                     </div>
                     <div class="flex items-center space-x-4">
@@ -108,22 +100,6 @@
                 </div>
             </nav>
 
-            <!-- Sidebar Drawer -->
-            <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity" onclick="toggleSidebar()"></div>
-            <aside id="sidebar-drawer" class="fixed inset-y-0 left-0 w-80 bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
-                    <span class="font-bold text-gray-900 tracking-tight">Navigation</span>
-                    <button onclick="toggleSidebar()" class="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
-                </div>
-                <div class="p-4 space-y-2">
-                    <button onclick="toggleSidebar(); openTransferModal();" class="w-full text-left px-3 py-2.5 rounded-lg bg-red-50 text-red-700 font-semibold text-sm flex items-center space-x-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-                        <span>Transfer Funds</span>
-                    </button>
-                </div>
-            </aside>
-
-            <!-- Main Dashboard Body -->
             <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div class="flex justify-between items-center mb-8">
                     <div>
@@ -131,14 +107,12 @@
                         <p class="text-sm text-gray-500">Here is your live banking overview and recent financial standing.</p>
                     </div>
                     <button onclick="openTransferModal()" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center space-x-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
                         <span>Transfer Funds</span>
                     </button>
                 </div>
 
-                <!-- Account Overview Card -->
                 <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100">
-                    <p id="account-type-label" class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Checking Account Balance</p>
+                    <p id="account-type-label" class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Account Balance</p>
                     <h1 id="account-balance" class="text-3xl font-extrabold text-gray-900 mt-1">$0.00</h1>
                     <div class="flex flex-wrap items-center gap-x-6 gap-y-1 mt-3">
                         <p class="text-xs text-gray-400">Account No: <span id="account-number-display" class="font-mono text-gray-700 font-medium">--</span></p>
@@ -147,7 +121,6 @@
                     </div>
                 </div>
 
-                <!-- Transaction History -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100">
                         <h3 class="font-bold text-gray-900">Recent Transactions</h3>
@@ -172,50 +145,6 @@
         <footer class="text-center py-6 text-xs text-gray-400">&copy; 2026 Cash Flow Banking. Secure 256-Bit SSL Encryption.</footer>
     </div>
 
-
-    <!-- ========================================== -->
-    <!-- VIEW 3: ADMIN APPROVAL PANEL SCREEN         -->
-    <!-- ========================================== -->
-    <div id="admin-view" class="hidden flex flex-col min-h-screen justify-between bg-gray-100">
-        <header class="bg-gray-900 text-white shadow-md py-4">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    <span class="font-bold text-lg tracking-wide">Master Admin Approval Portal</span>
-                </div>
-                <button onclick="logoutAdmin()" class="bg-gray-800 hover:bg-gray-700 text-gray-200 px-3 py-1.5 rounded text-xs font-semibold transition border border-gray-700">Exit Admin</button>
-            </div>
-        </header>
-
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-            <h1 class="text-2xl font-black text-gray-900 mb-6">Client Accounts Management</h1>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr class="bg-gray-50 text-gray-500 uppercase text-[11px] font-bold tracking-wider border-b border-gray-200">
-                                <th class="py-3.5 px-6">Account No</th>
-                                <th class="py-3.5 px-6">Client Name</th>
-                                <th class="py-3.5 px-6">Type</th>
-                                <th class="py-3.5 px-6">Balance</th>
-                                <th class="py-3.5 px-6">Status</th>
-                                <th class="py-3.5 px-6 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-clients-table" class="divide-y divide-gray-100 text-gray-700">
-                            <tr><td colspan="6" class="py-8 text-center text-gray-400">Loading client profiles...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
-        <footer class="text-center py-6 text-xs text-gray-400">&copy; 2026 Cash Flow Banking. Admin Operations Console.</footer>
-    </div>
-
-
-    <!-- ========================================== -->
-    <!-- MODALS (Transfer & Admin Login)             -->
-    <!-- ========================================== -->
     <!-- Transfer Modal -->
     <div id="transfer-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
@@ -237,30 +166,10 @@
         </div>
     </div>
 
-    <!-- Admin Login Modal -->
-    <div id="admin-login-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl">
-            <h3 class="font-bold text-lg text-gray-900 mb-4">Master Admin Sign In</h3>
-            <form id="form-admin-login" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Admin Passcode</label>
-                    <input type="password" id="admin-passcode" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" placeholder="Enter PIN">
-                </div>
-                <div class="flex space-x-3 pt-2">
-                    <button type="button" onclick="closeAdminLoginModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-lg text-sm transition">Cancel</button>
-                    <button type="submit" class="flex-1 bg-gray-900 hover:bg-black text-white font-semibold py-2.5 rounded-lg text-sm transition">Authenticate</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- ========================================== -->
-    <!-- FIREBASE & LOGIC SCRIPT                     -->
-    <!-- ========================================== -->
+    <!-- Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateCode, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
@@ -274,51 +183,32 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
         let currentUserData = null;
 
         function showLoading(msg = "Processing securely...") {
             document.getElementById('loading-text').innerText = msg;
             document.getElementById('loading-overlay').classList.remove('hidden');
         }
-        function hideLoading() {
-            document.getElementById('loading-overlay').classList.add('hidden');
-        }
+        function hideLoading() { document.getElementById('loading-overlay').classList.add('hidden'); }
 
-        // Auth Tabs
         window.switchAuthTab = function(tab) {
             const loginForm = document.getElementById('form-login');
             const signupForm = document.getElementById('form-signup');
             const tabLogin = document.getElementById('tab-login');
             const tabSignup = document.getElementById('tab-signup');
-
             if (tab === 'login') {
-                loginForm.classList.remove('hidden');
-                signupForm.classList.add('hidden');
+                loginForm.classList.remove('hidden'); signupForm.classList.add('hidden');
                 tabLogin.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white text-red-900 shadow-sm transition";
                 tabSignup.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition";
             } else {
-                signupForm.classList.remove('hidden');
-                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden'); loginForm.classList.add('hidden');
                 tabSignup.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white text-red-900 shadow-sm transition";
                 tabLogin.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition";
             }
         }
 
-        // Sidebar & Modals
-        window.toggleSidebar = function() {
-            const drawer = document.getElementById('sidebar-drawer');
-            const backdrop = document.getElementById('sidebar-backdrop');
-            const isOpen = !drawer.classList.contains('-translate-x-full');
-            if (isOpen) { drawer.classList.add('-translate-x-full'); backdrop.classList.add('hidden'); }
-            else { drawer.classList.remove('-translate-x-full'); backdrop.classList.remove('hidden'); }
-        }
-
         window.openTransferModal = function() { document.getElementById('transfer-modal').classList.remove('hidden'); }
         window.closeTransferModal = function() { document.getElementById('transfer-modal').classList.add('hidden'); }
-        window.openAdminLoginModal = function() { document.getElementById('admin-login-modal').classList.remove('hidden'); }
-        window.closeAdminLoginModal = function() { document.getElementById('admin-login-modal').classList.add('hidden'); }
-
         window.logoutUser = function() {
             localStorage.removeItem("currentClientAccount");
             currentUserData = null;
@@ -326,13 +216,6 @@
             document.getElementById('auth-view').classList.remove('hidden');
         }
 
-        window.logoutAdmin = function() {
-            localStorage.removeItem("isAdminLoggedIn");
-            document.getElementById('admin-view').classList.add('hidden');
-            document.getElementById('auth-view').classList.remove('hidden');
-        }
-
-        // Registration Submission
         document.getElementById('form-signup').addEventListener('submit', async (e) => {
             e.preventDefault();
             showLoading("Creating your secure account profile...");
@@ -345,12 +228,8 @@
                 const today = new Date().toISOString().split('T')[0];
 
                 await setDoc(doc(db, "clients", accountId), {
-                    clientName: name,
-                    email: email,
-                    accountType: accountType,
-                    accountNumber: accountId,
-                    balance: 1000.00, // Starting bonus balance
-                    createdAt: today,
+                    clientName: name, email: email, accountType: accountType,
+                    accountNumber: accountId, balance: 1000.00, createdAt: today,
                     status: "Pending Approval",
                     transactions: [{ description: "Account Opening Deposit", date: today, amount: 1000.00 }]
                 });
@@ -361,12 +240,10 @@
                 switchAuthTab('login');
             } catch (err) {
                 hideLoading();
-                console.error("Signup error:", err);
                 alert("Registration failed. Please check network.");
             }
         });
 
-        // Login Submission
         document.getElementById('form-login').addEventListener('submit', async (e) => {
             e.preventDefault();
             showLoading("Authenticating credentials...");
@@ -380,7 +257,7 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     if (data.status === "Pending Approval") {
-                        alert("Your account is currently pending master admin approval. Please check back later.");
+                        alert("Your account is currently pending master admin approval.");
                         return;
                     }
                     localStorage.setItem("currentClientAccount", identifier);
@@ -390,50 +267,24 @@
                 }
             } catch (err) {
                 hideLoading();
-                console.error("Login error:", err);
                 alert("Sign in error occurred.");
             }
         });
 
-        // Admin Login
-        document.getElementById('form-admin-login').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const pin = document.getElementById('admin-passcode').value;
-            if (pin === "1234") { // Default secure admin PIN
-                localStorage.setItem("isAdminLoggedIn", "true");
-                closeAdminLoginModal();
-                document.getElementById('admin-login-modal').querySelector('form').reset();
-                loadAdminPanel();
-            } else {
-                alert("Incorrect Admin Passcode.");
-            }
-        });
-
-        // Transfer Submission
         document.getElementById('form-transfer').addEventListener('submit', async (e) => {
             e.preventDefault();
             const recipientId = document.getElementById('transfer-recipient').value.trim();
             const amount = parseFloat(document.getElementById('transfer-amount').value);
 
-            if (recipientId === currentUserData.accountNumber) {
-                alert("You cannot transfer funds to your own account.");
-                return;
-            }
-            if (amount <= 0 || amount > currentUserData.balance) {
-                alert("Invalid amount or insufficient funds.");
-                return;
-            }
+            if (recipientId === currentUserData.accountNumber) { alert("You cannot transfer funds to your own account."); return; }
+            if (amount <= 0 || amount > currentUserData.balance) { alert("Invalid amount or insufficient funds."); return; }
 
             showLoading("Processing secure transfer...");
             try {
                 const recipientRef = doc(db, "clients", recipientId);
                 const recipientSnap = await getDoc(recipientRef);
 
-                if (!recipientSnap.exists()) {
-                    hideLoading();
-                    alert("Recipient account number does not exist.");
-                    return;
-                }
+                if (!recipientSnap.exists()) { hideLoading(); alert("Recipient account number does not exist."); return; }
 
                 const recipientData = recipientSnap.data();
                 const senderRef = doc(db, "clients", currentUserData.accountNumber);
@@ -445,7 +296,6 @@
                 const senderTx = { description: `Transfer to ${recipientId}`, date: today, amount: -amount };
                 const recipientTx = { description: `Transfer from ${currentUserData.accountNumber}`, date: today, amount: amount };
 
-                // Update both accounts
                 await setDoc(senderRef, { balance: newSenderBalance, transactions: arrayUnion(senderTx) }, { merge: true });
                 await setDoc(recipientRef, { balance: newRecipientBalance, transactions: arrayUnion(recipientTx) }, { merge: true });
 
@@ -453,142 +303,49 @@
                 if (!currentUserData.transactions) currentUserData.transactions = [];
                 currentUserData.transactions.push(senderTx);
 
-                hideLoading();
-                closeTransferModal();
+                hideLoading(); closeTransferModal();
                 document.getElementById('form-transfer').reset();
                 initDashboard(currentUserData);
                 alert("Transfer completed successfully!");
             } catch (err) {
                 hideLoading();
-                console.error("Transfer error:", err);
-                alert("Transfer failed. Please try again.");
+                alert("Transfer failed.");
             }
         });
 
-        // Dashboard Renderer
         function initDashboard(data) {
             currentUserData = data;
             document.getElementById('auth-view').classList.add('hidden');
-            document.getElementById('admin-view').classList.add('hidden');
             document.getElementById('dashboard-view').classList.remove('hidden');
 
-            const accType = data.accountType || "Checking Account";
             document.getElementById('user-display-name').innerText = `Welcome, ${data.clientName}`;
             document.getElementById('welcome-title').innerText = `Welcome back, ${data.clientName}`;
-            document.getElementById('account-type-label').innerText = `${accType} Balance`;
+            document.getElementById('account-type-label').innerText = `${data.accountType || "Checking Account"} Balance`;
             document.getElementById('account-balance').innerText = '$' + Number(data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('account-number-display').innerText = data.accountNumber;
             document.getElementById('account-date-display').innerText = data.createdAt || 'N/A';
             document.getElementById('account-status-display').innerText = data.status || 'Active';
 
-            // Render Transactions
             const txBody = document.getElementById('transactions-table-body');
             txBody.innerHTML = '';
             if (data.transactions && data.transactions.length > 0) {
-                // Reverse to show latest first
                 [...data.transactions].reverse().forEach(tx => {
                     const isPositive = tx.amount >= 0;
-                    const row = `
+                    txBody.innerHTML += `
                         <tr class="hover:bg-gray-50 transition">
                             <td class="py-3 px-6 font-medium">${tx.description}</td>
                             <td class="py-3 px-6 text-gray-500">${tx.date}</td>
                             <td class="py-3 px-6 text-right font-semibold ${isPositive ? 'text-emerald-600' : 'text-gray-900'}">
                                 ${isPositive ? '+' : ''}$${Number(tx.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}
                             </td>
-                        </tr>
-                    `;
-                    txBody.innerHTML += row;
+                        </tr>`;
                 });
             } else {
                 txBody.innerHTML = `<tr><td colspan="3" class="py-6 text-center text-gray-400 text-xs">No transactions recorded yet.</td></tr>`;
             }
         }
 
-        // Load Admin Panel
-        async function loadAdminPanel() {
-            document.getElementById('auth-view').classList.add('hidden');
-            document.getElementById('dashboard-view').classList.add('hidden');
-            document.getElementById('admin-view').classList.remove('hidden');
-
-            const tbody = document.getElementById('admin-clients-table');
-            tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-gray-400">Loading client profiles...</td></tr>`;
-
-            try {
-                const querySnapshot = await getDocs(collection(db, "clients"));
-                tbody.innerHTML = '';
-                if (querySnapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-gray-400">No client accounts found.</td></tr>`;
-                    return;
-                }
-
-                querySnapshot.forEach((docSnap) => {
-                    const client = docSnap.data();
-                    const isPending = client.status === "Pending Approval";
-                    const row = `
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="py-4 px-6 font-mono text-xs font-semibold">${client.accountNumber}</td>
-                            <td class="py-4 px-6 font-medium text-gray-900">${client.clientName}</td>
-                            <td class="py-4 px-6 text-gray-500">${client.accountType || 'Checking'}</td>
-                            <td class="py-4 px-6 font-semibold">$${Number(client.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                            <td class="py-4 px-6">
-                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${isPending ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
-                                    ${client.status || 'Active'}
-                                </span>
-                            </td>
-                            <td class="py-4 px-6 text-right space-x-2">
-                                ${isPending ? `<button onclick="approveClient('${client.accountNumber}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded text-xs font-semibold shadow-sm transition">Approve</button>` : ''}
-                                <button onclick="deleteClient('${client.accountNumber}')" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs font-semibold transition">Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-            } catch (err) {
-                console.error("Admin load error:", err);
-                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-500">Failed to load clients.</td></tr>`;
-            }
-        }
-
-        // Admin Actions
-        window.approveClient = async function(accountId) {
-            showLoading("Approving client account...");
-            try {
-                const ref = doc(db, "clients", accountId);
-                await setDoc(ref, { status: "Active" }, { merge: true });
-                hideLoading();
-                alert(`Account ${accountId} has been approved successfully!`);
-                loadAdminPanel();
-            } catch (err) {
-                hideLoading();
-                alert("Approval failed.");
-            }
-        };
-
-        window.deleteClient = async function(accountId) {
-            if (!confirm(`Are you sure you want to delete account ${accountId}?`)) return;
-            showLoading("Removing account...");
-            try {
-                // Delete doc by setting status or deleting (using setDoc with inactive or reload)
-                // For simplicity in standard client SDK without deleteDoc import, we can mark as terminated or import deleteDoc.
-                // Let's use standard status update or remove.
-                const ref = doc(db, "clients", accountId);
-                await setDoc(ref, { status: "Terminated", balance: 0 }, { merge: true });
-                hideLoading();
-                alert("Account terminated.");
-                loadAdminPanel();
-            } catch (err) {
-                hideLoading();
-                alert("Deletion failed.");
-            }
-        };
-
-        // Session Restoration
         async function checkExistingSession() {
-            if (localStorage.getItem("isAdminLoggedIn") === "true") {
-                loadAdminPanel();
-                return;
-            }
-
             const currentAccount = localStorage.getItem("currentClientAccount");
             if (currentAccount) {
                 showLoading("Restoring session...");
@@ -596,20 +353,14 @@
                     const docRef = doc(db, "clients", currentAccount);
                     const docSnap = await getDoc(docRef);
                     hideLoading();
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        if (data.status !== "Pending Approval") {
-                            initDashboard(data);
-                            return;
-                        }
+                    if (docSnap.exists() && docSnap.data().status !== "Pending Approval") {
+                        initDashboard(docSnap.data());
+                        return;
                     }
                     localStorage.removeItem("currentClientAccount");
-                } catch (err) {
-                    hideLoading();
-                }
+                } catch (err) { hideLoading(); }
             }
         }
-
         checkExistingSession();
     </script>
 </body>
