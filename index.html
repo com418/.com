@@ -32,8 +32,8 @@
                 <div class="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-md space-y-4">
                     <h2 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-lock mr-2 text-blue-400"></i>Sign In to Account</h2>
                     <div>
-                        <label class="text-[11px] font-medium text-blue-200">Email Address</label>
-                        <input type="email" id="login-email" placeholder="alex@example.com" class="w-full mt-1 px-3.5 py-2.5 bg-slate-900/60 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400">
+                        <label class="text-[11px] font-medium text-blue-200">Account Number</label>
+                        <input type="text" id="login-account-number" placeholder="e.g. 48922847" maxlength="8" class="w-full mt-1 px-3.5 py-2.5 bg-slate-900/60 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400 font-mono">
                     </div>
                     <div>
                         <label class="text-[11px] font-medium text-blue-200">Password</label>
@@ -125,7 +125,7 @@
                 <h2 id="balance-display" class="text-3xl font-extrabold tracking-tight mt-1">$12,450.00</h2>
                 
                 <div class="flex justify-between items-center mt-5 pt-4 border-t border-blue-900/50 text-xs text-blue-200">
-                    <span>Account <span id="account-number">......2847</span></span>
+                    <span>Account <span id="account-number-display">......2847</span></span>
                     <span id="account-type-badge" class="bg-white/10 px-3 py-1 rounded-full font-medium text-white backdrop-blur-sm">Checking ....2847</span>
                 </div>
             </div>
@@ -179,7 +179,7 @@
                     <div class="p-3.5 flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold"><i class="fa-solid fa-mug-hot text-sm"></i></div>
-                            <div><h4 class="text-xs font-bold text-slate-900">Starbucks</h4><p class="text-[11px] text-slate-400">Today • 8:32 AM • Card ....2847</p></div>
+                            <div><h4 class="text-xs font-bold text-slate-900">Starbucks</h4><p class="text-[11px] text-slate-400">Today • 8:32 AM • Card</p></div>
                         </div>
                         <span class="text-xs font-bold text-rose-600">-$5.42</span>
                     </div>
@@ -230,7 +230,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // View Switching Control
         const viewLogin = document.getElementById('view-login');
         const viewSignup = document.getElementById('view-signup');
 
@@ -249,7 +248,7 @@
             viewLogin.classList.remove('hidden');
         });
 
-        // Sign Up Form Submission
+        // Sign Up Form Submission - Generates an 8-digit account number automatically
         document.getElementById('btn-submit-signup').addEventListener('click', () => {
             const fullName = document.getElementById('signup-fullname').value.trim();
             const email = document.getElementById('signup-email').value.trim();
@@ -261,19 +260,23 @@
                 return;
             }
 
+            // Generate random 8-digit account number
+            const accountNumber = Math.floor(10000000 + Math.random() * 90000000).toString();
+
             const accountsRef = ref(db, 'accounts');
             const newAccountRef = push(accountsRef);
             
             set(newAccountRef, {
                 fullName,
                 email,
+                accountNumber,
                 accountType,
                 password,
-                balance: 1000.00,
+                balance: 12450.00,
                 status: 'pending',
                 createdAt: new Date().toISOString()
             }).then(() => {
-                alert("Account application submitted successfully! Please wait for admin approval before logging in.");
+                alert(`Account application submitted successfully!\n\nYour assigned Account Number is: ${accountNumber}\n\nPlease save this number. You will need it to login once an administrator approves your account.`);
                 viewSignup.classList.add('hidden');
                 viewLogin.classList.remove('hidden');
             }).catch((error) => {
@@ -281,13 +284,13 @@
             });
         });
 
-        // Login Form Submission
+        // Login Form Submission - Using Account Number and Password
         document.getElementById('btn-submit-login').addEventListener('click', () => {
-            const email = document.getElementById('login-email').value.trim();
+            const accountNumberInput = document.getElementById('login-account-number').value.trim();
             const password = document.getElementById('login-password').value;
 
-            if (!email || !password) {
-                alert("Please enter your email and password.");
+            if (!accountNumberInput || !password) {
+                alert("Please enter your account number and password.");
                 return;
             }
 
@@ -301,14 +304,14 @@
 
                 let foundAccount = null;
                 for (let key in data) {
-                    if (data[key].email && data[key].email.toLowerCase() === email.toLowerCase()) {
+                    if (data[key].accountNumber && data[key].accountNumber === accountNumberInput) {
                         foundAccount = data[key];
                         break;
                     }
                 }
 
                 if (!foundAccount) {
-                    alert("Account not found with this email address.");
+                    alert("Account not found with this account number.");
                     return;
                 }
 
@@ -327,16 +330,17 @@
                     return;
                 }
 
-                // If approved/active, grant access to dashboard
+                // Granted Access
                 document.getElementById('greeting-name').innerText = `Welcome back, ${foundAccount.fullName.split(' ')[0]}`;
                 document.getElementById('balance-display').innerText = `$${Number(foundAccount.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-                document.getElementById('account-type-badge').innerText = `${foundAccount.accountType} ....2847`;
+                document.getElementById('account-number-display').innerText = `......${foundAccount.accountNumber.slice(-4)}`;
+                document.getElementById('account-type-badge').innerText = `${foundAccount.accountType} ....${foundAccount.accountNumber.slice(-4)}`;
                 
                 viewLogin.classList.add('hidden');
             }, { onlyOnce: true });
         });
 
-        // Modal & Interactive Button Setup
+        // Interactive Modal Helpers & UI Buttons
         const modal = document.getElementById('app-modal');
         const modalContent = document.getElementById('modal-content');
         document.getElementById('modal-close').addEventListener('click', () => modal.classList.add('hidden'));
