@@ -3,74 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cash Flow Banking - Enterprise Administration Suite</title>
+    <title>Cash Flow Banking - Master Admin Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans text-gray-900">
+<body class="bg-gray-100 font-sans text-gray-900 min-h-screen flex flex-col justify-between relative">
 
-    <!-- Admin Navigation Header -->
-    <nav class="bg-red-900 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+    <!-- FULL-SCREEN LOADING OVERLAY -->
+    <div id="loading-overlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center space-y-4 transition-opacity">
+        <div class="relative">
+            <div class="w-16 h-16 border-4 border-gray-300 border-t-gray-900 rounded-full animate-spin"></div>
+        </div>
+        <p id="loading-text" class="text-sm font-semibold text-gray-700 tracking-wide">Processing securely...</p>
+    </div>
+
+    <!-- ADMIN LOGIN VIEW -->
+    <div id="admin-login-view" class="flex flex-col min-h-screen justify-between">
+        <header class="bg-gray-900 text-white shadow-md py-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <span class="font-bold text-lg tracking-wide">Cash Flow Banking - Admin Portal</span>
+                <a href="index.html" class="text-xs text-gray-300 hover:text-white underline">Back to Client Banking</a>
+            </div>
+        </header>
+
+        <main class="flex items-center justify-center px-4 py-12 flex-1">
+            <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-8 border border-gray-200">
+                <h3 class="font-bold text-lg text-gray-900 mb-4">Master Admin Sign In</h3>
+                <form id="form-admin-login" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Admin Passcode (Default: 1234)</label>
+                        <input type="password" id="admin-passcode" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-gray-900" placeholder="Enter PIN">
+                    </div>
+                    <button type="submit" class="w-full bg-gray-900 hover:bg-black text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-sm">Authenticate</button>
+                </form>
+            </div>
+        </main>
+        <footer class="text-center py-6 text-xs text-gray-400">&copy; 2026 Cash Flow Banking. Admin Operations Console.</footer>
+    </div>
+
+    <!-- ADMIN DASHBOARD VIEW -->
+    <div id="admin-dashboard-view" class="hidden flex flex-col min-h-screen justify-between">
+        <header class="bg-gray-900 text-white shadow-md py-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <svg class="w-6 h-6 text-red-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span class="font-bold text-lg tracking-wider">Cash Flow Banking | <span class="text-red-200 font-normal">Master Administration</span></span>
+                    <span class="font-bold text-lg tracking-wide">Master Admin Approval Portal</span>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-xs bg-red-950 text-red-200 border border-red-700 px-2.5 py-1 rounded font-mono">Secure Node: Active</span>
+                <button onclick="logoutAdmin()" class="bg-gray-800 hover:bg-gray-700 text-gray-200 px-3 py-1.5 rounded text-xs font-semibold transition border border-gray-700">Exit Admin</button>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+            <h1 class="text-2xl font-black text-gray-900 mb-6">Client Accounts Management</h1>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-500 uppercase text-[11px] font-bold tracking-wider border-b border-gray-200">
+                                <th class="py-3.5 px-6">Account No</th>
+                                <th class="py-3.5 px-6">Client Name</th>
+                                <th class="py-3.5 px-6">Type</th>
+                                <th class="py-3.5 px-6">Balance</th>
+                                <th class="py-3.5 px-6">Status</th>
+                                <th class="py-3.5 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-clients-table" class="divide-y divide-gray-100 text-gray-700">
+                            <tr><td colspan="6" class="py-8 text-center text-gray-400">Loading client profiles...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-    </nav>
+        </main>
+        <footer class="text-center py-6 text-xs text-gray-400">&copy; 2026 Cash Flow Banking. Admin Operations Console.</footer>
+    </div>
 
-    <!-- Main Admin Dashboard -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Metrics Row -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Clients / Queue</p>
-                <h3 id="metric-clients" class="text-2xl font-black text-gray-900 mt-1">--</h3>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Aggregate System Balance</p>
-                <h3 id="metric-deposits" class="text-2xl font-black text-emerald-600 mt-1">$0.00</h3>
-            </div>
-        </div>
-
-        <!-- Management Section -->
-        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-bold text-gray-900">Client Oversight & Approval Queue</h2>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider">
-                            <th class="py-3 px-3">Client Name</th>
-                            <th class="py-3 px-3">Account No</th>
-                            <th class="py-3 px-3">Creation Date</th>
-                            <th class="py-3 px-3">Balance</th>
-                            <th class="py-3 px-3">Status</th>
-                            <th class="py-3 px-3 text-right">Administrative Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-clients-table" class="divide-y divide-gray-100 text-sm">
-                        <tr>
-                            <td colspan="6" class="py-6 text-center text-gray-400">Connecting to secure Firebase database...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
-
-    <!-- Firebase SDK & Admin App Script -->
+    <!-- Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
@@ -85,70 +95,93 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Function to Approve Account Status
-        window.approveAccount = async function(docId) {
-            try {
-                const clientRef = doc(db, "clients", docId);
-                await updateDoc(clientRef, { status: "Active" });
-                alert("Account successfully approved and activated!");
-                loadAdminClients(); // Refresh list
-            } catch (err) {
-                console.error("Error approving account:", err);
-                alert("Failed to approve account.");
+        function showLoading(msg = "Processing...") {
+            document.getElementById('loading-text').innerText = msg;
+            document.getElementById('loading-overlay').classList.remove('hidden');
+        }
+        function hideLoading() { document.getElementById('loading-overlay').classList.add('hidden'); }
+
+        document.getElementById('form-admin-login').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const pin = document.getElementById('admin-passcode').value;
+            if (pin === "1234") {
+                localStorage.setItem("isAdminLoggedIn", "true");
+                loadAdminPanel();
+            } else {
+                alert("Incorrect Admin Passcode.");
             }
+        });
+
+        window.logoutAdmin = function() {
+            localStorage.removeItem("isAdminLoggedIn");
+            document.getElementById('admin-dashboard-view').classList.add('hidden');
+            document.getElementById('admin-login-view').classList.remove('hidden');
         }
 
-        // Fetch clients into Admin Table
-        async function loadAdminClients() {
+        async function loadAdminPanel() {
+            document.getElementById('admin-login-view').classList.add('hidden');
+            document.getElementById('admin-dashboard-view').classList.remove('hidden');
+
+            const tbody = document.getElementById('admin-clients-table');
+            tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-gray-400">Loading client profiles...</td></tr>`;
+
             try {
                 const querySnapshot = await getDocs(collection(db, "clients"));
-                const tbody = document.getElementById('admin-clients-table');
                 tbody.innerHTML = '';
-                
-                if(querySnapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">No client accounts found.</td></tr>`;
-                    document.getElementById('metric-clients').innerText = '0';
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-gray-400">No client accounts found.</td></tr>`;
                     return;
                 }
 
-                let totalBal = 0;
-                let count = 0;
-
                 querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const docId = docSnap.id;
-                    count++;
-                    totalBal += Number(data.balance || 0);
-
-                    const isPending = data.status === "Pending Approval";
-                    const statusBadgeClass = isPending 
-                        ? 'bg-amber-50 text-amber-700 border border-amber-200' 
-                        : 'bg-emerald-50 text-emerald-700';
-
-                    const actionButton = isPending
-                        ? `<button onclick="approveAccount('${docId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs px-3 py-1.5 rounded transition shadow-sm">Approve</button>`
-                        : `<span class="text-gray-400 text-xs font-medium">Approved</span>`;
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td class="py-3 px-3 font-medium text-gray-900">${data.clientName || 'N/A'}</td>
-                        <td class="py-3 px-3 text-gray-600 font-mono text-xs">${data.accountNumber || docId}</td>
-                        <td class="py-3 px-3 text-gray-600 font-mono text-xs">${data.createdAt || 'N/A'}</td>
-                        <td class="py-3 px-3 font-semibold text-gray-900">$${Number(data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                        <td class="py-3 px-3"><span class="${statusBadgeClass} px-2 py-0.5 rounded text-xs font-semibold">${data.status || 'Active'}</span></td>
-                        <td class="py-3 px-3 text-right">${actionButton}</td>
-                    `;
-                    tbody.appendChild(tr);
+                    const client = docSnap.data();
+                    const isPending = client.status === "Pending Approval";
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="py-4 px-6 font-mono text-xs font-semibold">${client.accountNumber}</td>
+                            <td class="py-4 px-6 font-medium text-gray-900">${client.clientName}</td>
+                            <td class="py-4 px-6 text-gray-500">${client.accountType || 'Checking'}</td>
+                            <td class="py-4 px-6 font-semibold">$${Number(client.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                            <td class="py-4 px-6">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${isPending ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
+                                    ${client.status || 'Active'}
+                                </span>
+                            </td>
+                            <td class="py-4 px-6 text-right space-x-2">
+                                ${isPending ? `<button onclick="approveClient('${client.accountNumber}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded text-xs font-semibold shadow-sm transition">Approve</button>` : ''}
+                                <button onclick="deleteClient('${client.accountNumber}')" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs font-semibold transition">Terminate</button>
+                            </td>
+                        </tr>`;
                 });
-
-                document.getElementById('metric-clients').innerText = count;
-                document.getElementById('metric-deposits').innerText = '$' + totalBal.toLocaleString(undefined, {minimumFractionDigits: 2});
             } catch (err) {
-                console.error("Error loading admin clients:", err);
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-500">Failed to load clients.</td></tr>`;
             }
         }
 
-        loadAdminClients();
+        window.approveClient = async function(accountId) {
+            showLoading("Approving client account...");
+            try {
+                await setDoc(doc(db, "clients", accountId), { status: "Active" }, { merge: true });
+                hideLoading();
+                alert(`Account ${accountId} has been approved!`);
+                loadAdminPanel();
+            } catch (err) { hideLoading(); alert("Approval failed."); }
+        };
+
+        window.deleteClient = async function(accountId) {
+            if (!confirm(`Are you sure you want to terminate account ${accountId}?`)) return;
+            showLoading("Terminating account...");
+            try {
+                await setDoc(doc(db, "clients", accountId), { status: "Terminated", balance: 0 }, { merge: true });
+                hideLoading();
+                alert("Account terminated.");
+                loadAdminPanel();
+            } catch (err) { hideLoading(); alert("Action failed."); }
+        };
+
+        if (localStorage.getItem("isAdminLoggedIn") === "true") {
+            loadAdminPanel();
+        }
     </script>
 </body>
 </html>
