@@ -93,7 +93,21 @@
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Country</label>
-                            <input type="text" id="signup-country" required class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2 text-xs text-gray-100 focus:outline-none focus:border-red-600 placeholder:text-gray-600" placeholder="e.g. United States">
+                            <select id="signup-country" required class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2 text-xs text-gray-100 focus:outline-none focus:border-red-600">
+                                <option value="" disabled selected>Select your country</option>
+                                <option value="United States">United States</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Germany">Germany</option>
+                                <option value="France">France</option>
+                                <option value="Switzerland">Switzerland</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="United Arab Emirates">United Arab Emirates</option>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
                         <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-lg shadow-red-900/30 mt-2">Create Account</button>
                     </form>
@@ -320,7 +334,7 @@
             const password = document.getElementById('signup-password').value.trim();
             const pin = document.getElementById('signup-pin').value.trim();
             const accountType = document.getElementById('signup-type').value;
-            const country = document.getElementById('signup-country').value.trim();
+            const country = document.getElementById('signup-country').value;
             
             const accountNumber = Math.floor(1000000000 + Math.random() * 9000000000).toString();
             const today = new Date().toISOString().split('T')[0];
