@@ -3,126 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cash Flow Banking - Secure Client Portal</title>
+    <title>Cash Flow Banking - Secure Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 font-sans text-gray-900">
+<body class="bg-gray-50 font-sans text-gray-900 min-h-screen flex flex-col justify-between relative">
 
-    <!-- Top Navigation -->
-    <nav class="bg-red-900 text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center space-x-3">
-                    <button onclick="toggleSidebar()" class="text-red-200 hover:text-white focus:outline-none p-1 rounded-lg hover:bg-red-800 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                    </button>
-                    <svg class="w-7 h-7 text-red-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span class="font-bold text-xl tracking-wide">Cash Flow Banking</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span id="user-display-name" class="text-sm font-medium text-red-100 hidden sm:inline">Welcome, Client</span>
-                    <button onclick="openRegistrationModal()" class="bg-red-800 hover:bg-red-700 text-white px-3 py-1.5 rounded text-sm transition font-medium border border-red-700">Create Account</button>
-                    <button id="logout-btn" class="text-red-200 hover:text-white text-sm transition">Sign Out</button>
-                </div>
+    <!-- FULL-SCREEN LOADING OVERLAY -->
+    <div id="loading-overlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center space-y-4 transition-opacity">
+        <div class="relative">
+            <div class="w-16 h-16 border-4 border-red-200 border-t-red-700 rounded-full animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-red-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             </div>
         </div>
-    </nav>
-
-    <!-- Sidebar Navigation Drawer -->
-    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity" onclick="toggleSidebar()"></div>
-    <aside id="sidebar-drawer" class="fixed inset-y-0 left-0 w-80 bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-        <div class="p-4 border-b border-gray-100 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <div class="bg-red-700 text-white p-1.5 rounded-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                </div>
-                <span class="font-bold text-gray-900 tracking-tight">Cash Flow Banking</span>
-            </div>
-            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
-
-        <div class="flex-1 overflow-y-auto px-4 py-6 space-y-6 text-sm">
-            <div>
-                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 px-3">Main</p>
-                <div class="space-y-1">
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-red-50 text-red-700 font-semibold">
-                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                        <span>Dashboard</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span>Account Summary</span>
-                    </a>
-                    <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-                            <span>Transfer</span>
-                        </div>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                        <span>Deposit Check</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Checking Account Balance</p>
-                    <div class="flex items-center space-x-3 mt-1">
-                        <h1 id="account-balance" class="text-3xl font-extrabold text-gray-900">$0.00</h1>
-                    </div>
-                    <div class="flex items-center space-x-4 mt-1">
-                        <p class="text-xs text-gray-400">Account No: <span id="account-number-display">••••4829</span></p>
-                        <p class="text-xs text-gray-400">Account Established: <span id="account-date-display" class="font-medium text-gray-600">--</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Account Registration Modal -->
-    <div id="registration-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-900">New Account Configuration</h3>
-                <button onclick="closeRegistrationModal()" class="text-gray-400 hover:text-gray-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <form id="registration-form" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Full Legal Name</label>
-                    <input type="text" id="reg-name" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600" placeholder="John Doe">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Initial Deposit Amount ($)</label>
-                    <input type="number" id="reg-balance" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600" placeholder="1000.00">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Account Creation Date</label>
-                    <input type="date" id="reg-creation-date" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600">
-                </div>
-                <div class="flex justify-end space-x-3 pt-2">
-                    <button type="button" onclick="closeRegistrationModal()" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Cancel</button>
-                    <button type="submit" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition">Submit for Approval</button>
-                </div>
-            </form>
-        </div>
+        <p id="loading-text" class="text-sm font-semibold text-gray-700 tracking-wide">Processing securely...</p>
     </div>
 
-    <!-- Firebase SDK & Client App Script -->
+    <!-- ========================================== -->
+    <!-- VIEW 1: AUTHENTICATION SCREEN (Login/Signup) -->
+    <!-- ========================================== -->
+    <div id="auth-view" class="flex flex-col min-h-screen justify-between">
+        <!-- Top Header Bar -->
+        <header class="bg-red-900 text-white shadow-md py-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center space-x-3">
+                <svg class="w-7 h-7 text-red-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span class="font-bold text-xl tracking-wide">Cash Flow Banking</span>
+            </div>
+        </header>
+
+        <!-- Main Auth Container -->
+        <main class="flex items-center justify-center px-4 py-12 flex-1">
+            <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 border border-gray-100">
+                
+                <!-- Tab Switcher -->
+                <div class="flex rounded-xl bg-gray-100 p-1 mb-6">
+                    <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-white text-red-900 shadow-sm transition">Sign In</button>
+                    <button id="tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition">Create Account</button>
+                </div>
+
+                <!-- LOGIN FORM -->
+                <form id="form-login" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Account Number</label>
+                        <input type="text" id="login-identifier" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 font-mono" placeholder="ACC-123456">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Secure Password</label>
+                        <input type="password" id="login-password" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-sm mt-2">
+                        Access Portal
+                    </button>
+                </form>
+
+                <!-- SIGN UP FORM -->
+                <form id="form-signup" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Full Legal Name</label>
+                        <input type="text" id="signup-name" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Email Address</label>
+                        <input type="email" id="signup-email" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" placeholder="john@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Initial Deposit Amount ($)</label>
+                        <input type="number" id="signup-balance" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" placeholder="1000.00">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Create Password</label>
+                        <input type="password" id="signup-password" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-sm mt-2">
+                        Submit for Approval
+                    </button>
+                </form>
+            </div>
+        </main>
+
+        <footer class="text-center py-6 text-xs text-gray-400">
+            &copy; 2026 Cash Flow Banking. Secure 256-Bit SSL Encryption.
+        </footer>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: CLIENT DASHBOARD SCREEN             -->
+    <!-- ========================================== -->
+    <div id="dashboard-view" class="hidden flex flex-col min-h-screen justify-between">
+        <div>
+            <!-- Top Navigation -->
+            <nav class="bg-red-900 text-white shadow-md sticky top-0 z-40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16">
+                        <div class="flex items-center space-x-3">
+                            <button onclick="toggleSidebar()" class="text-red-200 hover:text-white focus:outline-none p-1 rounded-lg hover:bg-red-800 transition">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                            </button>
+                            <svg class="w-7 h-7 text-red-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <span class="font-bold text-xl tracking-wide">Cash Flow Banking</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span id="user-display-name" class="text-sm font-medium text-red-100 hidden sm:inline">Loading user...</span>
+                            <button onclick="logoutUser()" class="bg-red-800 hover:bg-red-700 text-white px-3 py-1.5 rounded text-sm transition font-medium border border-red-700">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Sidebar Navigation Drawer -->
+            <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity" onclick="toggleSidebar()"></div>
+            <aside id="sidebar-drawer" class="fixed inset-y-0 left-0 w-80 bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="bg-red-700 text-white p-1.5 rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        </div>
+                        <span class="font-bold text-gray-900 tracking-tight">Cash Flow Banking</span>
+                    </div>
+                    <button onclick="toggleSidebar()" class="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto px-4 py-6 space-y-6 text-sm">
+                    <div>
+                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 px-3">Main</p>
+                        <div class="space-y-1">
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-red-50 text-red-700 font-semibold">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                                <span>Dashboard</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Dashboard Container -->
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="mb-8">
+                    <h1 class="text-2xl font-black text-gray-900" id="welcome-title">Welcome back</h1>
+                    <p class="text-sm text-gray-500">Here is your live banking overview and recent financial standing.</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Checking Account Balance</p>
+                        <div class="flex items-center space-x-3 mt-1">
+                            <h1 id="account-balance" class="text-3xl font-extrabold text-gray-900">$0.00</h1>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-x-6 gap-y-1 mt-2">
+                            <p class="text-xs text-gray-400">Account No: <span id="account-number-display" class="font-mono text-gray-700 font-medium">--</span></p>
+                            <p class="text-xs text-gray-400">Established: <span id="account-date-display" class="font-medium text-gray-600">--</span></p>
+                            <p class="text-xs text-gray-400">Status: <span id="account-status-display" class="font-semibold text-emerald-600">--</span></p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <footer class="text-center py-6 text-xs text-gray-400">
+            &copy; 2026 Cash Flow Banking. Secure 256-Bit SSL Encryption.
+        </footer>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- FIREBASE & APPLICATION CONTROLLER SCRIPT    -->
+    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
@@ -137,6 +188,36 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Loading Overlay Controls
+        function showLoading(msg = "Processing securely...") {
+            document.getElementById('loading-text').innerText = msg;
+            document.getElementById('loading-overlay').classList.remove('hidden');
+        }
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
+
+        // Auth Tab Toggle (Sign In vs Create Account)
+        window.switchAuthTab = function(tab) {
+            const loginForm = document.getElementById('form-login');
+            const signupForm = document.getElementById('form-signup');
+            const tabLogin = document.getElementById('tab-login');
+            const tabSignup = document.getElementById('tab-signup');
+
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                tabLogin.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white text-red-900 shadow-sm transition";
+                tabSignup.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition";
+            } else {
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                tabSignup.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white text-red-900 shadow-sm transition";
+                tabLogin.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition";
+            }
+        }
+
+        // Sidebar and Logout Functions for Dashboard View
         window.toggleSidebar = function() {
             const drawer = document.getElementById('sidebar-drawer');
             const backdrop = document.getElementById('sidebar-backdrop');
@@ -150,39 +231,114 @@
             }
         }
 
-        window.openRegistrationModal = function() {
-            document.getElementById('registration-modal').classList.remove('hidden');
-            if(!document.getElementById('reg-creation-date').value) {
-                document.getElementById('reg-creation-date').valueAsDate = new Date();
-            }
-        }
-        window.closeRegistrationModal = function() {
-            document.getElementById('registration-modal').classList.add('hidden');
+        window.logoutUser = function() {
+            localStorage.removeItem("currentClientAccount");
+            document.getElementById('dashboard-view').classList.add('hidden');
+            document.getElementById('auth-view').classList.remove('hidden');
         }
 
-        document.getElementById('registration-form').addEventListener('submit', async (e) => {
+        // Handle Registration Submission
+        document.getElementById('form-signup').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('reg-name').value;
-            const balance = parseFloat(document.getElementById('reg-balance').value);
-            const creationDate = document.getElementById('reg-creation-date').value;
+            showLoading("Creating your secure account profile...");
+
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const balance = parseFloat(document.getElementById('signup-balance').value);
             
             try {
                 const accountId = "ACC-" + Math.floor(100000 + Math.random() * 900000);
-                // Status is set to Pending Approval by default
+                const today = new Date().toISOString().split('T')[0];
+
                 await setDoc(doc(db, "clients", accountId), {
                     clientName: name,
+                    email: email,
                     accountNumber: accountId,
                     balance: balance,
-                    createdAt: creationDate,
+                    createdAt: today,
                     status: "Pending Approval"
                 });
-                alert("Account registration submitted successfully! Awaiting master admin approval.");
-                closeRegistrationModal();
-            } catch (error) {
-                console.error("Error creating account:", error);
-                alert("Failed to create account. Check console for details.");
+
+                hideLoading();
+                alert(`Account registration successful! Your Account Number is ${accountId}. It is pending master admin approval.`);
+                document.getElementById('form-signup').reset();
+                switchAuthTab('login');
+            } catch (err) {
+                hideLoading();
+                console.error("Signup error:", err);
+                alert("Registration failed. Please check your network connection.");
             }
         });
+
+        // Handle Login Submission
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading("Authenticating credentials...");
+
+            const identifier = document.getElementById('login-identifier').value.trim();
+
+            try {
+                const docRef = doc(db, "clients", identifier);
+                const docSnap = await getDoc(docRef);
+
+                hideLoading();
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.status === "Pending Approval") {
+                        alert("Your account is currently pending master admin approval. Please check back later.");
+                        return;
+                    }
+                    localStorage.setItem("currentClientAccount", identifier);
+                    initDashboard(data);
+                } else {
+                    alert("Account number not found in database. Please verify your ID or create an account.");
+                }
+            } catch (err) {
+                hideLoading();
+                console.error("Login error:", err);
+                alert("An error occurred during sign-in.");
+            }
+        });
+
+        // Render Dashboard Content
+        function initDashboard(data) {
+            document.getElementById('auth-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('hidden');
+
+            document.getElementById('user-display-name').innerText = `Welcome, ${data.clientName}`;
+            document.getElementById('welcome-title').innerText = `Welcome back, ${data.clientName}`;
+            document.getElementById('account-balance').innerText = '$' + Number(data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('account-number-display').innerText = data.accountNumber;
+            document.getElementById('account-date-display').innerText = data.createdAt || 'N/A';
+            document.getElementById('account-status-display').innerText = data.status || 'Active';
+        }
+
+        // Auto-check on Page Load if already logged in via LocalStorage
+        async function checkExistingSession() {
+            const currentAccount = localStorage.getItem("currentClientAccount");
+            if (currentAccount) {
+                showLoading("Restoring session...");
+                try {
+                    const docRef = doc(db, "clients", currentAccount);
+                    const docSnap = await getDoc(docRef);
+                    hideLoading();
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (data.status !== "Pending Approval") {
+                            initDashboard(data);
+                            return;
+                        }
+                    }
+                    localStorage.removeItem("currentClientAccount");
+                } catch (err) {
+                    hideLoading();
+                    console.error("Session restore error:", err);
+                }
+            }
+        }
+
+        checkExistingSession();
     </script>
 </body>
 </html>
