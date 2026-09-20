@@ -43,7 +43,7 @@
                 <form id="form-login" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Account Number</label>
-                        <input type="text" id="login-identifier" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600 font-mono" placeholder="ACC-123456">
+                        <input type="text" id="login-identifier" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600 font-mono" placeholder="7208268287">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Secure Password</label>
@@ -145,7 +145,7 @@
 
                         <div class="my-6">
                             <div class="text-xs text-gray-400 font-mono mb-1">Card Number</div>
-                            <div class="font-mono text-lg sm:text-xl text-gray-100 tracking-widest">•••• •••• •••• <span id="card-last-four">4892</span></div>
+                            <div class="font-mono text-lg sm:text-xl text-gray-100 tracking-widest">•••• •••• •••• <span id="card-last-four">8287</span></div>
                         </div>
 
                         <div class="flex justify-between items-end pt-2 border-t border-slate-800/60">
@@ -198,7 +198,7 @@
             <form id="form-transfer" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Recipient Account Number</label>
-                    <input type="text" id="transfer-recipient" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 font-mono focus:outline-none focus:border-red-600" placeholder="ACC-XXXXXX">
+                    <input type="text" id="transfer-recipient" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 font-mono focus:outline-none focus:border-red-600" placeholder="7208268287">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Amount ($)</label>
@@ -289,7 +289,8 @@
             const accountType = document.getElementById('signup-account-type').value;
 
             try {
-                const accountId = "ACC-" + Math.floor(100000 + Math.random() * 900000);
+                // Generates a 10-digit account number starting with 7
+                const accountId = "72" + Math.floor(10000000 + Math.random() * 90000000);
                 const today = new Date().toISOString().split('T')[0];
 
                 await setDoc(doc(db, "clients", accountId), {
@@ -322,7 +323,6 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     
-                    // FROZEN ACCOUNT LOGIN SAFEGUARD CHECK
                     if (data.status === "Frozen") {
                         alert("Access Denied: Your account has been frozen by administration. Please contact support.");
                         return;
@@ -398,9 +398,8 @@
             document.getElementById('account-date-display').innerText = data.createdAt || 'N/A';
             document.getElementById('account-status-display').innerText = data.status || 'Active';
             
-            // Set Virtual Card Holder Name & Last 4 digits derived from account ID
             document.getElementById('card-holder-name').innerText = data.clientName;
-            const lastFourDigits = data.accountNumber.replace('ACC-', '').slice(-4);
+            const lastFourDigits = String(data.accountNumber).slice(-4);
             document.getElementById('card-last-four').innerText = lastFourDigits;
 
             const txBody = document.getElementById('transactions-table-body');
