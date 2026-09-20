@@ -11,7 +11,10 @@
 
     <!-- FULL-SCREEN LOADING OVERLAY -->
     <div id="loading-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center space-y-4 transition-opacity">
-        <div class="w-16 h-16 border-4 border-red-500/30 border-t-red-600 rounded-full animate-spin"></div>
+        <div class="relative w-16 h-16 flex items-center justify-center">
+            <div class="absolute inset-0 border-4 border-red-500/30 border-t-red-600 rounded-full animate-spin"></div>
+            <svg class="w-6 h-6 text-red-500 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        </div>
         <p id="loading-text" class="text-sm font-semibold text-gray-300 tracking-wide">Processing admin action...</p>
     </div>
 
@@ -22,7 +25,10 @@
                     <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     <span class="font-bold text-xl tracking-wide text-white">Master Admin Portal</span>
                 </div>
-                <a href="index.html" class="text-xs text-red-400 hover:text-red-300 underline font-medium transition">Return to Client Portal</a>
+                <a href="index.html" class="text-xs text-red-400 hover:text-red-300 underline font-medium transition flex items-center space-x-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    <span>Return to Client Portal</span>
+                </a>
             </div>
         </header>
 
@@ -33,12 +39,14 @@
                     <p class="text-sm text-gray-400">Approve pending applications, manage balances, freeze accounts, set limits, and fund users securely.</p>
                 </div>
                 <button onclick="loadClients()" class="bg-slate-800 hover:bg-slate-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-slate-700 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     <span>Refresh Data</span>
                 </button>
             </div>
 
             <div class="bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-800 overflow-hidden">
-                <div class="p-6 border-b border-slate-800">
+                <div class="p-6 border-b border-slate-800 flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                     <h3 class="font-bold text-white">Registered Clients Directory</h3>
                 </div>
                 <div class="overflow-x-auto">
@@ -67,8 +75,13 @@
     <div id="fund-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-lg text-white">Fund Account</h3>
-                <button onclick="closeFundModal()" class="text-gray-400 hover:text-white">&times;</button>
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <h3 class="font-bold text-lg text-white">Fund Account</h3>
+                </div>
+                <button onclick="closeFundModal()" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
             <p class="text-xs text-gray-400 mb-4">Adding funds to account: <span id="fund-target-account" class="font-mono text-white font-semibold">--</span></p>
             <form id="form-fund" class="space-y-4">
@@ -88,8 +101,13 @@
     <div id="limit-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-lg text-white">Update Daily Transfer Limit</h3>
-                <button onclick="closeLimitModal()" class="text-gray-400 hover:text-white">&times;</button>
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    <h3 class="font-bold text-lg text-white">Update Daily Transfer Limit</h3>
+                </div>
+                <button onclick="closeLimitModal()" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
             <p class="text-xs text-gray-400 mb-4">Target account: <span id="limit-target-account" class="font-mono text-white font-semibold">--</span></p>
             <form id="form-limit" class="space-y-4">
