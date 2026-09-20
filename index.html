@@ -108,9 +108,14 @@
                         <h1 class="text-2xl font-black text-white" id="welcome-title">Welcome back</h1>
                         <p class="text-sm text-gray-400">Here is your live banking overview and recent financial standing.</p>
                     </div>
-                    <button onclick="openTransferModal()" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg shadow-red-900/20 transition flex items-center space-x-2">
-                        <span>Transfer Funds</span>
-                    </button>
+                    <div class="flex space-x-3">
+                        <button onclick="openDepositModal()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-semibold border border-slate-700 transition flex items-center space-x-2">
+                            <span>Deposit Funds</span>
+                        </button>
+                        <button onclick="openTransferModal()" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg shadow-red-900/20 transition flex items-center space-x-2">
+                            <span>Transfer Funds</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Account & Virtual Card Section Grid -->
@@ -191,6 +196,23 @@
         <footer class="text-center py-6 text-xs text-gray-500">&copy; 2026 Cash Flow Banking. Secure 256-Bit SSL Encryption.</footer>
     </div>
 
+    <!-- Deposit Modal -->
+    <div id="deposit-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <h3 class="font-bold text-lg text-white mb-4">Deposit Funds</h3>
+            <form id="form-deposit" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Deposit Amount ($)</label>
+                    <input type="number" step="0.01" id="deposit-amount" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="0.00">
+                </div>
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" onclick="closeDepositModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-lg text-sm transition">Cancel</button>
+                    <button type="submit" class="flex-1 bg-red-700 hover:bg-red-800 text-white font-semibold py-2.5 rounded-lg text-sm transition">Confirm Deposit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Transfer Modal -->
     <div id="transfer-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
@@ -254,6 +276,9 @@
             }
         }
 
+        window.openDepositModal = function() { document.getElementById('deposit-modal').classList.remove('hidden'); }
+        window.closeDepositModal = function() { document.getElementById('deposit-modal').classList.add('hidden'); }
+
         window.openTransferModal = function() { document.getElementById('transfer-modal').classList.remove('hidden'); }
         window.closeTransferModal = function() { document.getElementById('transfer-modal').classList.add('hidden'); }
         
@@ -289,7 +314,6 @@
             const accountType = document.getElementById('signup-account-type').value;
 
             try {
-                // Generates a 10-digit account number starting with 7
                 const accountId = "72" + Math.floor(10000000 + Math.random() * 90000000);
                 const today = new Date().toISOString().split('T')[0];
 
@@ -340,6 +364,37 @@
             } catch (err) {
                 hideLoading();
                 alert("Sign in error occurred.");
+            }
+        });
+
+        document.getElementById('form-deposit').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('deposit-amount').value);
+
+            if (amount <= 0) { alert("Please enter a valid deposit amount."); return; }
+
+            showLoading("Processing secure deposit...");
+            try {
+                const userRef = doc(db, "clients", currentUserData.accountNumber);
+                const today = new Date().toISOString().split('T')[0];
+
+                const newBalance = currentUserData.balance + amount;
+                const depositTx = { description: "Online Deposit", date: today, amount: amount };
+
+                await setDoc(userRef, { balance: newBalance, transactions: arrayUnion(depositTx) }, { merge: true });
+
+                currentUserData.balance = newBalance;
+                if (!currentUserData.transactions) currentUserData.transactions = [];
+                currentUserData.transactions.push(depositTx);
+
+                hideLoading(); 
+                closeDepositModal();
+                document.getElementById('form-deposit').reset();
+                initDashboard(currentUserData);
+                alert("Deposit completed successfully!");
+            } catch (err) {
+                hideLoading();
+                alert("Deposit failed. Please try again.");
             }
         });
 
