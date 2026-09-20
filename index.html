@@ -31,7 +31,7 @@
 </head>
 <body class="bg-bank-dark text-slate-100 font-sans antialiased h-full flex flex-col selection:bg-blue-600 selection:text-white transition-colors duration-300" id="appBody">
 
-    <!-- TOP INSTITUTIONAL SECURITY BAR (Admin link removed) -->
+    <!-- TOP INSTITUTIONAL SECURITY BAR -->
     <div class="bg-bank-navy border-b border-slate-800 px-4 py-2 text-xs flex flex-wrap items-center justify-between gap-2 z-40">
         <div class="flex items-center space-x-2 font-mono text-blue-400">
             <i class="fa-solid fa-shield-halved"></i>
@@ -86,11 +86,11 @@
                 <i class="fa-solid fa-triangle-exclamation mr-1"></i> Your account is currently pending administrator approval. Please wait for institutional verification.
             </div>
 
-            <!-- LOGIN FORM -->
+            <!-- LOGIN FORM (Account Number & Password) -->
             <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Email or Member ID</label>
-                    <input type="text" id="loginEmail" required value="lorenzo.parker@cashflowbank.com" class="w-full bg-bank-dark/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Account Number</label>
+                    <input type="text" id="loginAccountNumber" required value="2015961076" placeholder="e.g. 2015961076" class="w-full bg-bank-dark/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-mono focus:outline-none focus:border-blue-500 transition">
                 </div>
                 <div>
                     <div class="flex justify-between items-center mb-1">
@@ -307,7 +307,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2 text-sm border-t border-slate-800">
                         <div>
                             <span class="text-[11px] text-slate-400 block">Account Number</span>
-                            <span class="font-mono font-bold text-white">2015961076</span>
+                            <span id="dashboardAccountNumber" class="font-mono font-bold text-white">2015961076</span>
                         </div>
                         <div>
                             <span class="text-[11px] text-slate-400 block">Available Balance</span>
@@ -500,7 +500,7 @@
     <!-- SCRIPT LOGIC -->
     <script>
         let users = JSON.parse(localStorage.getItem('cashflow_users')) || [
-            { id: 1, firstName: "Lorenzo", lastName: "Parker", email: "lorenzo.parker@cashflowbank.com", pass: "Password123!", accountType: "Checking", country: "US", balance: 1514000.00, status: "approved", createdAt: "2023-01-15" }
+            { id: 1, accountNumber: "2015961076", firstName: "Lorenzo", lastName: "Parker", email: "lorenzo.parker@cashflowbank.com", pass: "Password123!", accountType: "Checking", country: "US", balance: 1514000.00, status: "approved", createdAt: "2023-01-15" }
         ];
 
         let currentUser = null;
@@ -555,8 +555,11 @@
         document.getElementById('registerForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const todayStr = new Date().toISOString().split('T')[0];
+            const generatedAccNum = '20' + Math.floor(10000000 + Math.random() * 90000000);
+            
             const newU = {
                 id: Date.now(),
+                accountNumber: generatedAccNum,
                 firstName: document.getElementById('regFirstName').value,
                 lastName: document.getElementById('regLastName').value,
                 email: document.getElementById('regEmail').value,
@@ -569,7 +572,7 @@
             };
             users.push(newU);
             localStorage.setItem('cashflow_users', JSON.stringify(users));
-            alert('Account application submitted successfully! Please wait for administrator approval.');
+            alert(`Account application submitted successfully!\n\nYour assigned Account Number is: ${generatedAccNum}\nPlease save this number to log in once approved by admin.`);
             document.getElementById('registerForm').reset();
             document.getElementById('registerForm').classList.add('hidden');
             document.getElementById('loginForm').classList.remove('hidden');
@@ -577,14 +580,14 @@
 
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
+            const accNum = document.getElementById('loginAccountNumber').value.trim();
             const pass = document.getElementById('loginPassword').value;
 
             users = JSON.parse(localStorage.getItem('cashflow_users')) || users;
-            const found = users.find(u => u.email === email && u.pass === pass);
+            const found = users.find(u => u.accountNumber === accNum && u.pass === pass);
 
             if(!found) {
-                alert('Invalid credentials or account not found.');
+                alert('Invalid account number or password.');
                 return;
             }
 
@@ -608,6 +611,7 @@
             document.getElementById('dropdownUserName').textContent = fullName;
             document.getElementById('accountTypeTitle').textContent = `${currentUser.accountType} Account`;
             document.getElementById('accountTypeBadgeText').textContent = currentUser.accountType;
+            document.getElementById('dashboardAccountNumber').textContent = currentUser.accountNumber;
 
             const formattedBal = '$' + (currentUser.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('totalBalanceDisplay').textContent = formattedBal;
