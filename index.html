@@ -353,7 +353,7 @@
                 }
 
                 // Granted Access
-                document.getElementById('greeting-name').innerText = `Welcome back, ${foundAccount.fullName.split(' ')[0]}`;
+                document.getElementById('greeting-name').innerText = `Good morning, ${foundAccount.fullName.split(' ')[0]}`;
                 document.getElementById('balance-display').innerText = `$${Number(foundAccount.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
                 document.getElementById('account-number-display').innerText = `......${foundAccount.accountNumber.slice(-4)}`;
                 document.getElementById('account-type-badge').innerText = `${foundAccount.accountType} ....${foundAccount.accountNumber.slice(-4)}`;
