@@ -12,8 +12,10 @@
     <!-- Header / Navbar -->
     <header class="flex justify-between items-center px-4 py-4 border-b border-gray-800/60 bg-[#0b0f19]/80 backdrop-blur sticky top-0 z-50">
         <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 font-bold">
-                🔒
+            <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
             </div>
             <div>
                 <h1 class="text-sm font-bold tracking-wide text-gray-200">Admin Control Center</h1>
@@ -39,11 +41,13 @@
                         <h3 id="total-clients-count" class="text-3xl font-extrabold text-white mt-2">1</h3>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-                        👥
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
                     </div>
                 </div>
                 <div class="mt-4 flex items-center space-x-2 text-xs text-emerald-400 font-medium">
-                    <span>✓</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     <span>Active database synchronized</span>
                 </div>
             </div>
@@ -56,11 +60,13 @@
                         <h3 id="pending-transfers-count" class="text-3xl font-extrabold text-white mt-2">0</h3>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-                        ⏱️
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
                     </div>
                 </div>
                 <div class="mt-4 flex items-center space-x-2 text-xs text-amber-400/90 font-medium">
-                    <span>ⓘ</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <span>Requires manual authorization</span>
                 </div>
             </div>
@@ -73,7 +79,9 @@
                         <h3 id="total-deposits" class="text-3xl font-extrabold text-emerald-400 mt-2">$0.00</h3>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                        💲
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
                     </div>
                 </div>
                 <div class="mt-4 text-xs text-gray-400 font-medium">
@@ -89,7 +97,9 @@
                         <h3 class="text-3xl font-extrabold text-cyan-400 mt-2 tracking-wide">SECURE</h3>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-                        🛡️
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
                     </div>
                 </div>
                 <div class="mt-4 flex items-center space-x-2 text-xs text-cyan-300 font-medium">
@@ -108,7 +118,9 @@
                     <p class="text-xs text-gray-400">View records, modify balances, or suspend malicious accounts.</p>
                 </div>
                 <button onclick="fetchClientRecords()" class="flex items-center justify-center space-x-2 px-4 py-2.5 bg-gray-800/80 hover:bg-gray-800 border border-gray-700/60 rounded-xl text-xs font-medium text-gray-200 transition">
-                    <span id="refresh-icon">🔄</span>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
                     <span>Refresh Records</span>
                 </button>
             </div>
@@ -124,7 +136,6 @@
                         </tr>
                     </thead>
                     <tbody id="client-table-body" class="divide-y divide-gray-800/60 text-sm">
-                        <!-- Dynamic content populated by Firebase script below -->
                         <tr>
                             <td class="p-3.5 font-mono text-gray-300">7322649829</td>
                             <td class="p-3.5 font-medium text-white">Steve Kenan</td>
@@ -143,8 +154,8 @@
     <!-- Footer -->
     <footer class="text-center text-xs text-gray-500 mt-12 px-4 space-y-1">
         <p>© 2026 Cash Flow Banking Corporation. Secure Administration Channel.</p>
-        <div class="flex items-center justify-center space-x-1 text-emerald-400 text-[11px]">
-            <span>●</span>
+        <div class="flex items-center justify-center space-x-1.5 text-emerald-400 text-[11px]">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             <span>Secure Connection Established</span>
         </div>
     </footer>
@@ -154,7 +165,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase.app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase.firestore.js";
 
-        // Your Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
           authDomain: "cash-flow-banking70.firebaseapp.com",
@@ -165,7 +175,6 @@
           appId: "1:1066612075328:web:3472b082cc86aa7d4428a5"
         };
 
-        // Initialize Firebase & Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -174,12 +183,8 @@
             const totalClientsEl = document.getElementById('total-clients-count');
             
             try {
-                // Change 'users' or 'clients' to match your actual Firestore collection name
                 const querySnapshot = await getDocs(collection(db, "users"));
-                
-                if (querySnapshot.empty) {
-                    return; // Keep placeholder if empty
-                }
+                if (querySnapshot.empty) return;
 
                 tableBody.innerHTML = "";
                 let count = 0;
@@ -207,10 +212,7 @@
             }
         }
 
-        // Attach function to global scope so the Refresh button can trigger it
         window.fetchClientRecords = fetchClientRecords;
-
-        // Run on load
         fetchClientRecords();
     </script>
 </body>
