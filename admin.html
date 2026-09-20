@@ -3,26 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashflowbank - Enterprise Core Banking & Core Administration OS</title>
+    <title>Cashflowbank - Secure Global Institutional Banking</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         bank: {
-                            light: '#f8fafc',
-                            card: '#ffffff',
-                            border: '#e2e8f0',
-                            darkText: '#0f172a',
-                            accent: '#dc2626'
-                        },
-                        adminred: {
-                            primary: '#dc2626',
-                            dark: '#991b1b',
-                            surface: '#ffffff',
-                            bg: '#fef2f2'
+                            dark: '#050b14',
+                            navy: '#0d182e',
+                            card: '#13233f',
+                            accent: '#1d4ed8',
+                            light: '#f8fafc'
                         }
                     }
                 }
@@ -30,287 +27,1026 @@
         }
     </script>
 </head>
-<body class="bg-adminred-bg text-slate-900 font-sans antialiased h-full flex flex-col selection:bg-red-600 selection:text-white">
+<body class="bg-bank-dark text-slate-100 font-sans antialiased h-full flex flex-col selection:bg-blue-600 selection:text-white transition-colors duration-300" id="appBody">
 
-    <!-- Top Institution Security Bar -->
-    <header class="bg-white border-b border-red-200 px-6 py-3 flex items-center justify-between text-xs shadow-sm">
+    <!-- TOP INSTITUTIONAL SECURITY BAR -->
+    <div class="bg-bank-navy border-b border-slate-800/80 px-4 py-2 text-xs flex flex-wrap items-center justify-between gap-2 z-40">
+        <div class="flex items-center space-x-2 font-mono text-blue-400">
+            <svg class="w-4 h-4 text-blue-400 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>256-Bit SSL Encrypted Session • FDIC Insured Institution</span>
+        </div>
         <div class="flex items-center space-x-3">
-            <div class="w-7 h-7 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold shadow-md">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            </div>
-            <div>
-                <span class="font-bold text-slate-900 tracking-wider">CASHFLOWBANK CORE OS v4.8</span>
-                <span class="text-red-600 ml-2 hidden sm:inline font-semibold">| Authorized Admin Node</span>
-            </div>
+            <span class="text-slate-400">Portal Theme:</span>
+            <select id="globalThemeSwitcher" class="bg-bank-card border border-slate-700 rounded px-2 py-1 text-white focus:outline-none">
+                <option value="navy">Royal Navy (Default)</option>
+                <option value="light">Light Mode</option>
+                <option value="dark">Dark Obsidian</option>
+                <option value="emerald">Emerald Wealth</option>
+                <option value="maroon">Maroon Classic</option>
+            </select>
         </div>
-        <div class="flex items-center space-x-4">
-            <div class="hidden md:flex items-center space-x-2 text-red-600 font-mono font-medium">
-                <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-                <span>SWIFT/ABA Gateway: SECURED (RED/WHITE)</span>
-            </div>
-            <a href="index.html" class="bg-red-50 hover:bg-red-100 text-red-700 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition border border-red-200 flex items-center space-x-1">
-                <i class="fa-solid fa-arrow-left mr-1"></i> Client Portal
-            </a>
-        </div>
-    </header>
+    </div>
 
-    <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 space-y-6 flex-1">
-        
-        <!-- Command Header & Quick System Actions -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-red-200 pb-4">
-            <div>
-                <h1 class="text-2xl font-black tracking-tight text-slate-900 flex items-center space-x-2">
-                    <span>Core Banking Administration Console</span>
-                </h1>
-                <p class="text-xs text-slate-500 mt-0.5">Real-time ledger audit, customer credentials view, liquidity allocation & historical backdating.</p>
+    <!-- 1. FULL SCREEN LOADING PAGE -->
+    <div id="loadingScreen" class="fixed inset-0 bg-bank-dark z-50 flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative flex flex-col items-center max-w-sm w-full px-6 text-center">
+            <div class="w-20 h-20 bg-blue-600/10 border border-blue-500/30 rounded-2xl flex items-center justify-center text-blue-400 mb-6 shadow-2xl animate-pulse backdrop-blur-xl">
+                <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             </div>
-            <div class="flex items-center space-x-3">
-                <button onclick="exportLedgerCSV()" class="bg-white hover:bg-red-50 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition border border-red-200 shadow-sm flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    <span>Export Ledger CSV</span>
-                </button>
-                <button onclick="triggerSystemAudit()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-lg shadow-red-600/25 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    <span>Run Compliance Check</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Real Bank Statistics & SVG Metrics Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <h1 class="text-2xl font-extrabold tracking-wider text-white mb-2">CASHFLOWBANK</h1>
+            <p class="text-xs text-blue-300 tracking-widest uppercase mb-8 font-mono">Secure Institutional Portal</p>
             
-            <!-- Stat 1: Total Registered Accounts -->
-            <div class="bg-white border border-red-200 p-5 rounded-3xl shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-red-400 transition">
-                <div class="absolute -right-4 -top-4 w-20 h-20 bg-red-100 rounded-full blur-xl pointer-events-none"></div>
-                <div>
-                    <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Total Registered Accounts</span>
-                    <h3 id="statTotalUsers" class="text-3xl font-black text-slate-900 mt-1">0</h3>
-                </div>
-                <div class="mt-4 pt-3 border-t border-red-100 flex items-center justify-between text-xs text-slate-500">
-                    <span>Active database cache</span>
-                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-                </div>
+            <div class="w-full bg-slate-900 rounded-full h-1.5 mb-4 overflow-hidden border border-slate-800">
+                <div id="loadingBar" class="bg-gradient-to-r from-blue-600 to-indigo-500 h-full rounded-full transition-all duration-300 shadow-[0_0_12px_rgba(37,99,235,0.6)]" style="width: 0%"></div>
             </div>
-
-            <!-- Stat 2: Pending KYC Approvals -->
-            <div class="bg-white border border-red-200 p-5 rounded-3xl shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-red-400 transition">
-                <div class="absolute -right-4 -top-4 w-20 h-20 bg-amber-100 rounded-full blur-xl pointer-events-none"></div>
-                <div>
-                    <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Pending KYC Approvals</span>
-                    <h3 id="statPendingUsers" class="text-3xl font-black text-amber-600 mt-1">0</h3>
-                </div>
-                <div class="mt-4 pt-3 border-t border-red-100 flex items-center justify-between text-xs">
-                    <span class="text-amber-600 font-semibold">Requires review</span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
-                </div>
-            </div>
-
-            <!-- Stat 3: Total Institutional Liquidity -->
-            <div class="bg-white border border-red-200 p-5 rounded-3xl shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-red-400 transition">
-                <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-100 rounded-full blur-xl pointer-events-none"></div>
-                <div>
-                    <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Total Institutional Liquidity</span>
-                    <h3 id="statTotalLiquidity" class="text-2xl font-black text-emerald-600 mt-1 truncate">$0.00</h3>
-                </div>
-                <div class="mt-4 pt-3 border-t border-red-100 flex items-center justify-between text-xs text-slate-500">
-                    <span>Vault reserves sum</span>
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                </div>
-            </div>
-
-            <!-- Stat 4: Fraud & Security Flag -->
-            <div class="bg-white border border-red-200 p-5 rounded-3xl shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-red-400 transition">
-                <div class="absolute -right-4 -top-4 w-20 h-20 bg-red-100 rounded-full blur-xl pointer-events-none"></div>
-                <div>
-                    <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Fraud & Security Flag</span>
-                    <h3 class="text-3xl font-black text-emerald-600 mt-1">0</h3>
-                </div>
-                <div class="mt-4 pt-3 border-t border-red-100 flex items-center justify-between text-xs text-emerald-600 font-semibold">
-                    <span>Zero anomalies found</span>
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-            </div>
-
+            <p id="loadingStatus" class="text-[11px] text-slate-400 font-mono">Initializing secure cryptographic handshake...</p>
         </div>
+    </div>
 
-        <!-- Main Client Ledger & Management Workspace -->
-        <div class="bg-white border border-red-200 rounded-3xl p-6 shadow-xl space-y-4">
-            
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h3 class="font-bold text-slate-900 text-base">Client Accounts, Credentials & Treasury Ledger</h3>
-                    <p class="text-xs text-slate-500">View client account numbers, emails, passwords, verification status, and manage fund injections.</p>
+    <!-- 2. AUTHENTICATION & ONBOARDING VIEW -->
+    <div id="authContainer" class="flex-1 flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-y-auto hidden">
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-md w-full bg-bank-navy/95 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-8 shadow-2xl relative z-10 my-8">
+            <div class="text-center mb-8">
+                <div class="inline-flex w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-2xl items-center justify-center shadow-lg shadow-blue-600/30 mb-3 border border-blue-400/20">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                 </div>
+                <h2 class="text-xl font-bold tracking-tight text-white">Cashflowbank</h2>
+                <p id="authSubtitle" class="text-xs text-slate-400 mt-1">Access your secure financial portal</p>
+            </div>
+
+            <!-- PENDING APPROVAL WARNING BANNER -->
+            <div id="pendingWarningBanner" class="hidden mb-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-300 text-xs text-center flex items-center space-x-2">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span>Your account is currently pending administrator approval. Please wait for institutional verification.</span>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Account Number / Admin ID</label>
+                    <input type="text" id="loginAccountNumber" required value="2015961076" placeholder="e.g. 2015961076" class="w-full bg-bank-dark/80 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white font-mono focus:outline-none focus:border-blue-500 transition shadow-inner">
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="text-xs font-semibold text-slate-300">Password</label>
+                        <a href="#" class="text-[11px] text-blue-400 hover:underline">Forgot?</a>
+                    </div>
+                    <input type="password" id="loginPassword" required value="Password123!" class="w-full bg-bank-dark/80 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-blue-600/30 text-sm">
+                    Sign In to Portal
+                </button>
+                <div class="text-center pt-2">
+                    <p class="text-xs text-slate-400">Don't have an account? <button type="button" id="showRegisterBtn" class="text-blue-400 font-semibold hover:underline">Create Account</button></p>
+                </div>
+                <div class="mt-2 text-center">
+                    <button type="button" id="fillAdminCreds" class="text-[11px] text-indigo-400 hover:text-indigo-300 underline font-mono">Fill Admin Demo Credentials (admin / adminpass)</button>
+                </div>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="registerForm" class="space-y-4 hidden">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">First Name</label>
+                        <input type="text" id="regFirstName" required placeholder="John" class="w-full bg-bank-dark/80 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Last Name</label>
+                        <input type="text" id="regLastName" required placeholder="Doe" class="w-full bg-bank-dark/80 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+                    <input type="email" id="regEmail" required placeholder="john.doe@example.com" class="w-full bg-bank-dark/80 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Country of Residence</label>
+                    <select id="regCountry" class="w-full bg-bank-dark/80 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="US">🇺🇸 United States</option>
+                        <option value="GB">🇬🇧 United Kingdom</option>
+                        <option value="CA">🇨🇦 Canada</option>
+                        <option value="AU">🇦🇺 Australia</option>
+                        <option value="NG">🇳🇬 Nigeria</option>
+                        <option value="GH">🇬🇭 Ghana</option>
+                        <option value="KE">🇰🇪 Kenya</option>
+                        <option value="ZA">🇿🇦 South Africa</option>
+                        <option value="DE">🇩🇪 Germany</option>
+                        <option value="FR">🇫🇷 France</option>
+                        <option value="CH">🇨🇭 Switzerland</option>
+                        <option value="AE">🇦🇪 United Arab Emirates</option>
+                        <option value="SG">🇸🇬 Singapore</option>
+                        <option value="JP">🇯🇵 Japan</option>
+                        <option value="IN">🇮🇳 India</option>
+                        <option value="BR">🇧🇷 Brazil</option>
+                        <option value="MX">🇲🇽 Mexico</option>
+                        <option value="OTHER">🌍 Other Country / Region</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Select Account Type</label>
+                    <select id="regAccountType" class="w-full bg-bank-dark/80 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-semibold text-blue-400">
+                        <option value="Checking">Checking Account</option>
+                        <option value="Savings">Savings Account</option>
+                        <option value="Business">Business Account</option>
+                        <option value="Private Wealth">Private Wealth Vault</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Create Password</label>
+                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-bank-dark/80 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-blue-600/30 text-sm">
+                    Submit Application for Approval
+                </button>
+                <div class="text-center pt-2">
+                    <p class="text-xs text-slate-400">Already registered? <button type="button" id="showLoginBtn" class="text-blue-400 font-semibold hover:underline">Sign In</button></p>
+                </div>
+            </form>
+
+            <div class="mt-6 pt-6 border-t border-slate-700/60 text-center">
+                <button id="openManifestoBtn" class="text-xs text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1.5">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span>View Institutional Manifesto & 20 Core Guarantees</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. MAIN DASHBOARD VIEW -->
+    <div id="mainDashboard" class="flex-1 flex flex-col hidden">
+        <header class="bg-bank-navy border-b border-slate-800/80 sticky top-0 z-30 shadow-md backdrop-blur-md bg-opacity-90">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-2 rounded-xl shadow flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    </div>
+                    <button id="menuBtn" class="text-slate-300 hover:text-white p-1.5 rounded-lg hover:bg-bank-card transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-2 bg-bank-card/80 px-3 py-1.5 rounded-full border border-slate-700/60 text-xs text-slate-300 font-mono">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Secure Session Active • IP: 10.30.162.149</span>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="notifBtn" class="relative p-2.5 text-slate-300 hover:text-white bg-bank-card hover:bg-slate-700 rounded-xl border border-slate-700/60 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        <span id="notifBadge" class="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-500 rounded-full ring-2 ring-bank-navy"></span>
+                    </button>
+
+                    <div class="relative">
+                        <button id="profileMenuBtn" class="flex items-center space-x-2 focus:outline-none">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="User" class="w-9 h-9 rounded-full object-cover border-2 border-blue-500">
+                            <svg class="w-3.5 h-3.5 text-slate-400 hidden sm:inline-block" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-bank-navy rounded-2xl shadow-2xl border border-slate-700 py-2 z-50 text-sm">
+                            <div class="px-4 py-2 border-b border-slate-800">
+                                <p class="font-bold text-white" id="dropdownUserName">Lorenzo Parker</p>
+                                <p class="text-[11px] text-blue-400" id="dropdownAccountCreationDate">Member since: 2024</p>
+                            </div>
+                            <a href="#" class="block px-4 py-2 text-slate-300 hover:bg-bank-card flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span>Settings</span>
+                            </a>
+                            <div class="border-t border-slate-800 my-1"></div>
+                            <a href="#" id="signOutBtn" class="block px-4 py-2 text-red-400 hover:bg-red-500/10 flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                <span>Sign Out</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto w-full px-4 py-6 space-y-6 flex-1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white tracking-tight">Dashboard</h1>
+                    <p id="dashboardGreeting" class="text-slate-400 text-sm">Good Evening, Lorenzo Parker</p>
+                </div>
+                <div class="bg-bank-navy border border-slate-700/80 px-3 py-1.5 rounded-xl text-xs text-slate-300 self-start sm:self-auto flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span>Member Since: <span id="headerCreationDateDisplay" class="font-semibold text-white">Jan 15, 2023</span></span>
+                </div>
+            </div>
+
+            <!-- Total Balance Card -->
+            <div class="bg-gradient-to-br from-bank-navy via-bank-card to-blue-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border border-slate-700/80">
+                <div class="absolute -right-16 -top-16 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Total Balance</span>
+                        <div class="flex items-center space-x-3 mt-1">
+                            <h2 id="totalBalanceDisplay" class="text-3xl sm:text-4xl font-black tracking-tight text-white">$1,514,000.00</h2>
+                            <button id="toggleBalanceVisibility" class="text-slate-400 hover:text-white transition focus:outline-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="openTransferModal" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-2xl font-semibold text-sm flex items-center space-x-2 shadow-lg shadow-blue-600/30 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                            <span>Transfer</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-700/60 text-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-xl bg-bank-dark flex items-center justify-center text-blue-400 border border-slate-700">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[11px] text-slate-400">Linked Cards</p>
+                            <p class="font-bold text-white">0 Cards Active</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-xl bg-bank-dark flex items-center justify-center text-blue-400 border border-slate-700">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[11px] text-slate-400">Account Holder</p>
+                            <p id="holderNameDisplay" class="font-bold text-white">Lorenzo Parker</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-xl bg-bank-dark flex items-center justify-center text-blue-400 border border-slate-700">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[11px] text-slate-400">IP Address</p>
+                            <p class="font-bold text-white">10.30.162.149</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUICK ACTIONS SHORTCUT TOOLBAR -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <button onclick="document.getElementById('transferModal').classList.remove('hidden')" class="bg-bank-navy hover:bg-bank-card border border-slate-700/80 p-4 rounded-2xl flex flex-col items-center text-center transition group shadow-lg">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-white">Wire Funds</span>
+                    <span class="text-[10px] text-slate-400">Global Swift Transfer</span>
+                </button>
+                <button onclick="alert('Virtual Card Generation requires KYC Level 2 authorization.')" class="bg-bank-navy hover:bg-bank-card border border-slate-700/80 p-4 rounded-2xl flex flex-col items-center text-center transition group shadow-lg">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-white">Virtual Card</span>
+                    <span class="text-[10px] text-slate-400">Issue instant card</span>
+                </button>
+                <button onclick="alert('Statements archive downloaded successfully as PDF.')" class="bg-bank-navy hover:bg-bank-card border border-slate-700/80 p-4 rounded-2xl flex flex-col items-center text-center transition group shadow-lg">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-white">Statements</span>
+                    <span class="text-[10px] text-slate-400">Official tax documents</span>
+                </button>
+                <button onclick="alert('Connecting to secure 24/7 Priority Concierge line...')" class="bg-bank-navy hover:bg-bank-card border border-slate-700/80 p-4 rounded-2xl flex flex-col items-center text-center transition group shadow-lg">
+                    <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-white">Concierge</span>
+                    <span class="text-[10px] text-slate-400">Dedicated manager</span>
+                </button>
+            </div>
+
+            <!-- DAILY TRANSACTION LIMITS WIDGET -->
+            <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Daily Transaction & Wire Limits</h3>
+                            <p class="text-xs text-slate-400">Resets every 24 hours at 00:00 UTC</p>
+                        </div>
+                    </div>
+                    <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Tier 1 Limit</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <div class="bg-bank-card/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <span class="text-[11px] text-slate-400 block mb-1 font-semibold uppercase">Daily Limit Max</span>
+                        <span id="dailyLimitMax" class="font-black text-white text-lg font-mono">$5,000,000.00</span>
+                        <span class="text-[10px] text-slate-400 block mt-1">Authorized institutional cap</span>
+                    </div>
+                    <div class="bg-bank-card/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <span class="text-[11px] text-slate-400 block mb-1 font-semibold uppercase">Spent Today</span>
+                        <span id="dailySpentToday" class="font-black text-amber-400 text-lg font-mono">$0.00</span>
+                        <span class="text-[10px] text-slate-400 block mt-1">Total outgoing volume</span>
+                    </div>
+                    <div class="bg-bank-card/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <span class="text-[11px] text-slate-400 block mb-1 font-semibold uppercase">Remaining Limit</span>
+                        <span id="dailyRemainingLimit" class="font-black text-emerald-400 text-lg font-mono">$5,000,000.00</span>
+                        <span class="text-[10px] text-slate-400 block mt-1">Available for immediate wire</span>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5 pt-1">
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-slate-400">Daily Limit Usage Progress</span>
+                        <span id="dailyLimitProgressText" class="text-white font-bold">0.0% used</span>
+                    </div>
+                    <div class="w-full bg-bank-dark rounded-full h-2 overflow-hidden border border-slate-700">
+                        <div id="dailyLimitBar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Details & Credit Score Widget -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 md:col-span-2 flex flex-col justify-between space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                            </div>
+                            <div>
+                                <h3 id="accountTypeTitle" class="font-bold text-white">Current Account</h3>
+                                <p class="text-xs text-slate-400">Primary Private Vault</p>
+                            </div>
+                        </div>
+                        <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Primary</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2 text-sm border-t border-slate-800">
+                        <div>
+                            <span class="text-[11px] text-slate-400 block">Account Number</span>
+                            <span id="dashboardAccountNumber" class="font-mono font-bold text-white">2015961076</span>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-slate-400 block">Available Balance</span>
+                            <span id="accountBalanceDisplay" class="font-bold text-emerald-400">$1,514,000.00</span>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-slate-400 block">Account Type</span>
+                            <span id="accountTypeBadgeText" class="font-medium text-white">Checking</span>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-slate-400 block">Status</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                Active
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 flex flex-col justify-between items-center text-center">
+                    <div class="w-full flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-white text-sm">Credit Score</h3>
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    </div>
+                    <div class="py-3">
+                        <span class="text-4xl font-black text-emerald-400 tracking-tight">850</span>
+                        <span class="block text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full mt-2">Excellent Standing</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Updated today via Experian & Equifax</p>
+                </div>
+            </div>
+
+            <!-- TWO COLUMN ADVANCED METRICS (ASSET DISTRIBUTION & CURRENCY CONVERTER) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Asset Distribution Breakdown -->
+                <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 space-y-4 flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-white">Global Asset Allocation</h3>
+                            <p class="text-xs text-slate-400">Portfolio distribution across liquidity pools</p>
+                        </div>
+                        <span class="text-xs font-mono text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-lg">Verified Yield</span>
+                    </div>
+
+                    <div class="space-y-3 py-2">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">USD Liquidity Vault</span>
+                                <span class="text-white font-bold font-mono">75.0%</span>
+                            </div>
+                            <div class="w-full bg-bank-dark rounded-full h-2 overflow-hidden border border-slate-800">
+                                <div class="bg-blue-500 h-full rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">Euro Sterling Reserves</span>
+                                <span class="text-white font-bold font-mono">15.0%</span>
+                            </div>
+                            <div class="w-full bg-bank-dark rounded-full h-2 overflow-hidden border border-slate-800">
+                                <div class="bg-indigo-500 h-full rounded-full" style="width: 15%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">Institutional Gold & Commodities</span>
+                                <span class="text-white font-bold font-mono">10.0%</span>
+                            </div>
+                            <div class="w-full bg-bank-dark rounded-full h-2 overflow-hidden border border-slate-800">
+                                <div class="bg-amber-500 h-full rounded-full" style="width: 10%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-bank-dark rounded-2xl border border-slate-800 text-xs flex items-center justify-between">
+                        <span class="text-slate-400">Annual Projected Yield:</span>
+                        <span class="text-emerald-400 font-bold font-mono">+4.85% APY compounding</span>
+                    </div>
+                </div>
+
+                <!-- Live Currency Converter Tool -->
+                <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-white">Forex Converter</h3>
+                            <p class="text-xs text-slate-400">Real-time institutional exchange rates</p>
+                        </div>
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1 font-semibold">Amount to Convert</label>
+                            <input type="number" id="convAmount" value="1000" class="w-full bg-bank-dark border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] text-slate-400 mb-1 font-semibold">From Currency</label>
+                                <select id="convFrom" class="w-full bg-bank-dark border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] text-slate-400 mb-1 font-semibold">To Currency</label>
+                                <select id="convTo" class="w-full bg-bank-dark border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="JPY">JPY (¥)</option>
+                                    <option value="CAD">CAD ($)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-bank-dark/80 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                            <span class="text-slate-400">Converted Value:</span>
+                            <span id="convResult" class="text-emerald-400 font-black font-mono text-base">€920.00 EUR</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cashflow Chart -->
+            <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-white">Cashflow Analytics</h3>
+                        <p class="text-xs text-slate-400">Multi-currency inflows & outflows</p>
+                    </div>
+                    <select class="bg-bank-card border border-slate-700 text-xs text-slate-300 rounded-xl px-3 py-1.5 focus:outline-none">
+                        <option>Past 30 Days</option>
+                        <option>Quarterly</option>
+                    </select>
+                </div>
+                <div class="h-56 relative flex items-center justify-center">
+                    <canvas id="cashflowChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-white">Recent Transactions</h3>
+                    <button class="text-xs text-blue-400 hover:underline font-semibold">View All</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-[11px] text-slate-400 uppercase tracking-wider">
+                                <th class="py-3 font-semibold">Description</th>
+                                <th class="py-3 font-semibold">Type</th>
+                                <th class="py-3 font-semibold">Date</th>
+                                <th class="py-3 font-semibold text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 text-sm">
+                            <tr class="hover:bg-bank-card/50 transition">
+                                <td class="py-3.5 font-medium text-white flex items-center space-x-3">
+                                    <div class="w-7 h-7 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                                    </div>
+                                    <span>Institutional Wire Deposit</span>
+                                </td>
+                                <td class="py-3.5"><span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] px-2 py-0.5 rounded-md font-semibold">WIRE</span></td>
+                                <td class="py-3.5 text-slate-400 text-xs" id="txDateDisplay">Today, 8:04 AM</td>
+                                <td class="py-3.5 text-right font-bold text-emerald-400" id="txAmountDisplay">+$1,514,000.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 4. ADMIN DASHBOARD VIEW -->
+    <div id="adminDashboard" class="flex-1 flex flex-col hidden">
+        <header class="bg-bank-navy border-b border-slate-800/80 sticky top-0 z-30 shadow-md">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-red-600 text-white p-2 rounded-xl shadow flex items-center justify-center font-bold text-xs uppercase tracking-wider">
+                        Admin
+                    </div>
+                    <span class="font-bold text-white text-base">Cashflowbank Institutional Control Center</span>
+                </div>
+                <button id="adminSignOutBtn" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-3 py-1.5 rounded-xl text-xs font-semibold transition border border-red-500/20">
+                    Sign Out Admin
+                </button>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto w-full px-4 py-8 space-y-6 flex-1">
+            <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div>
+                        <h2 class="font-bold text-lg text-white">Client Accounts & Limit Management</h2>
+                        <p class="text-xs text-slate-400">Review pending registrations and adjust individual client daily wire limits</p>
+                    </div>
+                    <span class="bg-blue-500/10 text-blue-400 text-xs px-3 py-1 rounded-full border border-blue-500/20 font-mono" id="adminTotalUsersCount">Total Accounts: 1</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-[11px] text-slate-400 uppercase tracking-wider">
+                                <th class="py-3 font-semibold">Account # / Name</th>
+                                <th class="py-3 font-semibold">Type & Country</th>
+                                <th class="py-3 font-semibold">Balance</th>
+                                <th class="py-3 font-semibold">Status</th>
+                                <th class="py-3 font-semibold">Daily Limit ($)</th>
+                                <th class="py-3 font-semibold text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUserTableBody" class="divide-y divide-slate-800/60 text-sm">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SIDEBAR DRAWER -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden"></div>
+    <div id="sidebarDrawer" class="fixed inset-y-0 left-0 max-w-xs w-full bg-bank-navy border-r border-slate-800 shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
+        <div>
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-bank-dark">
                 <div class="flex items-center space-x-2">
-                    <input type="text" id="adminSearchInput" onkeyup="filterClientLedger()" placeholder="Search client by name/email/acc..." class="bg-red-50/50 border border-red-200 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-red-600 w-64 placeholder-slate-400">
+                    <div class="bg-blue-600 text-white p-2 rounded-xl flex items-center justify-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    </div>
+                    <span class="font-bold text-white">Cashflowbank</span>
                 </div>
+                <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-red-200 text-[11px] text-red-800 uppercase tracking-wider bg-red-50/60">
-                            <th class="py-3 px-3 font-semibold">Client Name & Account Number</th>
-                            <th class="py-3 px-3 font-semibold">Email & Login Password</th>
-                            <th class="py-3 px-3 font-semibold">Account Type / Country</th>
-                            <th class="py-3 px-3 font-semibold">Ledger Balance ($ USD)</th>
-                            <th class="py-3 px-3 font-semibold">KYC Status</th>
-                            <th class="py-3 px-3 font-semibold text-right">Core Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminUserTableBody" class="divide-y divide-red-100 text-sm">
-                        <!-- Populated dynamically -->
-                    </tbody>
-                </table>
+            <div class="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-100px)] text-sm">
+                <div>
+                    <p class="text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-2 px-3">Main Navigation</p>
+                    <nav class="space-y-1">
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-blue-600 text-white font-semibold">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="#" id="sidebarTransferLink" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-300 hover:bg-bank-card font-medium">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                <span>Transfer</span>
+                            </div>
+                            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    </nav>
+                </div>
             </div>
         </div>
 
-        <!-- System Audit Log Terminal Box -->
-        <div class="bg-white border border-red-200 rounded-3xl p-6 shadow-xl space-y-3">
-            <div class="flex items-center justify-between border-b border-red-100 pb-3">
-                <div class="flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-                    <h3 class="font-bold text-slate-900 text-sm">Real-Time Core Bank System Log</h3>
+        <div class="p-4 border-t border-slate-800 bg-bank-dark">
+            <button id="sidebarSignOut" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 font-semibold text-sm transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MANIFESTO MODAL -->
+    <div id="manifestoModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-bank-navy border border-slate-700 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+                <div>
+                    <h3 class="font-bold text-lg text-white">Institutional Manifesto & Guarantees</h3>
+                    <p class="text-xs text-blue-400">Cashflowbank 20 Core Commitments</p>
                 </div>
-                <span class="text-[11px] font-mono text-red-600 font-semibold px-2.5 py-0.5 bg-red-50 rounded-md border border-red-200">Encrypted Stream</span>
+                <button id="closeManifestoModal" class="text-slate-400 hover:text-white p-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
-            <div id="systemLogBox" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 font-mono text-xs text-slate-300 space-y-1.5 h-36 overflow-y-auto">
-                <div class="text-slate-500">[02:51:00 UTC] System initialized. Core ledger connected to persistent localStorage cache.</div>
-                <div class="text-emerald-400">[02:51:02 UTC] Security handshake completed successfully across all nodes.</div>
+            <div class="overflow-y-auto pr-2 space-y-3 text-sm text-slate-300 flex-1">
+                <div class="p-3 bg-bank-dark rounded-xl border border-slate-800 flex items-start space-x-3">
+                    <span class="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">1</span>
+                    <div><strong class="text-white">Available 24/7:</strong> Uninterrupted banking access around the clock across all digital channels.</div>
+                </div>
+                <div class="p-3 bg-bank-dark rounded-xl border border-slate-800 flex items-start space-x-3">
+                    <span class="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">2</span>
+                    <div><strong class="text-white">Global Access:</strong> Seamless international wire transfers and borderless liquidity.</div>
+                </div>
+                <div class="p-3 bg-bank-dark rounded-xl border border-slate-800 flex items-start space-x-3">
+                    <span class="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">3</span>
+                    <div><strong class="text-white">Zero Hidden Fees:</strong> Complete fee transparency with no unexpected account charges.</div>
+                </div>
+                <div class="p-3 bg-bank-dark rounded-xl border border-slate-800 flex items-start space-x-3">
+                    <span class="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">4</span>
+                    <div><strong class="text-white">Military-Grade Encryption:</strong> End-to-end security protecting every transaction session.</div>
+                </div>
+            </div>
+            <div class="pt-4 border-t border-slate-800 text-center">
+                <button id="closeManifestoBtnBottom" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-xl transition text-sm">
+                    Acknowledge & Close
+                </button>
             </div>
         </div>
+    </div>
 
-    </main>
+    <!-- TRANSFER MODAL -->
+    <div id="transferModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-bank-navy border border-slate-700 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-lg text-white">Transfer Funds / Wire</h3>
+                <button id="closeTransferModal" class="text-slate-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="transferForm" class="space-y-4 text-sm">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Beneficiary Name / Bank</label>
+                    <input type="text" id="transferRecipient" placeholder="e.g., Chase Bank" required class="w-full bg-bank-dark border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Amount ($ USD)</label>
+                    <input type="number" id="transferAmountInput" step="0.01" min="1" placeholder="0.00" required class="w-full bg-bank-dark border border-slate-700 rounded-xl px-3 py-2.5 text-white font-bold focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="pt-2 flex items-center justify-end space-x-3">
+                    <button type="button" id="cancelTransferBtn" class="px-4 py-2 text-slate-400 hover:text-white text-xs font-semibold">Cancel</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-semibold text-xs transition">Authorize Transfer</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <!-- SCRIPT LOGIC -->
     <script>
-        function logSystemEvent(msg, type = 'info') {
-            const box = document.getElementById('systemLogBox');
-            const div = document.createElement('div');
-            const timeStr = new Date().toISOString().split('T')[1].slice(0, 8);
-            if(type === 'success') div.className = "text-emerald-400";
-            else if(type === 'warn') div.className = "text-amber-400";
-            else div.className = "text-slate-300";
-            div.textContent = `[${timeStr} UTC] ${msg}`;
-            box.appendChild(div);
-            box.scrollTop = box.scrollHeight;
-        }
+        let users = JSON.parse(localStorage.getItem('cashflow_users')) || [
+            { id: 1, accountNumber: "2015961076", firstName: "Lorenzo", lastName: "Parker", email: "lorenzo.parker@cashflowbank.com", pass: "Password123!", accountType: "Checking", country: "US", balance: 1514000.00, status: "approved", createdAt: "2023-01-15", dailySpent: 0.00, dailyLimit: 5000000.00 }
+        ];
 
-        function renderAdminTable() {
-            let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
-            const tableBody = document.getElementById('adminUserTableBody');
-            tableBody.innerHTML = '';
+        let currentUser = null;
 
-            let total = users.length;
-            let pending = users.filter(u => u.status === 'pending').length;
-            let totalLiq = users.reduce((sum, u) => sum + (parseFloat(u.balance) || 0), 0);
+        const globalThemeSwitcher = document.getElementById('globalThemeSwitcher');
+        const appBody = document.getElementById('appBody');
+        globalThemeSwitcher.addEventListener('change', (e) => {
+            const mode = e.target.value;
+            if(mode === 'light') {
+                appBody.className = "bg-slate-100 text-slate-900 font-sans antialiased h-full flex flex-col transition-colors duration-300";
+            } else if(mode === 'dark') {
+                appBody.className = "bg-black text-slate-100 font-sans antialiased h-full flex flex-col transition-colors duration-300";
+            } else if(mode === 'emerald') {
+                appBody.className = "bg-emerald-950 text-slate-100 font-sans antialiased h-full flex flex-col transition-colors duration-300";
+            } else if(mode === 'maroon') {
+                appBody.className = "bg-stone-950 text-slate-100 font-sans antialiased h-full flex flex-col transition-colors duration-300";
+            } else {
+                appBody.className = "bg-bank-dark text-slate-100 font-sans antialiased h-full flex flex-col transition-colors duration-300";
+            }
+        });
 
-            document.getElementById('statTotalUsers').textContent = total;
-            document.getElementById('statPendingUsers').textContent = pending;
-            document.getElementById('statTotalLiquidity').textContent = '$' + totalLiq.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        window.addEventListener('DOMContentLoaded', () => {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 30;
+                if(progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('loadingScreen').style.display = 'none';
+                        document.getElementById('authContainer').classList.remove('hidden');
+                    }, 400);
+                }
+                document.getElementById('loadingBar').style.width = progress + '%';
+            }, 200);
+        });
 
-            if(users.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No client accounts found in the core database.</td></tr>`;
+        document.getElementById('showRegisterBtn').addEventListener('click', () => {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('pendingWarningBanner').classList.add('hidden');
+        });
+        document.getElementById('showLoginBtn').addEventListener('click', () => {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        });
+
+        document.getElementById('fillAdminCreds').addEventListener('click', () => {
+            document.getElementById('loginAccountNumber').value = 'admin';
+            document.getElementById('loginPassword').value = 'adminpass';
+        });
+
+        document.getElementById('openManifestoBtn').addEventListener('click', () => document.getElementById('manifestoModal').classList.remove('hidden'));
+        document.getElementById('closeManifestoModal').addEventListener('click', () => document.getElementById('manifestoModal').classList.add('hidden'));
+        document.getElementById('closeManifestoBtnBottom').addEventListener('click', () => document.getElementById('manifestoModal').classList.add('hidden'));
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const todayStr = new Date().toISOString().split('T')[0];
+            const generatedAccNum = '20' + Math.floor(10000000 + Math.random() * 90000000);
+            
+            const newU = {
+                id: Date.now(),
+                accountNumber: generatedAccNum,
+                firstName: document.getElementById('regFirstName').value,
+                lastName: document.getElementById('regLastName').value,
+                email: document.getElementById('regEmail').value,
+                pass: document.getElementById('regPassword').value,
+                country: document.getElementById('regCountry').value,
+                accountType: document.getElementById('regAccountType').value,
+                balance: 0.00,
+                status: 'pending',
+                createdAt: todayStr,
+                dailySpent: 0.00,
+                dailyLimit: 5000000.00
+            };
+            users.push(newU);
+            localStorage.setItem('cashflow_users', JSON.stringify(users));
+            alert(`Account application submitted successfully!\n\nYour assigned Account Number is: ${generatedAccNum}\nPlease save this number to log in once approved by admin.`);
+            document.getElementById('registerForm').reset();
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const accNum = document.getElementById('loginAccountNumber').value.trim();
+            const pass = document.getElementById('loginPassword').value;
+
+            // Check if login is Admin
+            if(accNum === 'admin' && pass === 'adminpass') {
+                transitionToAdminDashboard();
                 return;
             }
 
+            users = JSON.parse(localStorage.getItem('cashflow_users')) || users;
+            const found = users.find(u => u.accountNumber === accNum && u.pass === pass);
+
+            if(!found) {
+                alert('Invalid account number or password.');
+                return;
+            }
+
+            if(found.status !== 'approved') {
+                document.getElementById('pendingWarningBanner').classList.remove('hidden');
+                alert('Account pending admin approval.');
+                return;
+            }
+
+            currentUser = found;
+            if(currentUser.dailySpent === undefined) currentUser.dailySpent = 0.00;
+            if(currentUser.dailyLimit === undefined) currentUser.dailyLimit = 5000000.00;
+            transitionToDashboard();
+        });
+
+        function updateDailyLimitsDisplay() {
+            const limit = currentUser.dailyLimit || 5000000.00;
+            const spent = currentUser.dailySpent || 0.00;
+            const remaining = Math.max(0, limit - spent);
+            const percent = Math.min(100, (spent / limit) * 100);
+
+            document.getElementById('dailyLimitMax').textContent = '$' + limit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('dailySpentToday').textContent = '$' + spent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('dailyRemainingLimit').textContent = '$' + remaining.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('dailyLimitBar').style.width = percent + '%';
+            document.getElementById('dailyLimitProgressText').textContent = percent.toFixed(1) + '% used';
+        }
+
+        // Live Currency Converter Logic
+        const rates = { USD: 1, EUR: 0.92, GBP: 0.79, JPY: 155.0, CAD: 1.37 };
+        function updateConversion() {
+            const amt = parseFloat(document.getElementById('convAmount').value) || 0;
+            const from = document.getElementById('convFrom').value;
+            const to = document.getElementById('convTo').value;
+            const valInUsd = amt / rates[from];
+            const converted = valInUsd * rates[to];
+            const symbols = { EUR: '€', GBP: '£', JPY: '¥', CAD: '$', USD: '$' };
+            document.getElementById('convResult').textContent = `${symbols[to] || ''}${converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${to}`;
+        }
+        document.getElementById('convAmount').addEventListener('input', updateConversion);
+        document.getElementById('convFrom').addEventListener('change', updateConversion);
+        document.getElementById('convTo').addEventListener('change', updateConversion);
+
+        function transitionToDashboard() {
+            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('mainDashboard').classList.remove('hidden');
+
+            const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
+            document.getElementById('dashboardGreeting').textContent = `Good Day, ${fullName}`;
+            document.getElementById('holderNameDisplay').textContent = fullName;
+            document.getElementById('dropdownUserName').textContent = fullName;
+            document.getElementById('accountTypeTitle').textContent = `${currentUser.accountType} Account`;
+            document.getElementById('accountTypeBadgeText').textContent = currentUser.accountType;
+            document.getElementById('dashboardAccountNumber').textContent = currentUser.accountNumber;
+
+            const formattedBal = '$' + (currentUser.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('totalBalanceDisplay').textContent = formattedBal;
+            document.getElementById('accountBalanceDisplay').textContent = formattedBal;
+
+            const formattedDate = currentUser.createdAt ? new Date(currentUser.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Jan 15, 2023';
+            document.getElementById('headerCreationDateDisplay').textContent = formattedDate;
+            document.getElementById('dropdownAccountCreationDate').textContent = `Member since: ${formattedDate}`;
+            document.getElementById('txDateDisplay').textContent = formattedDate;
+            document.getElementById('txAmountDisplay').textContent = '+' + formattedBal;
+
+            updateDailyLimitsDisplay();
+            initChart();
+            updateConversion();
+        }
+
+        function transitionToAdminDashboard() {
+            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            renderAdminUserTable();
+        }
+
+        function renderAdminUserTable() {
+            users = JSON.parse(localStorage.getItem('cashflow_users')) || users;
+            const tbody = document.getElementById('adminUserTableBody');
+            tbody.innerHTML = '';
+            document.getElementById('adminTotalUsersCount').textContent = `Total Accounts: ${users.length}`;
+
             users.forEach(u => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-red-50/40 transition";
-                
-                const statusBadge = u.status === 'approved' 
-                    ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center space-x-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Approved</span></span>`
-                    : `<span class="bg-amber-100 text-amber-800 border border-amber-200 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center space-x-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span>Pending</span></span>`;
-
-                const formattedBal = (u.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                tr.className = "hover:bg-bank-card/50 transition";
+                const isApproved = u.status === 'approved';
+                const limitVal = u.dailyLimit !== undefined ? u.dailyLimit : 5000000.00;
 
                 tr.innerHTML = `
-                    <td class="py-4 px-3">
-                        <div class="font-bold text-slate-900">${u.firstName} ${u.lastName}</div>
-                        <div class="text-xs text-red-600 font-mono font-bold tracking-wide">Acc: ${u.accountNumber || 'N/A'}</div>
+                    <td class="py-3.5">
+                        <span class="font-mono text-white font-bold block">${u.accountNumber}</span>
+                        <span class="text-xs text-slate-400">${u.firstName} ${u.lastName} (${u.email})</span>
                     </td>
-                    <td class="py-4 px-3">
-                        <div class="text-xs text-slate-700 font-mono"><span class="text-slate-400">Email:</span> ${u.email}</div>
-                        <div class="text-xs text-slate-900 font-mono font-semibold mt-0.5"><span class="text-slate-400 font-normal">Pass:</span> <span class="bg-red-50 text-red-700 px-1.5 py-0.5 rounded border border-red-200">${u.pass || u.password || 'N/A'}</span></div>
+                    <td class="py-3.5">
+                        <span class="text-xs text-white block font-medium">${u.accountType}</span>
+                        <span class="text-[10px] text-slate-400 uppercase">${u.country}</span>
                     </td>
-                    <td class="py-4 px-3">
-                        <div class="text-red-600 font-semibold text-xs">${u.accountType}</div>
-                        <div class="text-[11px] text-slate-500">${u.country}</div>
+                    <td class="py-3.5 font-mono text-emerald-400 font-bold">
+                        $${(u.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
-                    <td class="py-4 px-3">
-                        <div class="font-bold text-emerald-600 font-mono">$${formattedBal}</div>
-                        <button onclick="fundAccount(${u.id})" class="text-[11px] text-red-600 hover:underline mt-0.5 inline-flex items-center space-x-1 font-medium"><i class="fa-solid fa-pen-to-square"></i><span>Override Balance</span></button>
+                    <td class="py-3.5">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isApproved ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}">
+                            ${u.status || 'pending'}
+                        </span>
                     </td>
-                    <td class="py-4 px-3">${statusBadge}</td>
-                    <td class="py-4 px-3 text-right space-x-2">
-                        ${u.status !== 'approved' ? `<button onclick="approveUser(${u.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition shadow-sm">Approve</button>` : ''}
-                        <button onclick="deleteUser(${u.id})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-xl text-xs font-semibold transition border border-red-200">Purge</button>
+                    <td class="py-3.5">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-mono text-slate-300">$</span>
+                            <input type="number" id="limitInput_${u.id}" value="${limitVal}" step="1000" class="w-32 bg-bank-dark border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-blue-500">
+                        </div>
+                    </td>
+                    <td class="py-3.5 text-right space-x-2">
+                        <button onclick="saveUserLimit(${u.id})" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+                            Save Limit
+                        </button>
+                        ${!isApproved ? `<button onclick="approveUser(${u.id})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">Approve</button>` : ''}
                     </td>
                 `;
-                tableBody.appendChild(tr);
+                tbody.appendChild(tr);
             });
         }
 
-        function approveUser(id) {
-            let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
-            const idx = users.findIndex(u => u.id === id);
-            if(idx !== -1) {
-                users[idx].status = 'approved';
+        window.saveUserLimit = function(id) {
+            const inputVal = parseFloat(document.getElementById(`limitInput_${id}`).value);
+            if(isNaN(inputVal) || inputVal < 0) {
+                alert('Please enter a valid amount.');
+                return;
+            }
+            users = JSON.parse(localStorage.getItem('cashflow_users')) || users;
+            const target = users.find(u => u.id === id);
+            if(target) {
+                target.dailyLimit = inputVal;
                 localStorage.setItem('cashflow_users', JSON.stringify(users));
-                logSystemEvent(`KYC Approved for account ID: ${users[idx].email}`, 'success');
-                renderAdminTable();
+                alert(`Daily limit for account ${target.accountNumber} successfully updated to $${inputVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`);
+                renderAdminUserTable();
             }
-        }
+        };
 
-        function fundAccount(id) {
-            let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
-            const idx = users.findIndex(u => u.id === id);
-            if(idx !== -1) {
-                const amountPrompt = prompt(`Enter new exact USD ledger balance for ${users[idx].firstName} ${users[idx].lastName}:`, users[idx].balance || "1514000");
-                if(amountPrompt !== null) {
-                    const amount = parseFloat(amountPrompt);
-                    if(!isNaN(amount)) {
-                        users[idx].balance = amount;
-                        localStorage.setItem('cashflow_users', JSON.stringify(users));
-                        logSystemEvent(`Ledger balance adjusted to $${amount.toLocaleString()} for ${users[idx].email}`, 'success');
-                        renderAdminTable();
-                    }
-                }
-            }
-        }
-
-        function deleteUser(id) {
-            if(confirm('Warning: Are you certain you want to permanently delete this client account from the vault ledger?')) {
-                let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
-                users = users.filter(u => u.id !== id);
+        window.approveUser = function(id) {
+            users = JSON.parse(localStorage.getItem('cashflow_users')) || users;
+            const target = users.find(u => u.id === id);
+            if(target) {
+                target.status = 'approved';
                 localStorage.setItem('cashflow_users', JSON.stringify(users));
-                logSystemEvent(`Account record purged from cache (ID: ${id})`, 'warn');
-                renderAdminTable();
+                alert(`Account ${target.accountNumber} has been approved.`);
+                renderAdminUserTable();
             }
+        };
+
+        document.getElementById('adminSignOutBtn').addEventListener('click', () => {
+            location.reload();
+        });
+
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            document.getElementById('sidebarDrawer').classList.remove('-translate-x-full');
+            document.getElementById('sidebarOverlay').classList.remove('hidden');
+        });
+        document.getElementById('closeSidebar').addEventListener('click', closeDrawer);
+        document.getElementById('sidebarOverlay').addEventListener('click', closeDrawer);
+        function closeDrawer() {
+            document.getElementById('sidebarDrawer').classList.add('-translate-x-full');
+            document.getElementById('sidebarOverlay').classList.add('hidden');
         }
 
-        function triggerSystemAudit() {
-            logSystemEvent("Initiating automated compliance and AML transaction sweep...", 'info');
-            setTimeout(() => {
-                logSystemEvent("AML check passed: 0 suspicious transactions flagged across all active nodes.", 'success');
-                alert("Core System Audit Complete: All ledgers match and security keys are optimal.");
-            }, 800);
-        }
+        const handleSignOut = (e) => {
+            e.preventDefault();
+            location.reload();
+        };
+        document.getElementById('signOutBtn').addEventListener('click', handleSignOut);
+        document.getElementById('sidebarSignOut').addEventListener('click', handleSignOut);
 
-        function exportLedgerCSV() {
-            logSystemEvent("Exporting encrypted core bank ledger data as CSV...", 'success');
-            alert("Ledger export generated successfully.");
-        }
+        document.getElementById('openTransferModal').addEventListener('click', () => document.getElementById('transferModal').classList.remove('hidden'));
+        document.getElementById('sidebarTransferLink').addEventListener('click', (e) => { e.preventDefault(); closeDrawer(); document.getElementById('transferModal').classList.remove('hidden'); });
+        document.getElementById('closeTransferModal').addEventListener('click', () => document.getElementById('transferModal').classList.add('hidden'));
+        document.getElementById('cancelTransferBtn').addEventListener('click', () => document.getElementById('transferModal').classList.add('hidden'));
 
-        function filterClientLedger() {
-            const query = document.getElementById('adminSearchInput').value.toLowerCase();
-            const rows = document.querySelectorAll('#adminUserTableBody tr');
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(query) ? '' : 'none';
+        document.getElementById('transferForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const amt = parseFloat(document.getElementById('transferAmountInput').value);
+            if(isNaN(amt) || amt <= 0) return;
+
+            const currentLimit = currentUser.dailyLimit || 5000000.00;
+            const currentSpent = currentUser.dailySpent || 0.00;
+
+            if((currentSpent + amt) > currentLimit) {
+                alert(`Transfer exceeds your remaining daily limit of $${(currentLimit - currentSpent).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.`);
+                return;
+            }
+
+            currentUser.balance = (currentUser.balance || 0) + amt;
+            currentUser.dailySpent = currentSpent + amt;
+
+            users = JSON.parse(localStorage.getItem('cashflow_users')) || users;
+            const idx = users.findIndex(u => u.id === currentUser.id);
+            if(idx !== -1) { users[idx] = currentUser; localStorage.setItem('cashflow_users', JSON.stringify(users)); }
+
+            const fmt = '$' + currentUser.balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('totalBalanceDisplay').textContent = fmt;
+            document.getElementById('accountBalanceDisplay').textContent = fmt;
+            document.getElementById('transferModal').classList.add('hidden');
+            document.getElementById('transferForm').reset();
+            updateDailyLimitsDisplay();
+            alert('Transfer processed successfully.');
+        });
+
+        function initChart() {
+            const ctx = document.getElementById('cashflowChart').getContext('2d');
+            const bal = currentUser.balance || 1514000;
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Current'],
+                    datasets: [{
+                        label: 'Liquidity ($)',
+                        data: [bal * 0.85, bal * 0.90, bal * 0.95, bal * 0.98, bal],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
-
-        window.addEventListener('DOMContentLoaded', renderAdminTable);
     </script>
 </body>
 </html>
