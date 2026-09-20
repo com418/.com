@@ -55,24 +55,44 @@
                 <button id="link-back-login" class="text-slate-300 hover:text-white text-sm focus:outline-none"><i class="fa-solid fa-chevron-left mr-1"></i> Back</button>
             </div>
             
-            <div class="my-auto space-y-4 py-4">
+            <div class="my-auto space-y-3 py-4">
                 <div>
                     <h2 class="text-xl font-bold">Open an Account</h2>
                     <p class="text-xs text-blue-300 mt-0.5">Applications require admin approval before activation.</p>
                 </div>
 
-                <div class="space-y-3">
+                <div class="space-y-2.5">
                     <div>
                         <label class="text-[11px] font-medium text-blue-200">Full Name</label>
-                        <input type="text" id="signup-fullname" placeholder="Alex Morgan" class="w-full mt-1 px-3.5 py-2.5 bg-slate-900/60 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400">
+                        <input type="text" id="signup-fullname" placeholder="Alex Morgan" class="w-full mt-1 px-3 py-2 bg-slate-900/60 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400">
                     </div>
                     <div>
                         <label class="text-[11px] font-medium text-blue-200">Email Address</label>
-                        <input type="email" id="signup-email" placeholder="alex@example.com" class="w-full mt-1 px-3.5 py-2.5 bg-slate-900/60 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400">
+                        <input type="email" id="signup-email" placeholder="alex@example.com" class="w-full mt-1 px-3 py-2 bg-slate-900/60 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-medium text-blue-200">Country of Residence</label>
+                        <select id="signup-country" class="w-full mt-1 px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-blue-400">
+                            <option value="" disabled selected>Select your country</option>
+                            <option value="United States">United States</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Nigeria">Nigeria</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                            <option value="India">India</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="Ghana">Ghana</option>
+                            <option value="Kenya">Kenya</option>
+                            <option value="United Arab Emirates">United Arab Emirates</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Other">Other Country</option>
+                        </select>
                     </div>
                     <div>
                         <label class="text-[11px] font-medium text-blue-200">Account Type</label>
-                        <select id="signup-account-type" class="w-full mt-1 px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-blue-400">
+                        <select id="signup-account-type" class="w-full mt-1 px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-blue-400">
                             <option value="Checking">Checking</option>
                             <option value="Savings">Savings</option>
                             <option value="Business Checking">Business Checking</option>
@@ -81,9 +101,9 @@
                     </div>
                     <div>
                         <label class="text-[11px] font-medium text-blue-200">Password</label>
-                        <input type="password" id="signup-password" placeholder="••••••••" class="w-full mt-1 px-3.5 py-2.5 bg-slate-900/60 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400">
+                        <input type="password" id="signup-password" placeholder="••••••••" class="w-full mt-1 px-3 py-2 bg-slate-900/60 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400">
                     </div>
-                    <button id="btn-submit-signup" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl text-xs font-bold transition shadow-lg mt-2">Submit Application</button>
+                    <button id="btn-submit-signup" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl text-xs font-bold transition shadow-lg mt-1">Submit Application</button>
                 </div>
             </div>
 
@@ -248,15 +268,16 @@
             viewLogin.classList.remove('hidden');
         });
 
-        // Sign Up Form Submission - Generates an 8-digit account number automatically
+        // Sign Up Form Submission - Collects Country & generates Account Number
         document.getElementById('btn-submit-signup').addEventListener('click', () => {
             const fullName = document.getElementById('signup-fullname').value.trim();
             const email = document.getElementById('signup-email').value.trim();
+            const country = document.getElementById('signup-country').value;
             const accountType = document.getElementById('signup-account-type').value;
             const password = document.getElementById('signup-password').value;
 
-            if (!fullName || !email || !password) {
-                alert("Please fill out all required fields.");
+            if (!fullName || !email || !country || !password) {
+                alert("Please fill out all required fields, including selecting your country.");
                 return;
             }
 
@@ -269,6 +290,7 @@
             set(newAccountRef, {
                 fullName,
                 email,
+                country,
                 accountNumber,
                 accountType,
                 password,
@@ -276,7 +298,7 @@
                 status: 'pending',
                 createdAt: new Date().toISOString()
             }).then(() => {
-                alert(`Account application submitted successfully!\n\nYour assigned Account Number is: ${accountNumber}\n\nPlease save this number. You will need it to login once an administrator approves your account.`);
+                alert(`Account application submitted successfully!\n\nCountry: ${country}\nYour assigned Account Number is: ${accountNumber}\n\nPlease save this number. You will need it to login once an administrator approves your account.`);
                 viewSignup.classList.add('hidden');
                 viewLogin.classList.remove('hidden');
             }).catch((error) => {
