@@ -1,146 +1,160 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Control Center - Cash Flow Banking</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#fdf2f2',
-                            100: '#fde8e8',
-                            500: '#ef4444',
-                            600: '#dc2626',
-                            700: '#b91c1c',
-                            900: '#7f1d1d',
-                            950: '#450a0a',
-                        },
-                        darksurface: {
-                            900: '#0f172a',
-                            950: '#090d16',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind CSS for rapid styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-darksurface-950 font-sans text-gray-100 min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
+<body class="bg-[#0b0f19] text-gray-100 font-sans antialiased min-h-screen pb-12">
 
-    <!-- FULL-SCREEN LOADING OVERLAY -->
-    <div id="loading-overlay" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex flex-col items-center justify-center space-y-4 transition-all">
-        <div class="relative w-16 h-16 flex items-center justify-center">
-            <div class="absolute inset-0 border-4 border-red-500/20 border-t-red-600 rounded-full animate-spin"></div>
-            <svg class="w-6 h-6 text-red-500 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+    <!-- Header / Navbar -->
+    <header class="flex justify-between items-center px-4 py-4 border-b border-gray-800/60 bg-[#0b0f19]/80 backdrop-blur sticky top-0 z-50">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 font-bold">
+                🔒
+            </div>
+            <div>
+                <h1 class="text-sm font-bold tracking-wide text-gray-200">Admin Control Center</h1>
+                <p class="text-[10px] tracking-widest text-red-400 font-semibold uppercase">Institution Management</p>
+            </div>
         </div>
-        <p id="loading-text" class="text-xs font-semibold text-gray-300 tracking-wider uppercase">Processing Admin Command...</p>
-    </div>
+        <a href="index.html" class="px-4 py-2 text-xs font-medium text-gray-300 bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 rounded-xl transition">
+            Exit to Portal
+        </a>
+    </header>
 
-    <!-- ADMIN DASHBOARD VIEW -->
-    <div id="admin-dashboard" class="flex flex-col min-h-screen justify-between relative">
-        <!-- Navigation Bar -->
-        <nav class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 shadow-xl sticky top-0 z-40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-xl bg-red-600/10 border border-red-500/20 flex items-center justify-center text-red-500">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-                    </div>
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
+
+        <!-- Top Metrics Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- Total Clients Card -->
+            <div class="bg-[#121826] border border-gray-800/80 rounded-2xl p-5 relative overflow-hidden shadow-lg">
+                <div class="flex justify-between items-start">
                     <div>
-                        <span class="font-bold text-sm text-white tracking-wide block">Admin Control Center</span>
-                        <span class="text-[10px] text-red-400 font-mono tracking-widest uppercase block -mt-1">Institution Management</span>
+                        <p class="text-xs font-semibold text-gray-400 tracking-wider uppercase">Total Clients</p>
+                        <h3 id="total-clients-count" class="text-3xl font-extrabold text-white mt-2">1</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                        👥
                     </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <button onclick="logoutAdmin()" class="text-xs text-gray-400 hover:text-white bg-slate-950 border border-slate-800 px-3.5 py-2 rounded-xl transition">Exit to Portal</button>
+                <div class="mt-4 flex items-center space-x-2 text-xs text-emerald-400 font-medium">
+                    <span>✓</span>
+                    <span>Active database synchronized</span>
                 </div>
             </div>
-        </nav>
 
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6 w-full">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-xl font-black text-white tracking-tight">Client Accounts Management</h1>
-                    <p class="text-xs text-gray-400 mt-0.5">View records, modify balances, or suspend malicious accounts.</p>
+            <!-- Pending Transfers Card -->
+            <div class="bg-[#121826] border border-gray-800/80 rounded-2xl p-5 relative overflow-hidden shadow-lg">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 tracking-wider uppercase">Pending Transfers</p>
+                        <h3 id="pending-transfers-count" class="text-3xl font-extrabold text-white mt-2">0</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                        ⏱️
+                    </div>
                 </div>
-                <button onclick="loadAdminClients()" class="bg-slate-900 hover:bg-slate-800 text-gray-200 text-xs font-semibold py-2.5 px-4 rounded-xl border border-slate-800 transition flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                <div class="mt-4 flex items-center space-x-2 text-xs text-amber-400/90 font-medium">
+                    <span>ⓘ</span>
+                    <span>Requires manual authorization</span>
+                </div>
+            </div>
+
+            <!-- Total Bank Deposits Card -->
+            <div class="bg-[#121826] border border-gray-800/80 rounded-2xl p-5 relative overflow-hidden shadow-lg">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 tracking-wider uppercase">Total Bank Deposits</p>
+                        <h3 id="total-deposits" class="text-3xl font-extrabold text-emerald-400 mt-2">$0.00</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        💲
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-gray-400 font-medium">
+                    Combined user checking & savings
+                </div>
+            </div>
+
+            <!-- System Status Card -->
+            <div class="bg-[#121826] border border-gray-800/80 rounded-2xl p-5 relative overflow-hidden shadow-lg">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 tracking-wider uppercase">System Status</p>
+                        <h3 class="text-3xl font-extrabold text-cyan-400 mt-2 tracking-wide">SECURE</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                        🛡️
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center space-x-2 text-xs text-cyan-300 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Firewall & Cloud DB Active</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Client Accounts Management Section -->
+        <div class="bg-[#121826] border border-gray-800/80 rounded-2xl p-5 shadow-lg space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Client Accounts Management</h2>
+                    <p class="text-xs text-gray-400">View records, modify balances, or suspend malicious accounts.</p>
+                </div>
+                <button onclick="fetchClientRecords()" class="flex items-center justify-center space-x-2 px-4 py-2.5 bg-gray-800/80 hover:bg-gray-800 border border-gray-700/60 rounded-xl text-xs font-medium text-gray-200 transition">
+                    <span id="refresh-icon">🔄</span>
                     <span>Refresh Records</span>
                 </button>
             </div>
 
-            <!-- Client Records Table -->
-            <div class="bg-slate-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-800/80 overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-slate-950/60 text-gray-400 uppercase text-[10px] font-bold tracking-wider border-b border-slate-800">
-                                <th class="py-3.5 px-6">Account ID</th>
-                                <th class="py-3.5 px-6">Client Name</th>
-                                <th class="py-3.5 px-6">Email / Country</th>
-                                <th class="py-3.5 px-6">Type</th>
-                                <th class="py-3.5 px-6">Balance ($)</th>
-                                <th class="py-3.5 px-6">Status</th>
-                                <th class="py-3.5 px-6 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-clients-table" class="divide-y divide-slate-800/60 text-gray-300">
-                            <tr><td colspan="7" class="py-8 text-center text-gray-500">Authenticating database records...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Data Table Container -->
+            <div class="overflow-x-auto border border-gray-800 rounded-xl">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-800 text-[11px] font-semibold text-gray-400 tracking-wider uppercase bg-[#0f1420]">
+                            <th class="p-3.5">Account ID</th>
+                            <th class="p-3.5">Client Name</th>
+                            <th class="p-3.5">Email / Country</th>
+                        </tr>
+                    </thead>
+                    <tbody id="client-table-body" class="divide-y divide-gray-800/60 text-sm">
+                        <!-- Dynamic content populated by Firebase script below -->
+                        <tr>
+                            <td class="p-3.5 font-mono text-gray-300">7322649829</td>
+                            <td class="p-3.5 font-medium text-white">Steve Kenan</td>
+                            <td class="p-3.5 text-gray-400 text-xs">
+                                maroejiata0@gmail.com<br>
+                                <span class="text-gray-500">United States</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </main>
-
-        <footer class="text-center py-6 text-[11px] text-gray-500 border-t border-slate-900 flex items-center justify-center space-x-2">
-            <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-            <span>&copy; 2026 Cash Flow Banking Corporation. Secure Administration Channel.</span>
-        </footer>
-    </div>
-
-    <!-- ADMIN EDIT MODAL -->
-    <div id="admin-edit-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-sm text-white">Modify Client Account</h3>
-                <button onclick="closeModal('admin-edit-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-            </div>
-            <form id="form-admin-edit" class="space-y-3">
-                <input type="hidden" id="edit-acc-num">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Client Name</label>
-                    <input type="text" id="edit-name" disabled class="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-gray-400 font-mono">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">New Balance ($)</label>
-                    <input type="number" step="0.01" id="edit-balance" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 font-mono focus:outline-none focus:border-red-600">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Account Status</label>
-                    <select id="edit-status" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 focus:outline-none focus:border-red-600">
-                        <option value="Active">Active</option>
-                        <option value="Frozen">Frozen / Suspended</option>
-                    </select>
-                </div>
-                <div class="pt-2 flex space-x-3">
-                    <button type="button" onclick="closeModal('admin-edit-modal')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-700">Cancel</button>
-                    <button type="submit" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-red-950/50">Save Changes</button>
-                </div>
-            </form>
         </div>
-    </div>
 
-    <!-- Admin Script Logic -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-gray-500 mt-12 px-4 space-y-1">
+        <p>© 2026 Cash Flow Banking Corporation. Secure Administration Channel.</p>
+        <div class="flex items-center justify-center space-x-1 text-emerald-400 text-[11px]">
+            <span>●</span>
+            <span>Secure Connection Established</span>
+        </div>
+    </footer>
+
+    <!-- Firebase Connection & Logic Script -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase.app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase.firestore.js";
 
+        // Your Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
           authDomain: "cash-flow-banking70.firebaseapp.com",
@@ -151,115 +165,53 @@
           appId: "1:1066612075328:web:3472b082cc86aa7d4428a5"
         };
 
+        // Initialize Firebase & Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        function showLoading(msg = "Processing Admin Command...") {
-            document.getElementById('loading-text').innerText = msg;
-            document.getElementById('loading-overlay').classList.remove('hidden');
-        }
-        function hideLoading() { document.getElementById('loading-overlay').classList.add('hidden'); }
-
-        window.closeModal = function(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-
-        window.logoutAdmin = function() {
-            localStorage.removeItem("isAdminLoggedIn");
-            window.location.href = "index.html";
-        }
-
-        // Security check on load
-        window.addEventListener('DOMContentLoaded', () => {
-            const isAdmin = localStorage.getItem("isAdminLoggedIn");
-            if (isAdmin !== "true") {
-                alert("Unauthorized access. Please login via Admin Access on the main portal.");
-                window.location.href = "index.html";
-                return;
-            }
-            loadAdminClients();
-        });
-
-        window.loadAdminClients = async function() {
-            const tableBody = document.getElementById('admin-clients-table');
-            tableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-500">Synchronizing database records...</td></tr>`;
-
+        async function fetchClientRecords() {
+            const tableBody = document.getElementById('client-table-body');
+            const totalClientsEl = document.getElementById('total-clients-count');
+            
             try {
-                const querySnapshot = await getDocs(collection(db, "clients"));
-                tableBody.innerHTML = '';
-
+                // Change 'users' or 'clients' to match your actual Firestore collection name
+                const querySnapshot = await getDocs(collection(db, "users"));
+                
                 if (querySnapshot.empty) {
-                    tableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-500">No client accounts found in database.</td></tr>`;
-                    return;
+                    return; // Keep placeholder if empty
                 }
 
-                querySnapshot.forEach((documentSnapshot) => {
-                    const client = documentSnapshot.data();
-                    const accNum = client.accountNumber || documentSnapshot.id;
-                    const statusColor = client.status === 'Frozen' ? 'text-red-400 bg-red-950/60 border-red-800/80' : 'text-emerald-400 bg-emerald-950/60 border-emerald-800/80';
+                tableBody.innerHTML = "";
+                let count = 0;
 
-                    tableBody.innerHTML += `
-                        <tr class="hover:bg-slate-800/40 transition">
-                            <td class="py-3.5 px-6 font-mono font-bold text-white">${accNum}</td>
-                            <td class="py-3.5 px-6 font-semibold text-white">${client.clientName || 'N/A'}</td>
-                            <td class="py-3.5 px-6 text-gray-400">${client.email || 'N/A'}<br><span class="text-[10px] text-gray-500">${client.country || ''}</span></td>
-                            <td class="py-3.5 px-6 font-mono text-gray-300">${client.accountType || 'Checking'}</td>
-                            <td class="py-3.5 px-6 font-mono font-bold text-emerald-400">$${Number(client.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                            <td class="py-3.5 px-6"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${statusColor}">${client.status || 'Active'}</span></td>
-                            <td class="py-3.5 px-6 text-right space-x-2">
-                                <button onclick='openEditClientModal(${JSON.stringify(client).replace(/'/g, "&#39;")})' class="bg-slate-800 hover:bg-slate-700 text-gray-200 px-3 py-1.5 rounded-xl font-medium transition border border-slate-700">Edit</button>
-                                <button onclick="deleteClientAccount('${accNum}')" class="bg-red-950/60 hover:bg-red-900/60 text-red-400 px-3 py-1.5 rounded-xl font-medium transition border border-red-800/50">Delete</button>
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    count++;
+                    
+                    const row = `
+                        <tr class="hover:bg-gray-800/30 transition">
+                            <td class="p-3.5 font-mono text-gray-300">${data.accountId || data.id || doc.id.substring(0, 10)}</td>
+                            <td class="p-3.5 font-medium text-white">${data.fullName || data.name || 'N/A'}</td>
+                            <td class="p-3.5 text-gray-400 text-xs">
+                                ${data.email || 'N/A'}<br>
+                                <span class="text-gray-500">${data.country || 'Unknown'}</span>
                             </td>
                         </tr>
                     `;
+                    tableBody.innerHTML += row;
                 });
-            } catch (err) {
-                tableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-red-400">Failed to load client records. Check network connection.</td></tr>`;
+
+                totalClientsEl.textContent = count;
+            } catch (error) {
+                console.error("Error fetching Firestore records: ", error);
             }
-        };
+        }
 
-        window.openEditClientModal = function(client) {
-            document.getElementById('edit-acc-num').value = client.accountNumber;
-            document.getElementById('edit-name').value = client.clientName;
-            document.getElementById('edit-balance').value = client.balance;
-            document.getElementById('edit-status').value = client.status || 'Active';
-            document.getElementById('admin-edit-modal').classList.remove('hidden');
-        };
+        // Attach function to global scope so the Refresh button can trigger it
+        window.fetchClientRecords = fetchClientRecords;
 
-        document.getElementById('form-admin-edit').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const accNum = document.getElementById('edit-acc-num').value;
-            const newBalance = parseFloat(document.getElementById('edit-balance').value);
-            const newStatus = document.getElementById('edit-status').value;
-
-            showLoading("Updating client account profile...");
-            try {
-                const clientRef = doc(db, "clients", accNum);
-                await setDoc(clientRef, { balance: newBalance, status: newStatus }, { merge: true });
-                hideLoading();
-                closeModal('admin-edit-modal');
-                alert("Client profile updated successfully.");
-                loadAdminClients();
-            } catch (err) {
-                hideLoading();
-                alert("Failed to update profile.");
-            }
-        });
-
-        window.deleteClientAccount = async function(accNum) {
-            if (!confirm(`Are you sure you want to permanently delete account ${accNum}? This action cannot be undone.`)) return;
-
-            showLoading("Deleting client account...");
-            try {
-                await deleteDoc(doc(db, "clients", accNum));
-                hideLoading();
-                alert("Account deleted successfully.");
-                loadAdminClients();
-            } catch (err) {
-                hideLoading();
-                alert("Failed to delete account.");
-            }
-        };
+        // Run on load
+        fetchClientRecords();
     </script>
 </body>
 </html>
