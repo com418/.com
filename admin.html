@@ -213,7 +213,7 @@
             showLoading("Updating balance...");
             try {
                 const today = new Date().toISOString().split('T')[0];
-                const tx = { description: "Online Deposit", date: today, amount: newBal - currentBal };
+                const tx = { description: "Payment Received", date: today, amount: newBal - currentBal };
                 await setDoc(doc(db, "clients", accountNumber), { balance: newBal, transactions: arrayUnion(tx) }, { merge: true });
                 hideLoading();
                 loadAdminClients();
