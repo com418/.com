@@ -305,14 +305,20 @@
           </div>
         </div>
 
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Account Status</label>
-          <select id="editStatus" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-bold text-white focus:outline-none focus:border-cyan-500">
-            <option value="ACTIVE">ACTIVE</option>
-            <option value="PENDING">PENDING</option>
-            <option value="FROZEN">FROZEN (Security Hold)</option>
-            <option value="DECLINED">DECLINED</option>
-          </select>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Account Status</label>
+            <select id="editStatus" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-bold text-white focus:outline-none focus:border-cyan-500">
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="PENDING">PENDING</option>
+              <option value="FROZEN">FROZEN (Security Hold)</option>
+              <option value="DECLINED">DECLINED</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Account Creation Date (Backdate)</label>
+            <input id="editCreatedAt" type="date" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-mono text-white focus:outline-none focus:border-cyan-500">
+          </div>
         </div>
 
         <div>
@@ -486,6 +492,7 @@
         const savBal = parseFloat(usr.savingsBalance || 0);
         const invBal = parseFloat(usr.investmentBalance || 0);
         const status = usr.status || 'PENDING';
+        const createdAt = usr.createdAt ? new Date(usr.createdAt).toLocaleDateString() : 'N/A';
 
         const statusColor = status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
                             status === 'FROZEN' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
@@ -498,6 +505,7 @@
                 <div>
                   <h4 class="font-bold text-white text-sm">${usr.name}</h4>
                   <p class="text-[11px] text-slate-400 font-mono">Acc: ${usr.accNo} • ${usr.email}</p>
+                  <p class="text-[10px] text-slate-500 font-mono mt-0.5">Created: ${createdAt}</p>
                 </div>
                 <span class="px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border ${statusColor}">${status}</span>
               </div>
@@ -559,6 +567,7 @@
       document.getElementById('editStatus').value = usr.status || 'PENDING';
       document.getElementById('editHoldReason').value = usr.holdReason || '';
       document.getElementById('editClearanceFee').value = usr.clearanceFee || 0;
+      document.getElementById('editCreatedAt').value = usr.createdAt ? usr.createdAt.split('T')[0] : '';
       document.getElementById('editModalTitle').textContent = `Edit Account: ${usr.name} (${usr.accNo})`;
 
       const modal = document.getElementById('accountEditModal');
@@ -580,6 +589,8 @@
       const status = document.getElementById('editStatus').value;
       const holdReason = document.getElementById('editHoldReason').value.trim();
       const clearanceFee = parseFloat(document.getElementById('editClearanceFee').value) || 0;
+      const createdAtInput = document.getElementById('editCreatedAt').value;
+      const createdAt = createdAtInput ? new Date(createdAtInput).toISOString() : new Date().toISOString();
 
       try {
         await updateDoc(doc(db, 'cashflow_accounts', userId), {
@@ -590,7 +601,8 @@
           dailyLimit,
           status,
           holdReason,
-          clearanceFee
+          clearanceFee,
+          createdAt
         });
 
         closeEditModal();
@@ -701,7 +713,7 @@
       }
 
       try {
-        let checkingBal = parseFloat(usr.checkingBalance || usr.balance || 0);
+        let checkingBal = parseFloat(usr.checkingBalance || usr.balance || 50);
         let savingsBal = parseFloat(usr.savingsBalance || 0);
         let investBal = parseFloat(usr.investmentBalance || 0);
 
