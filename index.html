@@ -288,6 +288,50 @@
                 </div>
             </div>
 
+            <!-- DAILY TRANSACTION LIMITS WIDGET -->
+            <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-gauge-high"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Daily Transaction & Wire Limits</h3>
+                            <p class="text-xs text-slate-400">Resets every 24 hours at 00:00 UTC</p>
+                        </div>
+                    </div>
+                    <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Tier 1 Limit</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <div class="bg-bank-card/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <span class="text-[11px] text-slate-400 block mb-1 font-semibold uppercase">Daily Limit Max</span>
+                        <span id="dailyLimitMax" class="font-black text-white text-lg font-mono">$5,000,000.00</span>
+                        <span class="text-[10px] text-slate-400 block mt-1">Authorized institutional cap</span>
+                    </div>
+                    <div class="bg-bank-card/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <span class="text-[11px] text-slate-400 block mb-1 font-semibold uppercase">Spent Today</span>
+                        <span id="dailySpentToday" class="font-black text-amber-400 text-lg font-mono">$0.00</span>
+                        <span class="text-[10px] text-slate-400 block mt-1">Total outgoing volume</span>
+                    </div>
+                    <div class="bg-bank-card/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <span class="text-[11px] text-slate-400 block mb-1 font-semibold uppercase">Remaining Limit</span>
+                        <span id="dailyRemainingLimit" class="font-black text-emerald-400 text-lg font-mono">$5,000,000.00</span>
+                        <span class="text-[10px] text-slate-400 block mt-1">Available for immediate wire</span>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5 pt-1">
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-slate-400">Daily Limit Usage Progress</span>
+                        <span id="dailyLimitProgressText" class="text-white font-bold">0.0% used</span>
+                    </div>
+                    <div class="w-full bg-bank-dark rounded-full h-2 overflow-hidden border border-slate-700">
+                        <div id="dailyLimitBar" class="bg-blue-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Account Details & Credit Score Widget -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-bank-navy rounded-3xl p-6 shadow-xl border border-slate-700 md:col-span-2 flex flex-col justify-between space-y-4">
@@ -500,7 +544,7 @@
     <!-- SCRIPT LOGIC -->
     <script>
         let users = JSON.parse(localStorage.getItem('cashflow_users')) || [
-            { id: 1, accountNumber: "2015961076", firstName: "Lorenzo", lastName: "Parker", email: "lorenzo.parker@cashflowbank.com", pass: "Password123!", accountType: "Checking", country: "US", balance: 1514000.00, status: "approved", createdAt: "2023-01-15" }
+            { id: 1, accountNumber: "2015961076", firstName: "Lorenzo", lastName: "Parker", email: "lorenzo.parker@cashflowbank.com", pass: "Password123!", accountType: "Checking", country: "US", balance: 1514000.00, status: "approved", createdAt: "2023-01-15", dailySpent: 0.00, dailyLimit: 5000000.00 }
         ];
 
         let currentUser = null;
@@ -568,7 +612,9 @@
                 accountType: document.getElementById('regAccountType').value,
                 balance: 0.00,
                 status: 'pending',
-                createdAt: todayStr
+                createdAt: todayStr,
+                dailySpent: 0.00,
+                dailyLimit: 5000000.00
             };
             users.push(newU);
             localStorage.setItem('cashflow_users', JSON.stringify(users));
@@ -598,8 +644,23 @@
             }
 
             currentUser = found;
+            if(currentUser.dailySpent === undefined) currentUser.dailySpent = 0.00;
+            if(currentUser.dailyLimit === undefined) currentUser.dailyLimit = 5000000.00;
             transitionToDashboard();
         });
+
+        function updateDailyLimitsDisplay() {
+            const limit = currentUser.dailyLimit || 5000000.00;
+            const spent = currentUser.dailySpent || 0.00;
+            const remaining = Math.max(0, limit - spent);
+            const percent = Math.min(100, (spent / limit) * 100);
+
+            document.getElementById('dailyLimitMax').textContent = '$' + limit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('dailySpentToday').textContent = '$' + spent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('dailyRemainingLimit').textContent = '$' + remaining.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('dailyLimitBar').style.width = percent + '%';
+            document.getElementById('dailyLimitProgressText').textContent = percent.toFixed(1) + '% used';
+        }
 
         function transitionToDashboard() {
             document.getElementById('authContainer').classList.add('hidden');
@@ -623,6 +684,7 @@
             document.getElementById('txDateDisplay').textContent = formattedDate;
             document.getElementById('txAmountDisplay').textContent = '+' + formattedBal;
 
+            updateDailyLimitsDisplay();
             initChart();
         }
 
@@ -652,8 +714,19 @@
         document.getElementById('transferForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const amt = parseFloat(document.getElementById('transferAmountInput').value);
-            if(isNaN(amt)) return;
+            if(isNaN(amt) || amt <= 0) return;
+
+            const currentLimit = currentUser.dailyLimit || 5000000.00;
+            const currentSpent = currentUser.dailySpent || 0.00;
+
+            if((currentSpent + amt) > currentLimit) {
+                alert(`Transfer exceeds your remaining daily limit of $${(currentLimit - currentSpent).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.`);
+                return;
+            }
+
             currentUser.balance = (currentUser.balance || 0) + amt;
+            currentUser.dailySpent = currentSpent + amt;
+
             const idx = users.findIndex(u => u.id === currentUser.id);
             if(idx !== -1) { users[idx] = currentUser; localStorage.setItem('cashflow_users', JSON.stringify(users)); }
 
@@ -661,6 +734,8 @@
             document.getElementById('totalBalanceDisplay').textContent = fmt;
             document.getElementById('accountBalanceDisplay').textContent = fmt;
             document.getElementById('transferModal').classList.add('hidden');
+            document.getElementById('transferForm').reset();
+            updateDailyLimitsDisplay();
             alert('Transfer processed successfully.');
         });
 
