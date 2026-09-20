@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Secure Banking Dashboard</title>
+    <title>Secure Banking Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -13,10 +13,9 @@
                 extend: {
                     colors: {
                         darkBg: '#090d16',
-                        cardBg: '#131b2e',
-                        cardBorder: '#1e293b',
+                        cardBg: '#111827',
+                        cardBorder: '#1f293d',
                         accentBlue: '#3b82f6',
-                        modalBg: 'rgba(19, 27, 46, 0.85)',
                     }
                 }
             }
@@ -25,7 +24,7 @@
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -33,168 +32,401 @@
             color: #f8fafc;
             -webkit-tap-highlight-color: transparent;
         }
-        /* Custom smooth backdrop blur for modern iOS feel */
         .glass-modal {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(9, 13, 22, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        /* Custom scrollbar hiding for clean look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white pb-6">
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
 
-    <!-- Top Mobile Header / Nav Bar -->
-    <header class="w-full bg-[#0d1322] border-b border-[#1a263d] px-4 py-3 flex items-center justify-between sticky top-0 z-30">
-        <div class="flex items-center space-x-3">
-            <!-- App Icon / Logo Box -->
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-lg shadow-blue-900/30">
-                <i class="fa-solid fa-building-columns text-sm"></i>
-            </div>
-            <!-- Domain text matching style -->
-            <span class="text-xs font-medium text-slate-300 tracking-wide bg-[#131b2e] px-2.5 py-1 rounded-md border border-[#23314d]">
-                com418.github.io
-            </span>
-        </div>
-
-        <div class="flex items-center space-x-3">
-            <button class="w-9 h-9 rounded-full bg-[#131b2e] border border-[#23314d] flex items-center justify-center text-slate-300 hover:text-white transition">
-                <i class="fa-regular fa-bell text-sm"></i>
-            </button>
-            <div class="w-9 h-9 rounded-full overflow-hidden border border-blue-500/40 bg-slate-800 flex items-center justify-center">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover">
+    <!-- ========================================== -->
+    <!-- 1. LOADING SPLASH SCREEN -->
+    <!-- ========================================== -->
+    <div id="loadingSplash" class="fixed inset-0 z-50 bg-[#090d16] flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative flex items-center justify-center mb-6">
+            <div class="absolute w-20 h-20 rounded-full border-4 border-blue-500/20 animate-ping"></div>
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-xl shadow-blue-600/40">
+                <i class="fa-solid fa-building-columns text-2xl"></i>
             </div>
         </div>
-    </header>
+        <h1 class="text-xl font-bold tracking-tight text-white mb-1">SecureVault Banking</h1>
+        <p class="text-xs text-slate-400 mb-8">Establishing secure encrypted connection...</p>
+        <div class="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div id="loadingBar" class="h-full bg-gradient-to-r from-blue-500 to-indigo-500 w-0 transition-all duration-300"></div>
+        </div>
+    </div>
 
-    <!-- Main Dashboard Content -->
-    <main class="flex-1 px-4 py-5 max-w-md mx-auto w-full space-y-4">
+
+    <!-- ========================================== -->
+    <!-- 2. AUTHENTICATION VIEWS (LOGIN / REGISTER) -->
+    <!-- ========================================== -->
+    <div id="authContainer" class="hidden flex-1 flex flex-col justify-between px-5 py-6 max-w-md mx-auto w-full">
         
-        <!-- Account Holder Card -->
-        <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-4 shadow-sm relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-500/5 rounded-full blur-xl pointer-events-none"></div>
-            <div class="flex items-center space-x-3 text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">
-                <i class="fa-regular fa-user text-blue-400"></i>
-                <span>Account Holder</span>
-            </div>
-            <div class="text-lg font-bold text-white tracking-wide">
-                Maro Ejiata
-            </div>
-        </div>
-
-        <!-- IP Address Card -->
-        <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-4 shadow-sm flex items-center justify-between">
-            <div>
-                <div class="flex items-center space-x-3 text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">
-                    <i class="fa-solid fa-globe text-blue-400"></i>
-                    <span>IP Address</span>
+        <!-- Top branding header -->
+        <div class="pt-4 pb-2 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-600/30">
+                    <i class="fa-solid fa-building-columns text-xs"></i>
                 </div>
-                <div class="text-base font-semibold text-slate-200 tracking-wider">
-                    10.30.162.149
-                </div>
+                <span class="text-xs font-semibold text-slate-300 tracking-wide bg-[#131b2e] px-2.5 py-1 rounded-md border border-[#23314d]">
+                    com418.github.io
+                </span>
             </div>
-            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">
-                <i class="fa-solid fa-shield-halved text-xs"></i>
+            <div id="authSwitchBadge" onclick="toggleAuthMode()" class="text-xs font-semibold text-blue-400 cursor-pointer bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg border border-blue-500/20 transition">
+                Create Account
             </div>
         </div>
 
-        <!-- Action / Feature Trigger Card -->
-        <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-5 shadow-sm text-center relative">
-            <h3 class="text-sm font-medium text-slate-300 mb-3">Priority Concierge Services</h3>
-            <button id="triggerModalBtn" class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-600/25 transition active:scale-[0.98] flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-headset text-sm"></i>
-                <span>Connect 24/7 Concierge</span>
-            </button>
-        </div>
+        <!-- LOGIN FORM VIEW -->
+        <div id="loginView" class="space-y-6 my-auto py-4">
+            <div class="space-y-2">
+                <h2 class="text-2xl font-bold text-white tracking-tight">Welcome Back</h2>
+                <p class="text-xs text-slate-400">Log in securely using your 10-digit Account Number & Password.</p>
+            </div>
 
-        <!-- Daily Transaction & Wire Limits Card -->
-        <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-5 shadow-sm space-y-4">
-            <div class="flex items-start justify-between">
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <h2 class="text-base font-bold text-white mb-1">Daily Transaction & Wire Limits</h2>
-                    <p class="text-xs text-slate-400">Resets every 24 hours at 00:00 UTC</p>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Account Number</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                            <i class="fa-solid fa-hashtag text-xs"></i>
+                        </span>
+                        <input type="text" id="loginAccNum" maxlength="10" placeholder="e.g. 1048291029" required
+                            class="w-full pl-10 pr-4 py-3 bg-[#111827] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:border-blue-500 transition">
+                    </div>
                 </div>
-                <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold tracking-wider rounded-md uppercase">
-                    Tier 1 Limit
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                            <i class="fa-solid fa-lock text-xs"></i>
+                        </span>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required
+                            class="w-full pl-10 pr-4 py-3 bg-[#111827] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-600/25 transition active:scale-[0.98] text-sm flex items-center justify-center space-x-2">
+                    <span>Secure Login</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </form>
+
+            <div class="bg-[#111827] border border-[#1f293d] rounded-xl p-3.5 text-center">
+                <p class="text-xs text-slate-400 mb-1">Demo test credentials:</p>
+                <p class="text-xs font-mono text-blue-400 font-bold">Account: 1234567890 | Pass: 123456</p>
+            </div>
+        </div>
+
+        <!-- REGISTER FORM VIEW -->
+        <div id="registerView" class="hidden space-y-5 my-auto py-2">
+            <div class="space-y-1">
+                <h2 class="text-2xl font-bold text-white tracking-tight">Open an Account</h2>
+                <p class="text-xs text-slate-400">Fill in your details to generate your instant 10-digit account number.</p>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1">Full Name</label>
+                    <input type="text" id="regName" placeholder="Maro Ejiata" required
+                        class="w-full px-4 py-2.5 bg-[#111827] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:border-blue-500 transition">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1">Account Type</label>
+                        <select id="regAccType" required
+                            class="w-full px-3 py-2.5 bg-[#111827] border border-[#1f293d] rounded-xl text-slate-100 text-sm focus:outline-none focus:border-blue-500 transition">
+                            <option value="Checking Account">Checking Account</option>
+                            <option value="Savings Account">Savings Account</option>
+                            <option value="Business Account">Business Account</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1">Country</label>
+                        <select id="regCountry" required
+                            class="w-full px-3 py-2.5 bg-[#111827] border border-[#1f293d] rounded-xl text-slate-100 text-sm focus:outline-none focus:border-blue-500 transition">
+                            <option value="United States">United States</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Switzerland">Switzerland</option>
+                            <option value="United Arab Emirates">United Arab Emirates</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Japan">Japan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1">Initial Deposit (€)</label>
+                    <input type="number" id="regDeposit" value="50000" min="100" required
+                        class="w-full px-4 py-2.5 bg-[#111827] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:border-blue-500 transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1">Set Password</label>
+                    <input type="password" id="regPassword" placeholder="••••••••" required
+                        class="w-full px-4 py-2.5 bg-[#111827] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:border-blue-500 transition">
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-600/25 transition active:scale-[0.98] text-sm flex items-center justify-center space-x-2 mt-2">
+                    <span>Create Account & Get Number</span>
+                    <i class="fa-solid fa-check text-xs"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Auth footer info -->
+        <div class="text-center pb-2 text-[11px] text-slate-500">
+            Protected by 256-bit SSL Encryption & Biometric Protocols
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- 3. MAIN BANKING DASHBOARD VIEW -->
+    <!-- ========================================== -->
+    <div id="dashboardContainer" class="hidden flex-1 flex flex-col justify-between max-w-md mx-auto w-full">
+        
+        <!-- Header -->
+        <header class="w-full bg-[#0d1322] border-b border-[#1a263d] px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-lg shadow-blue-900/30">
+                    <i class="fa-solid fa-building-columns text-sm"></i>
+                </div>
+                <span class="text-xs font-medium text-slate-300 tracking-wide bg-[#131b2e] px-2.5 py-1 rounded-md border border-[#23314d]">
+                    com418.github.io
                 </span>
             </div>
 
-            <div class="pt-2 border-t border-[#1f293d]/50">
-                <div class="text-xs uppercase tracking-wider text-slate-400 font-medium mb-1">Daily Limit Max</div>
-                <div class="text-2xl font-black text-white tracking-tight flex items-center space-x-1">
-                    <span>€5,000,000</span>
-                    <span class="text-xs font-normal text-slate-500">.00</span>
+            <div class="flex items-center space-x-2.5">
+                <button onclick="triggerConciergeModal()" class="w-9 h-9 rounded-full bg-[#131b2e] border border-[#23314d] flex items-center justify-center text-slate-300 hover:text-white transition">
+                    <i class="fa-regular fa-bell text-sm"></i>
+                </button>
+                <div onclick="logout()" title="Log out" class="w-9 h-9 rounded-full overflow-hidden border border-red-500/40 bg-slate-800 flex items-center justify-center cursor-pointer hover:opacity-80 transition">
+                    <i class="fa-solid fa-power-off text-xs text-red-400"></i>
                 </div>
             </div>
+        </header>
+
+        <!-- Main Scrolling Content -->
+        <main class="flex-1 px-4 py-5 space-y-4">
+            
+            <!-- Account Holder & Number Card -->
+            <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-4 shadow-sm relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-500/5 rounded-full blur-xl pointer-events-none"></div>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-2 text-slate-400 text-xs font-medium uppercase tracking-wider">
+                        <i class="fa-regular fa-user text-blue-400"></i>
+                        <span id="displayAccType">Checking Account</span>
+                    </div>
+                    <span id="displayCountry" class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">United States</span>
+                </div>
+                <div class="text-lg font-bold text-white tracking-wide mb-1" id="displayHolderName">
+                    Maro Ejiata
+                </div>
+                <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                    <span class="text-xs text-slate-400 font-mono">Acc: <strong id="displayAccNum" class="text-blue-400 font-semibold">1234567890</strong></span>
+                    <button onclick="copyAccNum()" class="text-[11px] text-blue-400 hover:underline"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                </div>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="bg-gradient-to-br from-blue-900/40 via-[#111827] to-[#111827] border border-blue-500/30 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs text-slate-400 uppercase tracking-wider font-medium">Available Balance</span>
+                    <div class="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
+                        <i class="fa-solid fa-wallet text-xs"></i>
+                    </div>
+                </div>
+                <div class="text-3xl font-extrabold text-white tracking-tight mb-4" id="displayBalance">
+                    €5,000,000<span class="text-sm font-normal text-slate-400">.00</span>
+                </div>
+
+                <!-- Action Buttons: Transfer & Deposit -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="openTransferModal()" class="py-2.5 px-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs flex items-center justify-center space-x-2 shadow transition active:scale-95">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                        <span>Transfer Funds</span>
+                    </button>
+                    <button onclick="openDepositModal()" class="py-2.5 px-3 bg-[#1e293b] hover:bg-[#283548] text-slate-200 font-semibold rounded-xl text-xs flex items-center justify-center space-x-2 border border-slate-700 transition active:scale-95">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Add Funds</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Priority Concierge Trigger Card -->
+            <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-4 shadow-sm text-center">
+                <h3 class="text-xs font-semibold text-slate-300 mb-2.5 uppercase tracking-wider">Priority Concierge Services</h3>
+                <button onclick="triggerConciergeModal()" class="w-full py-2.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-md shadow-blue-600/20 transition active:scale-[0.98] text-xs flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-headset text-sm"></i>
+                    <span>Connect 24/7 Concierge</span>
+                </button>
+            </div>
+
+            <!-- Limits & IP Card -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-4 shadow-sm">
+                    <div class="flex items-center space-x-2 text-slate-400 text-[11px] font-medium uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-globe text-blue-400"></i>
+                        <span>IP Address</span>
+                    </div>
+                    <div class="text-xs font-bold text-slate-200 truncate">10.30.162.149</div>
+                </div>
+
+                <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-4 shadow-sm flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Tier Limit</span>
+                        <span class="px-1.5 py-0.5 bg-amber-500/10 text-amber-400 text-[9px] font-bold rounded">TIER 1</span>
+                    </div>
+                    <div class="text-xs font-bold text-white">€5M / 24 hrs</div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions Section -->
+            <div class="bg-[#111827] border border-[#1f293d] rounded-2xl p-4 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Recent Transactions</h4>
+                    <span class="text-[10px] text-blue-400">Encrypted</span>
+                </div>
+                <div id="transactionList" class="space-y-2.5 max-h-48 overflow-y-auto no-scrollbar">
+                    <!-- Dynamic transactions injected here -->
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Simulated iOS Browser Toolbar -->
+        <footer class="w-full bg-[#0d1322] border-t border-[#1a263d] px-6 py-3 flex items-center justify-between sticky bottom-0 z-30">
+            <button class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-arrow-left text-sm"></i></button>
+            <button class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-arrow-right text-sm"></i></button>
+            <button onclick="openTransferModal()" class="w-8 h-8 rounded-full bg-[#1a263d] flex items-center justify-center text-slate-200 hover:text-white transition shadow"><i class="fa-solid fa-plus text-xs"></i></button>
+            <button class="px-2 py-0.5 rounded border border-slate-700 text-[11px] font-bold text-slate-300">53</button>
+            <button onclick="triggerConciergeModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-ellipsis text-sm"></i></button>
+        </footer>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- 4. TRANSFER FUNDS MODAL -->
+    <!-- ========================================== -->
+    <div id="transferModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 glass-modal transition-opacity">
+        <div class="w-full max-w-[320px] bg-[#131b2e] border border-[#2b3b5c] rounded-2xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider">Bank Wire Transfer</h3>
+                <button onclick="closeTransferModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            
+            <form onsubmit="handleTransfer(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 uppercase tracking-wider mb-1">Recipient Account / IBAN</label>
+                    <input type="text" id="transferAcc" placeholder="Recipient 10-digit account" required
+                        class="w-full px-3 py-2 bg-[#090d16] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-xs focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 uppercase tracking-wider mb-1">Bank Name</label>
+                    <input type="text" id="transferBank" placeholder="e.g. Chase / Barclays" required
+                        class="w-full px-3 py-2 bg-[#090d16] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-xs focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 uppercase tracking-wider mb-1">Amount (€)</label>
+                    <input type="number" id="transferAmount" placeholder="1000" min="1" required
+                        class="w-full px-3 py-2 bg-[#090d16] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-xs focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 uppercase tracking-wider mb-1">Narration / Note</label>
+                    <input type="text" id="transferNote" placeholder="Invoice Payment"
+                        class="w-full px-3 py-2 bg-[#090d16] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-xs focus:outline-none focus:border-blue-500">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs shadow transition mt-2">
+                    Authorize & Send Transfer
+                </button>
+            </form>
         </div>
-
-    </main>
-
-    <!-- Simulated iOS Browser Bottom Toolbar -->
-    <footer class="w-full bg-[#0d1322] border-t border-[#1a263d] px-6 py-3 flex items-center justify-between max-w-md mx-auto sticky bottom-0 z-30">
-        <button class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-arrow-left text-base"></i></button>
-        <button class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-arrow-right text-base"></i></button>
-        <button class="w-9 h-9 rounded-full bg-[#1a263d] flex items-center justify-center text-slate-200 hover:text-white transition shadow"><i class="fa-solid fa-plus text-sm"></i></button>
-        <button class="px-2 py-0.5 rounded border border-slate-700 text-xs font-bold text-slate-300">53</button>
-        <button class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-ellipsis text-base"></i></button>
-    </footer>
+    </div>
 
 
     <!-- ========================================== -->
-    <!-- REAL SVG DIALOG POPUP OVERLAY (USER REQUEST) -->
+    <!-- 5. ADD FUNDS (DEPOSIT) MODAL -->
     <!-- ========================================== -->
-    <div id="svgModalOverlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 glass-modal transition-opacity duration-300">
-        
-        <!-- SVG Container for Dialog Box mimicking exact iOS alert style with crisp vector paths & styling -->
-        <div class="w-full max-w-[310px] transform transition-all duration-300 scale-100 animate-in fade-in zoom-in-95">
+    <div id="depositModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 glass-modal transition-opacity">
+        <div class="w-full max-w-[320px] bg-[#131b2e] border border-[#2b3b5c] rounded-2xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider">Simulate Instant Deposit</h3>
+                <button onclick="closeDepositModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            
+            <form onsubmit="handleDeposit(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 uppercase tracking-wider mb-1">Deposit Amount (€)</label>
+                    <input type="number" id="depositAmount" placeholder="10000" min="10" required
+                        class="w-full px-3 py-2 bg-[#090d16] border border-[#1f293d] rounded-xl text-slate-100 placeholder-slate-600 text-xs focus:outline-none focus:border-blue-500">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs shadow transition mt-2">
+                    Credit Account Instantly
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- 6. REAL SVG CONCIERGE DIALOG POPUP OVERLAY -->
+    <!-- ========================================== -->
+    <div id="svgModalOverlay" class="fixed inset-0 z-50 hidden items-center justify-center p-4 glass-modal transition-opacity">
+        <div class="w-full max-w-[310px] transform transition-all">
             <svg viewBox="0 0 310 215" class="w-full h-auto drop-shadow-2xl" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <!-- Modal card background gradient -->
                     <linearGradient id="modalBgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stop-color="#192338" />
                         <stop offset="100%" stop-color="#121a2c" />
                     </linearGradient>
-                    
-                    <!-- Button OK gradient -->
                     <linearGradient id="btnOkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stop-color="#22304c" />
                         <stop offset="100%" stop-color="#182236" />
                     </linearGradient>
-
-                    <!-- Button Suppress gradient -->
                     <linearGradient id="btnSuppressGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stop-color="#1d2638" />
                         <stop offset="100%" stop-color="#131a28" />
                     </linearGradient>
-
-                    <!-- Subtle inner glow shadow filter -->
                     <filter id="boxShadow" x="-20%" y="-20%" width="140%" height="140%">
                         <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#000000" flood-opacity="0.65" />
                     </filter>
                 </defs>
 
-                <!-- Modal Window Background Rect with Rounded Corners -->
                 <rect x="2" y="2" width="306" height="211" rx="24" fill="url(#modalBgGrad)" stroke="#2b3b5c" stroke-width="1.2" filter="url(#boxShadow)" />
 
-                <!-- Header Title: com418.github.io says -->
                 <text x="155" y="32" text-anchor="middle" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="12" font-weight="500" letter-spacing="0.2">com418.github.io says</text>
 
-                <!-- Body Message Line 1 -->
                 <text x="155" y="60" text-anchor="middle" fill="#f1f5f9" font-family="'Inter', sans-serif" font-size="13" font-weight="400">Connecting to secure 24/7 Priority</text>
-                
-                <!-- Body Message Line 2 -->
                 <text x="155" y="78" text-anchor="middle" fill="#f1f5f9" font-family="'Inter', sans-serif" font-size="13" font-weight="400">Concierge line...</text>
 
-                <!-- Divider line between text and buttons -->
                 <line x1="16" y1="96" x2="294" y2="96" stroke="#222f48" stroke-width="1" />
 
-                <!-- Button 1: OK -->
-                <g id="okButton" class="cursor-pointer transition hover:opacity-90" onclick="closeModal()">
+                <!-- Button OK -->
+                <g class="cursor-pointer" onclick="closeConciergeModal()">
                     <rect x="24" y="106" width="262" height="42" rx="14" fill="url(#btnOkGrad)" stroke="#2d3f63" stroke-width="1" />
                     <text x="155" y="131" text-anchor="middle" fill="#60a5fa" font-family="'Inter', sans-serif" font-size="15" font-weight="600" letter-spacing="0.3">OK</text>
                 </g>
 
-                <!-- Button 2: Suppress dialogues -->
-                <g id="suppressButton" class="cursor-pointer transition hover:opacity-90" onclick="closeModal()">
+                <!-- Button Suppress -->
+                <g class="cursor-pointer" onclick="closeConciergeModal()">
                     <rect x="24" y="156" width="262" height="42" rx="14" fill="url(#btnSuppressGrad)" stroke="#2d3f63" stroke-width="1" />
                     <text x="155" y="181" text-anchor="middle" fill="#f87171" font-family="'Inter', sans-serif" font-size="14" font-weight="500" letter-spacing="0.2">Suppress dialogues</text>
                 </g>
@@ -202,31 +434,275 @@
         </div>
     </div>
 
-    <!-- Interactive script to reopen or dismiss the SVG modal -->
-    <script>
-        const modalOverlay = document.getElementById('svgModalOverlay');
-        const triggerBtn = document.getElementById('triggerModalBtn');
 
-        function closeModal() {
-            modalOverlay.style.opacity = '0';
-            setTimeout(() => {
-                modalOverlay.style.display = 'none';
-            }, 300);
+    <!-- ========================================== -->
+    <!-- 7. APPLICATION LOGIC (JAVASCRIPT) -->
+    <!-- ========================================== -->
+    <script>
+        // Default demo account
+        const DEMO_ACCOUNT = {
+            accNum: "1234567890",
+            password: "123456",
+            name: "Maro Ejiata",
+            accType: "Checking Account",
+            country: "United States",
+            balance: 5000000,
+            transactions: [
+                { title: "Wire Transfer Received", amount: "+€250,000.00", date: "Today, 10:42 AM", type: "credit" },
+                { title: "Priority Concierge Fee", amount: "-€150.00", date: "Yesterday, 04:15 PM", type: "debit" },
+                { title: "Global Settlement", amount: "+€4,750,000.00", date: "May 12, 2026", type: "credit" }
+            ]
+        };
+
+        // Initialize local storage database if empty
+        function getAccounts() {
+            let accs = JSON.parse(localStorage.getItem('bank_accounts'));
+            if (!accs) {
+                accs = [DEMO_ACCOUNT];
+                localStorage.setItem('bank_accounts', JSON.stringify(accs));
+            }
+            return accs;
         }
 
-        triggerBtn.addEventListener('click', () => {
-            modalOverlay.style.display = 'flex';
-            setTimeout(() => {
-                modalOverlay.style.opacity = '1';
-            }, 10);
+        function saveAccounts(accs) {
+            localStorage.setItem('bank_accounts', JSON.stringify(accs));
+        }
+
+        let currentSessionUser = JSON.parse(localStorage.getItem('bank_current_session')) || null;
+
+        // Run on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const loadingBar = document.getElementById('loadingBar');
+            const splash = document.getElementById('loadingSplash');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 25;
+                loadingBar.style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        splash.style.opacity = '0';
+                        setTimeout(() => {
+                            splash.style.display = 'none';
+                            initAppRouting();
+                        }, 400);
+                    }, 300);
+                }
+            }, 200);
         });
 
-        // Allow clicking outside the svg box to close it too
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                closeModal();
+        function initAppRouting() {
+            if (currentSessionUser) {
+                showDashboard();
+            } else {
+                showAuth();
             }
-        });
+        }
+
+        function showAuth() {
+            document.getElementById('authContainer').classList.remove('hidden');
+            document.getElementById('dashboardContainer').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('authContainer').classList.add('hidden');
+            const dash = document.getElementById('dashboardContainer');
+            dash.classList.remove('hidden');
+            updateDashboardUI();
+        }
+
+        // Toggle between Login and Register views
+        let isRegisterMode = false;
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            const loginView = document.getElementById('loginView');
+            const registerView = document.getElementById('registerView');
+            const badge = document.getElementById('authSwitchBadge');
+
+            if (isRegisterMode) {
+                loginView.classList.add('hidden');
+                registerView.classList.remove('hidden');
+                badge.innerText = "Back to Login";
+            } else {
+                registerView.classList.add('hidden');
+                loginView.classList.remove('hidden');
+                badge.innerText = "Create Account";
+            }
+        }
+
+        // Handle Login with Account Number & Password
+        function handleLogin(e) {
+            e.preventDefault();
+            const accNum = document.getElementById('loginAccNum').value.trim();
+            const pass = document.getElementById('loginPassword').value;
+
+            const accounts = getAccounts();
+            const found = accounts.find(a => a.accNum === accNum && a.password === pass);
+
+            if (found) {
+                currentSessionUser = found;
+                localStorage.setItem('bank_current_session', JSON.stringify(currentSessionUser));
+                showDashboard();
+            } else {
+                alert("Invalid Account Number or Password. Please check and try again.");
+            }
+        }
+
+        // Handle Account Creation
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const accType = document.getElementById('regAccType').value;
+            const country = document.getElementById('regCountry').value;
+            const initialDep = parseFloat(document.getElementById('regDeposit').value) || 1000;
+            const password = document.getElementById('regPassword').value;
+
+            // Generate random 10-digit account number
+            const newAccNum = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+
+            const newAccount = {
+                accNum: newAccNum,
+                password: password,
+                name: name,
+                accType: accType,
+                country: country,
+                balance: initialDep,
+                transactions: [
+                    { title: "Account Opening Deposit", amount: `+€${initialDep.toLocaleString()}.00`, date: "Just now", type: "credit" }
+                ]
+            };
+
+            const accounts = getAccounts();
+            accounts.push(newAccount);
+            saveAccounts(accounts);
+
+            currentSessionUser = newAccount;
+            localStorage.setItem('bank_current_session', JSON.stringify(currentSessionUser));
+
+            alert(`Account successfully created!\nYour 10-digit Account Number is: ${newAccNum}`);
+            showDashboard();
+        }
+
+        function logout() {
+            localStorage.removeItem('bank_current_session');
+            currentSessionUser = null;
+            showAuth();
+        }
+
+        function updateDashboardUI() {
+            if (!currentSessionUser) return;
+            document.getElementById('displayHolderName').innerText = currentSessionUser.name;
+            document.getElementById('displayAccNum').innerText = currentSessionUser.accNum;
+            document.getElementById('displayAccType').innerText = currentSessionUser.accType;
+            document.getElementById('displayCountry').innerText = currentSessionUser.country;
+            document.getElementById('displayBalance').innerHTML = `€${currentSessionUser.balance.toLocaleString()}<span class="text-sm font-normal text-slate-400">.00</span>`;
+
+            // Render transactions
+            const txList = document.getElementById('transactionList');
+            txList.innerHTML = '';
+            currentSessionUser.transactions.forEach(tx => {
+                const isCredit = tx.type === 'credit';
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-2.5 bg-[#0e1422] rounded-xl border border-[#1a253b]";
+                item.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg ${isCredit ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'} flex items-center justify-center">
+                            <i class="fa-solid ${isCredit ? 'fa-arrow-down' : 'fa-arrow-up'} text-xs"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-semibold text-slate-200">${tx.title}</div>
+                            <div class="text-[10px] text-slate-400">${tx.date}</div>
+                        </div>
+                    </div>
+                    <div class="text-xs font-bold ${isCredit ? 'text-emerald-400' : 'text-slate-200'}">${tx.amount}</div>
+                `;
+                txList.appendChild(item);
+            });
+        }
+
+        function copyAccNum() {
+            navigator.clipboard.writeText(currentSessionUser.accNum);
+            alert("Account number copied to clipboard: " + currentSessionUser.accNum);
+        }
+
+        // Modals management
+        function openTransferModal() {
+            document.getElementById('transferModal').style.display = 'flex';
+        }
+        function closeTransferModal() {
+            document.getElementById('transferModal').style.display = 'none';
+        }
+
+        function openDepositModal() {
+            document.getElementById('depositModal').style.display = 'flex';
+        }
+        function closeDepositModal() {
+            document.getElementById('depositModal').style.display = 'none';
+        }
+
+        function triggerConciergeModal() {
+            document.getElementById('svgModalOverlay').style.display = 'flex';
+        }
+        function closeConciergeModal() {
+            document.getElementById('svgModalOverlay').style.display = 'none';
+        }
+
+        // Handle Transfer submission
+        function handleTransfer(e) {
+            e.preventDefault();
+            const recipient = document.getElementById('transferAcc').value;
+            const bank = document.getElementById('transferBank').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const note = document.getElementById('transferNote').value || "Wire Transfer";
+
+            if (amount > currentSessionUser.balance) {
+                alert("Insufficient funds for this transfer.");
+                return;
+            }
+
+            currentSessionUser.balance -= amount;
+            currentSessionUser.transactions.unshift({
+                title: `Wire to ${recipient} (${bank})`,
+                amount: `-€${amount.toLocaleString()}.00`,
+                date: "Just now",
+                type: "debit"
+            });
+
+            syncUserSession();
+            closeTransferModal();
+            updateDashboardUI();
+            alert(`Successfully transferred €${amount.toLocaleString()} to ${recipient}!`);
+        }
+
+        // Handle Deposit submission
+        function handleDeposit(e) {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+
+            currentSessionUser.balance += amount;
+            currentSessionUser.transactions.unshift({
+                title: "Instant Bank Deposit",
+                amount: `+€${amount.toLocaleString()}.00`,
+                date: "Just now",
+                type: "credit"
+            });
+
+            syncUserSession();
+            closeDepositModal();
+            updateDashboardUI();
+            alert(`Successfully credited €${amount.toLocaleString()} to your account.`);
+        }
+
+        function syncUserSession() {
+            localStorage.setItem('bank_current_session', JSON.stringify(currentSessionUser));
+            const accounts = getAccounts();
+            const idx = accounts.findIndex(a => a.accNum === currentSessionUser.accNum);
+            if (idx !== -1) {
+                accounts[idx] = currentSessionUser;
+                saveAccounts(accounts);
+            }
+        }
     </script>
 </body>
 </html>
