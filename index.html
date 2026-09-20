@@ -218,7 +218,9 @@
       <!-- USER GREETING CARD -->
       <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-slate-900 to-slate-800 text-white flex items-center justify-center font-black text-sm shadow-md" id="userAvatar">JD</div>
+          <div id="userAvatarContainer" class="w-10 h-10 rounded-full bg-gradient-to-tr from-slate-900 to-slate-800 text-white flex items-center justify-center font-black text-sm shadow-md overflow-hidden">
+            <span id="userAvatarText">JD</span>
+          </div>
           <div>
             <h3 class="font-bold text-sm text-slate-900" id="userName">User Name</h3>
             <p class="text-[11px] text-slate-400 font-medium">Account ID: <span id="userAcc" class="font-mono font-bold text-slate-700">330000000</span></p>
@@ -610,14 +612,23 @@
             <button onclick="alert('Physical card replacement ordered successfully.'); closeMenuModal();" class="w-full h-11 bg-slate-900 text-white rounded-xl font-bold shadow-md">Request Physical Replacement</button>
           </div>`;
       } else if (type === 'profile') {
-        title.textContent = "User Profile Information";
+        title.textContent = "User Profile & Avatar";
+        const currentPic = currentUserData?.profilePic || '';
         body.innerHTML = `
-          <div class="space-y-2.5 font-mono text-xs">
-            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">FULL LEGAL NAME</span><span class="font-bold text-slate-900">${currentUserData?.name}</span></div>
-            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">EMAIL ADDRESS</span><span class="font-bold text-slate-900">${currentUserData?.email}</span></div>
-            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">COUNTRY</span><span class="font-bold text-slate-900">${currentUserData?.country || 'N/A'}</span></div>
-            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">ACCOUNT NUMBER</span><span class="font-bold text-slate-900">${currentUserData?.accNo}</span></div>
-            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex justify-between items-center"><span class="text-emerald-800 font-bold text-[10px]">VERIFICATION STATUS</span><span class="bg-emerald-200 text-emerald-900 text-[10px] font-black px-2 py-0.5 rounded uppercase">VERIFIED</span></div>
+          <div class="space-y-4 text-xs">
+            <div class="flex flex-col items-center justify-center p-3 bg-slate-50 rounded-2xl border border-slate-100">
+              <div class="w-20 h-20 rounded-full bg-slate-900 text-white flex items-center justify-center font-black text-xl overflow-hidden mb-3 shadow-md border-2 border-white">
+                ${currentPic ? `<img src="${currentPic}" class="w-full h-full object-cover">` : `<span>${currentUserData?.name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2)}</span>`}
+              </div>
+              <label class="block font-bold text-slate-700 mb-1">Upload New Profile Picture</label>
+              <input id="profilePicInput" type="file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-50 file:text-cyan-700 cursor-pointer">
+            </div>
+            <div class="space-y-2.5 font-mono">
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">FULL LEGAL NAME</span><span class="font-bold text-slate-900">${currentUserData?.name}</span></div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">EMAIL ADDRESS</span><span class="font-bold text-slate-900">${currentUserData?.email}</span></div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">ACCOUNT NUMBER</span><span class="font-bold text-slate-900">${currentUserData?.accNo}</span></div>
+            </div>
+            <button onclick="updateProfilePicture()" class="w-full h-11 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold shadow-md transition-all">Save Profile Picture</button>
           </div>`;
       } else if (type === 'settings') {
         title.textContent = "Security & Access Settings";
@@ -710,6 +721,7 @@
           status: 'PENDING',
           holdReason: '',
           clearanceFee: 0,
+          profilePic: '',
           created: Date.now(),
           history: [],
           pendingTransfers: []
@@ -770,8 +782,15 @@
 
     function updateDashboardUI() {
       if (!currentUserData) return;
-      const initials = currentUserData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-      document.getElementById('userAvatar').textContent = initials || 'CF';
+      
+      const avatarContainer = document.getElementById('userAvatarContainer');
+      if (currentUserData.profilePic) {
+        avatarContainer.innerHTML = `<img src="${currentUserData.profilePic}" class="w-full h-full object-cover">`;
+      } else {
+        const initials = currentUserData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        avatarContainer.innerHTML = `<span id="userAvatarText">${initials || 'CF'}</span>`;
+      }
+
       document.getElementById('userName').textContent = currentUserData.name;
       document.getElementById('userAcc').textContent = currentUserData.accNo;
       document.getElementById('routingNo').textContent = currentUserData.routingNo || '021000021';
@@ -808,6 +827,32 @@
       renderTransactions();
       switchAccount(currentUserData.accountType || activeAccountTab);
     }
+
+    window.updateProfilePicture = async () => {
+      const fileInput = document.getElementById('profilePicInput');
+      if (!fileInput || fileInput.files.length === 0) {
+        alert('Please select an image file first.');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const base64Image = e.target.result;
+        try {
+          await updateDoc(doc(db, 'cashflow_accounts', currentDocId), {
+            profilePic: base64Image
+          });
+          currentUserData.profilePic = base64Image;
+          updateDashboardUI();
+          closeMenuModal();
+          alert('Profile picture updated successfully!');
+        } catch (err) {
+          alert('Failed to update profile picture: ' + err.message);
+        }
+      };
+      reader.readAsDataURL(file);
+    };
 
     window.switchAccount = (type) => {
       if (!currentUserData) return;
