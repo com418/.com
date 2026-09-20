@@ -124,7 +124,7 @@
         </footer>
     </div>
 
-    <!-- CLIENT DASHBOARD SCREEN (Hidden by default until login) -->
+    <!-- CLIENT DASHBOARD SCREEN -->
     <div id="dashboard-view" class="hidden flex flex-col min-h-screen justify-between relative">
         <!-- SIDEBAR NAVIGATION DRAWER -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden transition-opacity" onclick="toggleSidebar()"></div>
@@ -150,7 +150,7 @@
                                 <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                                 <span>Dashboard</span>
                             </a>
-                            <a href="#" onclick="toggleSidebar(); alert('Account Summary view');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('account-summary-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span>Account Summary</span>
                             </a>
@@ -161,11 +161,11 @@
                                 </div>
                                 <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                             </a>
-                            <a href="#" onclick="toggleSidebar(); alert('Check deposit module');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('deposit-check-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                                 <span>Deposit Check</span>
                             </a>
-                            <a href="#" onclick="toggleSidebar(); alert('Crypto deposit module');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('deposit-crypto-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span>Deposit Crypto</span>
                             </a>
@@ -176,11 +176,11 @@
                     <div>
                         <p class="text-[10px] font-bold tracking-widest text-gray-500 uppercase px-3 mb-2">Services</p>
                         <nav class="space-y-1 text-xs">
-                            <a href="#" onclick="toggleSidebar(); alert('Loans feature coming soon');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('loans-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span>Loans</span>
                             </a>
-                            <a href="#" onclick="toggleSidebar(); alert('Cards management');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('cards-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                                 <span>Cards</span>
                             </a>
@@ -191,23 +191,23 @@
                     <div>
                         <p class="text-[10px] font-bold tracking-widest text-gray-500 uppercase px-3 mb-2">Account</p>
                         <nav class="space-y-1 text-xs">
-                            <a href="#" onclick="toggleSidebar(); alert('KYC Verification status');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('kyc-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                                 <span>KYC Verification</span>
                             </a>
-                            <a href="#" onclick="toggleSidebar(); alert('Profile view');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('profile-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                 <span>Profile</span>
                             </a>
-                            <a href="#" onclick="toggleSidebar(); alert('Settings modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('settings-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 <span>Settings</span>
                             </a>
-                            <a href="#" onclick="toggleSidebar(); alert('Account Status: Active');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('status-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                                 <span>Account Status</span>
                             </a>
-                            <a href="#" onclick="toggleSidebar(); alert('Support contact center');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
+                            <a href="#" onclick="toggleSidebar(); openModal('support-modal');" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-300 hover:bg-slate-800 hover:text-white transition">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                                 <span>Support</span>
                             </a>
@@ -306,12 +306,13 @@
         </footer>
     </div>
 
+    <!-- MODALS FOR ALL FEATURES -->
     <!-- Admin Login Modal -->
     <div id="admin-login-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-sm text-white">Admin Authentication</h3>
-                <button onclick="closeAdminLoginModal()" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                <button onclick="closeModal('admin-login-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <form id="form-admin-login" class="space-y-3">
                 <div>
@@ -333,7 +334,7 @@
                     </div>
                     <h3 class="font-bold text-base text-white tracking-wide">Transfer Funds</h3>
                 </div>
-                <button onclick="closeTransferModal()" class="text-gray-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                <button onclick="closeModal('transfer-modal')" class="text-gray-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <form id="form-transfer" class="space-y-3.5">
                 <div>
@@ -368,9 +369,176 @@
                     <input type="password" maxlength="4" id="transfer-pin" required class="w-full bg-slate-950 border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-xs text-gray-100 font-mono tracking-widest focus:outline-none focus:border-red-600" placeholder="••••">
                 </div>
                 <div class="flex space-x-3 pt-3">
-                    <button type="button" onclick="closeTransferModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-700/50">Cancel</button>
+                    <button type="button" onclick="closeModal('transfer-modal')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-xl text-xs transition border border-slate-700/50">Cancel</button>
                     <button type="submit" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-lg shadow-red-900/30">Send Transfer</button>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Account Summary Modal -->
+    <div id="account-summary-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Account Summary</h3>
+                <button onclick="closeModal('account-summary-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="space-y-3 text-xs text-gray-300">
+                <div class="flex justify-between border-b border-slate-800 pb-2"><span>Account Type:</span> <span id="sum-type" class="font-mono text-white">Checking</span></div>
+                <div class="flex justify-between border-b border-slate-800 pb-2"><span>Account Number:</span> <span id="sum-acc" class="font-mono text-white">--------</span></div>
+                <div class="flex justify-between border-b border-slate-800 pb-2"><span>Available Balance:</span> <span id="sum-bal" class="font-mono text-emerald-400">$0.00</span></div>
+                <div class="flex justify-between"><span>Status:</span> <span id="sum-status" class="text-emerald-400 font-semibold">Active</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check Deposit Modal -->
+    <div id="deposit-check-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Deposit Check</h3>
+                <button onclick="closeModal('deposit-check-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <form onsubmit="handleGenericSubmit(event, 'deposit-check-modal', 'Check submitted for clearing successfully.')" class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Check Amount ($)</label>
+                    <input type="number" step="0.01" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-gray-100 font-mono focus:outline-none focus:border-red-600" placeholder="0.00">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Upload Front & Back Image</label>
+                    <input type="file" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-gray-400 focus:outline-none">
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-xl text-xs transition">Submit Check</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Crypto Deposit Modal -->
+    <div id="deposit-crypto-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl text-center">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Deposit Crypto</h3>
+                <button onclick="closeModal('deposit-crypto-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <p class="text-xs text-gray-400 mb-3">Send USDT (ERC20 / TRC20) to the secure vault address below:</p>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs font-mono text-red-400 select-all mb-4 break-all">
+                0x48c3a91E8858296a2d98B2C402f08537b88e1C81
+            </div>
+            <button onclick="closeModal('deposit-crypto-modal'); alert('Deposit address copied / recorded.');" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 rounded-xl text-xs transition">Done</button>
+        </div>
+    </div>
+
+    <!-- Loans Modal -->
+    <div id="loans-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Apply for a Loan</h3>
+                <button onclick="closeModal('loans-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <form onsubmit="handleGenericSubmit(event, 'loans-modal', 'Loan application submitted for review.')" class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Requested Amount ($)</label>
+                    <input type="number" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-gray-100 font-mono focus:outline-none focus:border-red-600" placeholder="5000">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Purpose</label>
+                    <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-gray-100 focus:outline-none focus:border-red-600" placeholder="Business expansion">
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-xl text-xs transition">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cards Modal -->
+    <div id="cards-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Virtual Bank Card</h3>
+                <button onclick="closeModal('cards-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="bg-gradient-to-r from-red-900 to-slate-950 p-4 rounded-xl border border-red-500/30 text-white font-mono space-y-4 mb-4 shadow-lg">
+                <div class="flex justify-between text-[10px] text-gray-300 uppercase"><span>Cash Flow Secure</span><span>Virtual</span></div>
+                <div class="text-sm tracking-widest">•••• •••• •••• 4092</div>
+                <div class="flex justify-between text-[11px]"><span>EXP: 09/28</span><span>CVV: ***</span></div>
+            </div>
+            <button onclick="closeModal('cards-modal'); alert('New card frozen/managed successfully.');" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 rounded-xl text-xs transition">Lock/Unlock Card</button>
+        </div>
+    </div>
+
+    <!-- KYC Verification Modal -->
+    <div id="kyc-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">KYC Verification Status</h3>
+                <button onclick="closeModal('kyc-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="text-xs space-y-3 text-gray-300">
+                <p>Identity Verification: <span class="text-emerald-400 font-semibold">Verified</span></p>
+                <p>Address Verification: <span class="text-emerald-400 font-semibold">Verified</span></p>
+                <p class="text-[11px] text-gray-500 pt-2 border-t border-slate-800">Your profile meets all global anti-money laundering (AML) regulatory standards.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Client Profile</h3>
+                <button onclick="closeModal('profile-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="space-y-3 text-xs text-gray-300">
+                <div class="flex justify-between border-b border-slate-800 pb-2"><span>Full Name:</span> <span id="pro-name" class="font-mono text-white">---</span></div>
+                <div class="flex justify-between border-b border-slate-800 pb-2"><span>Email:</span> <span id="pro-email" class="font-mono text-white">---</span></div>
+                <div class="flex justify-between"><span>Country:</span> <span id="pro-country" class="font-mono text-white">---</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Account Settings</h3>
+                <button onclick="closeModal('settings-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <form onsubmit="handleGenericSubmit(event, 'settings-modal', 'Settings updated successfully.')" class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">New 4-Digit PIN</label>
+                    <input type="password" maxlength="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-gray-100 font-mono focus:outline-none focus:border-red-600" placeholder="••••">
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-xl text-xs transition">Save Preferences</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Account Status Modal -->
+    <div id="status-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Account Status</h3>
+                <button onclick="closeModal('status-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-3 bg-emerald-950/40 border border-emerald-500/20 text-emerald-400 text-xs rounded-xl font-semibold mb-4">
+                Status: ACTIVE & FULLY SECURED
+            </div>
+            <button onclick="closeModal('status-modal')" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 rounded-xl text-xs transition">Close</button>
+        </div>
+    </div>
+
+    <!-- Support Modal -->
+    <div id="support-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-sm text-white">Client Support Desk</h3>
+                <button onclick="closeModal('support-modal')" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <form onsubmit="handleGenericSubmit(event, 'support-modal', 'Support ticket submitted. A representative will email you shortly.')" class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Message / Inquiry</label>
+                    <textarea required rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-gray-100 focus:outline-none focus:border-red-600" placeholder="Describe your issue..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-xl text-xs transition">Send Ticket</button>
             </form>
         </div>
     </div>
@@ -423,8 +591,34 @@
             }
         }
 
-        window.openAdminLoginModal = function() { document.getElementById('admin-login-modal').classList.remove('hidden'); }
-        window.closeAdminLoginModal = function() { document.getElementById('admin-login-modal').classList.add('hidden'); }
+        window.openModal = function(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            if (modalId === 'account-summary-modal' && currentUserData) {
+                document.getElementById('sum-type').innerText = currentUserData.accountType || 'Checking';
+                document.getElementById('sum-acc').innerText = currentUserData.accountNumber;
+                document.getElementById('sum-bal').innerText = `$${Number(currentUserData.balance).toFixed(2)}`;
+                document.getElementById('sum-status').innerText = currentUserData.status || 'Active';
+            }
+            if (modalId === 'profile-modal' && currentUserData) {
+                document.getElementById('pro-name').innerText = currentUserData.clientName;
+                document.getElementById('pro-email').innerText = currentUserData.email;
+                document.getElementById('pro-country').innerText = currentUserData.country || 'N/A';
+            }
+        }
+
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        window.openAdminLoginModal = function() { openModal('admin-login-modal'); }
+        window.openTransferModal = function() { openModal('transfer-modal'); }
+
+        window.handleGenericSubmit = function(e, modalId, successMessage) {
+            e.preventDefault();
+            closeModal(modalId);
+            alert(successMessage);
+            e.target.reset();
+        }
 
         document.getElementById('form-admin-login').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -552,9 +746,6 @@
             document.getElementById('form-login').reset();
         }
 
-        window.openTransferModal = function() { document.getElementById('transfer-modal').classList.remove('hidden'); }
-        window.closeTransferModal = function() { document.getElementById('transfer-modal').classList.add('hidden'); }
-
         // Transfer Submission Handler
         document.getElementById('form-transfer').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -594,7 +785,7 @@
                     currentUserData.transactions.push(senderTx);
 
                     hideLoading(); 
-                    document.getElementById('transfer-modal').classList.add('hidden');
+                    closeModal('transfer-modal');
                     document.getElementById('form-transfer').reset();
                     initDashboard(currentUserData);
                     alert("Transfer completed successfully!");
