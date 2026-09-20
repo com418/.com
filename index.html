@@ -286,8 +286,8 @@
             </nav>
 
             <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-                <!-- Top Row: Balance Card & Financial Snapshot Chart -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Top Row: Balance Card Only -->
+                <div class="grid grid-cols-1 gap-6">
                     <!-- Balance Card -->
                     <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-slate-800/80 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col justify-between">
                         <div class="absolute -right-16 -top-16 w-56 h-56 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -314,23 +314,9 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Cash Flow Chart Widget -->
-                    <div class="lg:col-span-2 bg-slate-900/90 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 shadow-2xl flex flex-col justify-between">
-                        <div class="flex justify-between items-center mb-4">
-                            <div>
-                                <h3 class="font-bold text-sm text-white">Cash Flow Analytics</h3>
-                                <p class="text-xs text-gray-400">Monthly deposit and liquidity trends</p>
-                            </div>
-                            <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/20 px-2.5 py-1 rounded-lg">Real-Time Sync</span>
-                        </div>
-                        <div class="h-48 relative w-full">
-                            <canvas id="cashFlowChart"></canvas>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Quick Services Grid (Credit Line is 2nd, Mobile Check is 4th) -->
+                <!-- Quick Services Grid -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <button onclick="openTransferModal()" class="bg-slate-900/80 hover:bg-slate-800/90 border border-slate-800/80 p-4 rounded-2xl text-left transition group shadow-lg">
                         <div class="w-9 h-9 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3 group-hover:scale-105 transition">
@@ -362,6 +348,20 @@
                         <h4 class="font-bold text-xs text-white">Mobile Check</h4>
                         <p class="text-[10px] text-gray-400 mt-0.5">Instant deposit capture</p>
                     </button>
+                </div>
+
+                <!-- Cash Flow Chart Widget (Now Before Transaction History) -->
+                <div class="bg-slate-900/90 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 shadow-2xl flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="font-bold text-sm text-white">Cash Flow Analytics</h3>
+                            <p class="text-xs text-gray-400">Monthly deposit and liquidity trends</p>
+                        </div>
+                        <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/20 px-2.5 py-1 rounded-lg">Real-Time Sync</span>
+                    </div>
+                    <div class="h-48 relative w-full">
+                        <canvas id="cashFlowChart"></canvas>
+                    </div>
                 </div>
 
                 <!-- Transaction History Table -->
