@@ -8,108 +8,98 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body class="bg-slate-100 min-h-screen font-sans">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col">
 
-    <!-- Top Navigation Header -->
-    <header class="bg-[#0b1b3d] text-white px-8 py-4 flex justify-between items-center shadow-md">
+    <!-- Top Admin Header -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center sticky top-0 z-30">
         <div class="flex items-center space-x-3">
-            <i class="fa-solid fa-shield-halved text-blue-400 text-2xl"></i>
+            <div class="w-10 h-10 bg-amber-500/20 border border-amber-500/30 rounded-xl flex items-center justify-center text-amber-400">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
             <div>
-                <h1 class="font-bold text-lg tracking-wider">FIRST NATIONAL BANK</h1>
-                <p class="text-xs text-blue-300">Admin Control & Management Portal</p>
+                <h1 class="font-bold text-base tracking-wider text-white">BANK ADMINISTRATION</h1>
+                <p class="text-[11px] text-slate-400">Manage user accounts, balances, limits & statuses</p>
             </div>
         </div>
-        <div class="flex items-center space-x-4">
-            <span class="bg-blue-900/80 text-blue-200 text-xs px-3 py-1.5 rounded-full border border-blue-700 font-medium">
-                <i class="fa-solid fa-lock mr-1.5 text-blue-400"></i> Secure Admin Session
-            </span>
-            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3.5 py-2 rounded-lg transition font-medium flex items-center">
-                <i class="fa-solid fa-arrow-left mr-1.5"></i> Back to App
+        <div>
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-4 py-2 rounded-xl transition border border-slate-700 font-medium">
+                <i class="fa-solid fa-arrow-left mr-1.5"></i> Back to Mobile App
             </a>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
         
-        <!-- Metrics / Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Accounts</p>
-                    <h3 id="stat-total" class="text-3xl font-extrabold text-slate-900 mt-1">0</h3>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-users"></i>
-                </div>
+        <!-- Summary Stat Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Accounts</p>
+                <h3 id="stat-total" class="text-2xl font-bold text-white mt-1">0</h3>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Pending Review</p>
-                    <h3 id="stat-pending" class="text-3xl font-extrabold text-amber-600 mt-1">0</h3>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+                <p class="text-xs font-medium text-amber-400 uppercase tracking-wider">Pending Approval</p>
+                <h3 id="stat-pending" class="text-2xl font-bold text-amber-400 mt-1">0</h3>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Active / Approved</p>
-                    <h3 id="stat-active" class="text-3xl font-extrabold text-emerald-600 mt-1">0</h3>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-user-check"></i>
-                </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+                <p class="text-xs font-medium text-emerald-400 uppercase tracking-wider">Active Accounts</p>
+                <h3 id="stat-active" class="text-2xl font-bold text-emerald-400 mt-1">0</h3>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+                <p class="text-xs font-medium text-blue-400 uppercase tracking-wider">Total Bank Assets</p>
+                <h3 id="stat-assets" class="text-2xl font-bold text-blue-400 mt-1">$0.00</h3>
             </div>
         </div>
 
-        <!-- Account Management Table Card -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900">Account Applications & Management</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Review newly submitted applications, update status, or delete accounts.</p>
-                </div>
-                <div class="relative w-full sm:w-64">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                        <i class="fa-solid fa-search text-xs"></i>
-                    </span>
-                    <input type="text" id="search-input" placeholder="Search by name or email..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 transition">
+        <!-- Accounts Table Section -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center flex-wrap gap-3">
+                <h2 class="font-bold text-sm text-white"><i class="fa-solid fa-users mr-2 text-blue-400"></i>Registered Accounts Database</h2>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="search-input" placeholder="Search by name, email, or account #..." class="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 w-64">
                 </div>
             </div>
 
-            <!-- Table -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50 text-slate-500 text-[11px] font-bold uppercase tracking-wider border-b border-slate-200">
-                            <th class="py-3.5 px-6">User / Holder</th>
-                            <th class="py-3.5 px-6">Email Address</th>
-                            <th class="py-3.5 px-6">Account Type</th>
-                            <th class="py-3.5 px-6">Current Balance</th>
-                            <th class="py-3.5 px-6">Status</th>
-                            <th class="py-3.5 px-6 text-right">Actions</th>
+                        <tr class="bg-slate-950/50 text-[11px] font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800">
+                            <th class="p-4">Customer</th>
+                            <th class="p-4">Account Number</th>
+                            <th class="p-4">Country</th>
+                            <th class="p-4">Type</th>
+                            <th class="p-4">Balance</th>
+                            <th class="p-4">Daily Limit</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-table-body" class="divide-y divide-slate-100 text-xs text-slate-700">
-                        <!-- Populated dynamically via Firebase -->
-                        <tr>
-                            <td colspan="6" class="text-center py-8 text-slate-400">Loading accounts from Firebase...</td>
-                        </tr>
+                    <tbody id="accounts-table-body" class="divide-y divide-slate-800 text-xs text-slate-300">
+                        <!-- Populated dynamically -->
                     </tbody>
                 </table>
             </div>
         </div>
-
     </main>
 
-    <!-- Firebase Administration Script -->
+    <!-- Generic Modal Dialog for Editing (Funding, Limits) -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
+            <button id="modal-close" class="absolute top-4 right-4 text-slate-400 hover:text-white text-base focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK & Admin Controller Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Your Firebase Configuration (`cash-flow-banking70`)
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
           authDomain: "cash-flow-banking70.firebaseapp.com",
@@ -123,135 +113,211 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        let allAccountsData = {};
+        const tableBody = document.getElementById('accounts-table-body');
+        const statTotal = document.getElementById('stat-total');
+        const statPending = document.getElementById('stat-pending');
+        const statActive = document.getElementById('stat-active');
+        const statAssets = document.getElementById('stat-assets');
+        const searchInput = document.getElementById('search-input');
 
-        // Fetch accounts in real-time from database path 'accounts'
+        const modal = document.getElementById('admin-modal');
+        const modalBody = document.getElementById('modal-body');
+        document.getElementById('modal-close').addEventListener('click', () => modal.classList.add('hidden'));
+
+        let globalAccountsData = {};
+
+        // Fetch and render data from Firebase Realtime Database
         const accountsRef = ref(db, 'accounts');
         onValue(accountsRef, (snapshot) => {
             const data = snapshot.val();
-            allAccountsData = data || {};
-            renderTable(allAccountsData);
+            globalAccountsData = data || {};
+            renderTable(globalAccountsData);
         });
 
-        function renderTable(data) {
-            const tbody = document.getElementById('admin-table-body');
-            tbody.innerHTML = '';
-
-            const keys = Object.keys(data);
+        function renderTable(data, filter = '') {
+            tableBody.innerHTML = '';
             
-            // Update stats
-            let totalCount = keys.length;
-            let pendingCount = 0;
-            let activeCount = 0;
-
-            if (totalCount === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400 font-medium">No accounts found in the database.</td></tr>`;
-                document.getElementById('stat-total').innerText = '0';
-                document.getElementById('stat-pending').innerText = '0';
-                document.getElementById('stat-active').innerText = '0';
+            if (!data) {
+                tableBody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-500">No accounts found in the database.</td></tr>`;
+                statTotal.innerText = '0';
+                statPending.innerText = '0';
+                statActive.innerText = '0';
+                statAssets.innerText = '$0.00';
                 return;
             }
 
-            keys.forEach(key => {
+            let totalCount = 0;
+            let pendingCount = 0;
+            let activeCount = 0;
+            let totalAssets = 0;
+
+            const filterLower = filter.toLowerCase();
+
+            for (let key in data) {
                 const acc = data[key];
-                const status = acc.status || 'pending';
-                
-                if (status === 'pending') pendingCount++;
-                if (status === 'active' || status === 'approved') activeCount++;
+                totalCount++;
 
-                const row = document.createElement('tr');
-                row.className = "hover:bg-slate-50/80 transition";
+                const fullName = acc.fullName || '';
+                const email = acc.email || '';
+                const accountNumber = acc.accountNumber || '';
 
-                let statusBadge = '';
-                if (status === 'active' || status === 'approved') {
-                    statusBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full font-semibold text-[10px] inline-flex items-center"><i class="fa-solid fa-circle text-[6px] mr-1.5 text-emerald-500"></i> Active</span>`;
-                } else if (status === 'declined') {
-                    statusBadge = `<span class="bg-rose-50 text-rose-700 border border-rose-200 px-2.5 py-1 rounded-full font-semibold text-[10px] inline-flex items-center"><i class="fa-solid fa-circle text-[6px] mr-1.5 text-rose-500"></i> Declined</span>`;
-                } else {
-                    statusBadge = `<span class="bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-full font-semibold text-[10px] inline-flex items-center"><i class="fa-solid fa-circle text-[6px] mr-1.5 text-amber-500"></i> Pending</span>`;
+                if (filterLower && !fullName.toLowerCase().includes(filterLower) && !email.toLowerCase().includes(filterLower) && !accountNumber.includes(filterLower)) {
+                    continue;
                 }
 
-                row.innerHTML = `
-                    <td class="py-4 px-6 font-bold text-slate-900 flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs uppercase">
-                            ${(acc.fullName || 'U').charAt(0)}
-                        </div>
-                        <span>${acc.fullName || 'Unnamed Account'}</span>
+                if (acc.status === 'pending') pendingCount++;
+                if (acc.status === 'active') activeCount++;
+                totalAssets += Number(acc.balance || 0);
+
+                const balanceFormatted = Number(acc.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2});
+                const dailyLimitFormatted = Number(acc.dailyLimit || 5000).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                let statusBadge = '';
+                if (acc.status === 'active') {
+                    statusBadge = `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-medium">Active</span>`;
+                } else if (acc.status === 'declined') {
+                    statusBadge = `<span class="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2.5 py-0.5 rounded-full font-medium">Declined</span>`;
+                } else {
+                    statusBadge = `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-medium">Pending</span>`;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-950/30 transition";
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <div class="font-bold text-white">${acc.fullName}</div>
+                        <div class="text-[11px] text-slate-400">${acc.email}</div>
                     </td>
-                    <td class="py-4 px-6 text-slate-600">${acc.email || 'N/A'}</td>
-                    <td class="py-4 px-6 font-medium text-slate-700">
-                        <select onchange="updateAccountType('${key}', this.value)" class="bg-slate-100 border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:border-blue-500">
-                            <option value="Checking" ${acc.accountType === 'Checking' ? 'selected' : ''}>Checking</option>
-                            <option value="Savings" ${acc.accountType === 'Savings' ? 'selected' : ''}>Savings</option>
-                            <option value="Business Checking" ${acc.accountType === 'Business Checking' ? 'selected' : ''}>Business Checking</option>
-                            <option value="Platinum Rewards" ${acc.accountType === 'Platinum Rewards' ? 'selected' : ''}>Platinum Rewards</option>
-                        </select>
-                    </td>
-                    <td class="py-4 px-6 font-semibold text-slate-900">$${Number(acc.balance || 12450).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                    <td class="py-4 px-6">${statusBadge}</td>
-                    <td class="py-4 px-6 text-right space-x-2">
-                        ${status !== 'active' && status !== 'approved' ? `
-                            <button onclick="setStatus('${key}', 'active')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-semibold transition shadow-sm">
-                                <i class="fa-solid fa-check mr-1"></i> Approve
-                            </button>
-                        ` : ''}
-                        ${status !== 'declined' ? `
-                            <button onclick="setStatus('${key}', 'declined')" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-[11px] font-semibold transition shadow-sm">
-                                <i class="fa-solid fa-xmark mr-1"></i> Decline
-                            </button>
-                        ` : ''}
-                        <button onclick="deleteAccount('${key}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition border border-rose-200">
-                            <i class="fa-solid fa-trash mr-1"></i> Delete
-                        </button>
+                    <td class="p-4 font-mono text-blue-400">${acc.accountNumber}</td>
+                    <td class="p-4 text-slate-300">${acc.country || 'N/A'}</td>
+                    <td class="p-4">${acc.accountType}</td>
+                    <td class="p-4 font-bold text-white">$${balanceFormatted}</td>
+                    <td class="p-4 font-mono text-slate-300">$${dailyLimitFormatted}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-right space-x-1">
+                        <button onclick="window.adminApprove('${key}')" title="Approve Account" class="w-7 h-7 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-lg inline-flex items-center justify-center transition"><i class="fa-solid fa-check text-xs"></i></button>
+                        <button onclick="window.adminDecline('${key}')" title="Decline Account" class="w-7 h-7 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 rounded-lg inline-flex items-center justify-center transition"><i class="fa-solid fa-ban text-xs"></i></button>
+                        <button onclick="window.openFundModal('${key}')" title="Fund Account" class="w-7 h-7 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg inline-flex items-center justify-center transition"><i class="fa-solid fa-wallet text-xs"></i></button>
+                        <button onclick="window.openLimitModal('${key}')" title="Change Daily Limit" class="w-7 h-7 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg inline-flex items-center justify-center transition"><i class="fa-solid fa-gauge-high text-xs"></i></button>
+                        <button onclick="window.adminDelete('${key}')" title="Delete Account" class="w-7 h-7 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 rounded-lg inline-flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
                     </td>
                 `;
-                tbody.appendChild(row);
-            });
+                tableBody.appendChild(tr);
+            }
 
-            document.getElementById('stat-total').innerText = totalCount;
-            document.getElementById('stat-pending').innerText = pendingCount;
-            document.getElementById('stat-active').innerText = activeCount;
+            statTotal.innerText = totalCount;
+            statPending.innerText = pendingCount;
+            statActive.innerText = activeCount;
+            statAssets.innerText = `$${totalAssets.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
         }
 
-        // Global functions for admin actions
-        window.setStatus = function(id, newStatus) {
-            const accRef = ref(db, `accounts/${id}`);
-            update(accRef, { status: newStatus }).then(() => {
-                // optional notification or feedback
-            }).catch(error => {
-                alert("Error updating status: " + error.message);
-            });
+        searchInput.addEventListener('input', (e) => {
+            renderTable(globalAccountsData, e.target.value);
+        });
+
+        // Global functions mapped to buttons in table
+        window.adminApprove = function(key) {
+            update(ref(db, `accounts/${key}`), { status: 'active' })
+                .then(() => alert("Account approved successfully."))
+                .catch(err => alert("Error: " + err.message));
         };
 
-        window.updateAccountType = function(id, newType) {
-            const accRef = ref(db, `accounts/${id}`);
-            update(accRef, { accountType: newType }).catch(error => {
-                alert("Error updating account type: " + error.message);
-            });
+        window.adminDecline = function(key) {
+            update(ref(db, `accounts/${key}`), { status: 'declined' })
+                .then(() => alert("Account declined."))
+                .catch(err => alert("Error: " + err.message));
         };
 
-        window.deleteAccount = function(id) {
-            if (confirm("Are you sure you want to completely delete this account? This action cannot be undone.")) {
-                const accRef = ref(db, `accounts/${id}`);
-                remove(accRef).catch(error => {
-                    alert("Error deleting account: " + error.message);
-                });
+        window.adminDelete = function(key) {
+            if (confirm("Are you sure you want to permanently delete this user account?")) {
+                remove(ref(db, `accounts/${key}`))
+                    .then(() => alert("Account deleted successfully."))
+                    .catch(err => alert("Error: " + err.message));
             }
         };
 
-        // Search filtering functionality
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = {};
-            Object.keys(allAccountsData).forEach(key => {
-                const acc = allAccountsData[key];
-                if ((acc.fullName && acc.fullName.toLowerCase().includes(term)) || 
-                    (acc.email && acc.email.toLowerCase().includes(term))) {
-                    filtered[key] = acc;
+        window.openFundModal = function(key) {
+            const acc = globalAccountsData[key];
+            modalBody.innerHTML = `
+                <h3 class="font-bold text-sm text-white mb-1"><i class="fa-solid fa-wallet text-blue-400 mr-2"></i>Fund Account: ${acc.fullName}</h3>
+                <p class="text-xs text-slate-400 mb-4">Current Balance: <span class="text-white font-bold">$${Number(acc.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}</span></p>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-[11px] font-medium text-slate-300">Action Type</label>
+                        <select id="fund-action" class="w-full mt-1 px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500">
+                            <option value="deposit">Deposit (Add Funds)</option>
+                            <option value="withdraw">Withdraw (Deduct Funds)</option>
+                            <option value="set">Set Exact Balance</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-medium text-slate-300">Amount ($)</label>
+                        <input type="number" id="fund-amount" placeholder="0.00" class="w-full mt-1 px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <button id="btn-confirm-fund" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl text-xs font-bold transition mt-2">Apply Funding Update</button>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+
+            document.getElementById('btn-confirm-fund').onclick = () => {
+                const action = document.getElementById('fund-action').value;
+                const amt = parseFloat(document.getElementById('fund-amount').value);
+
+                if (isNaN(amt) || amt < 0) {
+                    alert("Please enter a valid amount.");
+                    return;
                 }
-            });
-            renderTable(filtered);
-        });
+
+                let currentBal = Number(acc.balance || 0);
+                let newBal = currentBal;
+
+                if (action === 'deposit') newBal += amt;
+                else if (action === 'withdraw') newBal -= amt;
+                else if (action === 'set') newBal = amt;
+
+                update(ref(db, `accounts/${key}`), { balance: newBal })
+                    .then(() => {
+                        alert("Account balance updated successfully!");
+                        modal.classList.add('hidden');
+                    })
+                    .catch(err => alert("Error: " + err.message));
+            };
+        };
+
+        window.openLimitModal = function(key) {
+            const acc = globalAccountsData[key];
+            const currentLimit = acc.dailyLimit || 5000;
+            modalBody.innerHTML = `
+                <h3 class="font-bold text-sm text-white mb-1"><i class="fa-solid fa-gauge-high text-purple-400 mr-2"></i>Change Daily Limit: ${acc.fullName}</h3>
+                <p class="text-xs text-slate-400 mb-4">Current Daily Limit: <span class="text-white font-bold">$${Number(currentLimit).toLocaleString('en-US', {minimumFractionDigits: 2})}</span></p>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-[11px] font-medium text-slate-300">New Daily Limit ($)</label>
+                        <input type="number" id="limit-amount" value="${currentLimit}" class="w-full mt-1 px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                    <button id="btn-confirm-limit" class="w-full bg-purple-600 hover:bg-purple-500 text-white py-2.5 rounded-xl text-xs font-bold transition mt-2">Update Daily Limit</button>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+
+            document.getElementById('btn-confirm-limit').onclick = () => {
+                const newLimit = parseFloat(document.getElementById('limit-amount').value);
+
+                if (isNaN(newLimit) || newLimit < 0) {
+                    alert("Please enter a valid daily limit.");
+                    return;
+                }
+
+                update(ref(db, `accounts/${key}`), { dailyLimit: newLimit })
+                    .then(() => {
+                        alert("Daily limit updated successfully!");
+                        modal.classList.add('hidden');
+                    })
+                    .catch(err => alert("Error: " + err.message));
+            };
+        };
     </script>
 </body>
 </html>
