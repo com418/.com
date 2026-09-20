@@ -90,9 +90,16 @@
         <div>
             <nav class="bg-slate-950/80 backdrop-blur-md border-b border-slate-800 shadow-md sticky top-0 z-40">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
-                    <div class="flex items-center space-x-3">
-                        <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        <span class="font-bold text-xl tracking-wide text-white">Cash Flow Banking</span>
+                    <div class="flex items-center space-x-6">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <span class="font-bold text-xl tracking-wide text-white">Cash Flow Banking</span>
+                        </div>
+                        <!-- Main / Home Navigation Button -->
+                        <button onclick="goToMainDashboard()" class="hidden sm:inline-flex items-center space-x-1.5 text-xs font-semibold text-gray-300 hover:text-white bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-800 transition">
+                            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            <span>Main</span>
+                        </button>
                     </div>
                     <div class="flex items-center space-x-4">
                         <span id="user-display-name" class="text-sm font-medium text-gray-300 hidden sm:inline"></span>
@@ -282,6 +289,22 @@
         window.openTransferModal = function() { document.getElementById('transfer-modal').classList.remove('hidden'); }
         window.closeTransferModal = function() { document.getElementById('transfer-modal').classList.add('hidden'); }
         
+        window.goToMainDashboard = async function() {
+            if (!currentUserData) return;
+            showLoading("Refreshing dashboard...");
+            try {
+                const docRef = doc(db, "clients", currentUserData.accountNumber);
+                const docSnap = await getDoc(docRef);
+                hideLoading();
+                if (docSnap.exists()) {
+                    initDashboard(docSnap.data());
+                }
+            } catch (err) {
+                hideLoading();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
         window.toggleCardLock = function() {
             isCardLocked = !isCardLocked;
             const badge = document.getElementById('card-lock-status');
