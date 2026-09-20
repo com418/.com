@@ -6,7 +6,6 @@
     <title>Cash Flow Banking - Enterprise Administration Suite</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-100 font-sans text-gray-900">
 
@@ -15,12 +14,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-shield-halved text-2xl text-red-200"></i>
+                    <svg class="w-6 h-6 text-red-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     <span class="font-bold text-lg tracking-wider">Cash Flow Banking | <span class="text-red-200 font-normal">Master Administration</span></span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-xs bg-red-950 text-red-200 border border-red-700 px-2.5 py-1 rounded font-mono">Secure Node: Active</span>
-                    <button id="admin-logout" class="text-red-200 hover:text-white text-sm transition">Lock Session</button>
                 </div>
             </div>
         </div>
@@ -32,30 +30,19 @@
         <!-- Metrics Row -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Active Clients</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Clients / Queue</p>
                 <h3 id="metric-clients" class="text-2xl font-black text-gray-900 mt-1">--</h3>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Pending Transfer Queue</p>
-                <h3 id="metric-transfers" class="text-2xl font-black text-amber-600 mt-1">--</h3>
             </div>
             <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Aggregate System Balance</p>
                 <h3 id="metric-deposits" class="text-2xl font-black text-emerald-600 mt-1">$0.00</h3>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">System Security State</p>
-                <h3 class="text-2xl font-black text-red-700 mt-1">Nominal</h3>
             </div>
         </div>
 
         <!-- Management Section -->
         <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-bold text-gray-900">Client Oversight & Ledger Control</h2>
-                <div class="flex space-x-3">
-                    <input type="text" id="admin-search-input" placeholder="Search client name or account..." class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-red-600">
-                </div>
+                <h2 class="text-lg font-bold text-gray-900">Client Oversight & Approval Queue</h2>
             </div>
 
             <div class="overflow-x-auto">
@@ -65,7 +52,7 @@
                             <th class="py-3 px-3">Client Name</th>
                             <th class="py-3 px-3">Account No</th>
                             <th class="py-3 px-3">Creation Date</th>
-                            <th class="py-3 px-3">Current Balance</th>
+                            <th class="py-3 px-3">Balance</th>
                             <th class="py-3 px-3">Status</th>
                             <th class="py-3 px-3 text-right">Administrative Actions</th>
                         </tr>
@@ -83,7 +70,7 @@
     <!-- Firebase SDK & Admin App Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
@@ -98,7 +85,20 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Fetch clients into Admin Table to check back-dates
+        // Function to Approve Account Status
+        window.approveAccount = async function(docId) {
+            try {
+                const clientRef = doc(db, "clients", docId);
+                await updateDoc(clientRef, { status: "Active" });
+                alert("Account successfully approved and activated!");
+                loadAdminClients(); // Refresh list
+            } catch (err) {
+                console.error("Error approving account:", err);
+                alert("Failed to approve account.");
+            }
+        }
+
+        // Fetch clients into Admin Table
         async function loadAdminClients() {
             try {
                 const querySnapshot = await getDocs(collection(db, "clients"));
@@ -116,19 +116,27 @@
 
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
+                    const docId = docSnap.id;
                     count++;
                     totalBal += Number(data.balance || 0);
+
+                    const isPending = data.status === "Pending Approval";
+                    const statusBadgeClass = isPending 
+                        ? 'bg-amber-50 text-amber-700 border border-amber-200' 
+                        : 'bg-emerald-50 text-emerald-700';
+
+                    const actionButton = isPending
+                        ? `<button onclick="approveAccount('${docId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs px-3 py-1.5 rounded transition shadow-sm">Approve</button>`
+                        : `<span class="text-gray-400 text-xs font-medium">Approved</span>`;
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="py-3 px-3 font-medium text-gray-900">${data.clientName || 'N/A'}</td>
-                        <td class="py-3 px-3 text-gray-600 font-mono text-xs">${data.accountNumber || docSnap.id}</td>
+                        <td class="py-3 px-3 text-gray-600 font-mono text-xs">${data.accountNumber || docId}</td>
                         <td class="py-3 px-3 text-gray-600 font-mono text-xs">${data.createdAt || 'N/A'}</td>
-                        <td class="py-3 px-3 font-semibold text-emerald-600">$${Number(data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                        <td class="py-3 px-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded text-xs font-medium">${data.status || 'Active'}</span></td>
-                        <td class="py-3 px-3 text-right">
-                            <button class="text-red-700 hover:text-red-900 font-medium text-xs bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded transition">Manage</button>
-                        </td>
+                        <td class="py-3 px-3 font-semibold text-gray-900">$${Number(data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                        <td class="py-3 px-3"><span class="${statusBadgeClass} px-2 py-0.5 rounded text-xs font-semibold">${data.status || 'Active'}</span></td>
+                        <td class="py-3 px-3 text-right">${actionButton}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -141,7 +149,6 @@
         }
 
         loadAdminClients();
-        console.log("Firebase initialized successfully for Admin Suite.");
     </script>
 </body>
 </html>
