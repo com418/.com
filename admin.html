@@ -393,6 +393,7 @@
       showAlert('');
     };
 
+    // Real-time synchronization for admin control center
     function initRealtimeListener() {
       const transListEl = document.getElementById('adminPendingTransfersList');
       const usersListEl = document.getElementById('adminUsersList');
@@ -424,10 +425,12 @@
 
         cachedUsers = allUsers;
 
+        // Update top stats
         document.getElementById('statTotalUsers').textContent = allUsers.length;
         document.getElementById('statPendingCount').textContent = allPending.length;
         document.getElementById('statTotalDeposits').textContent = '$' + totalDepositsSum.toLocaleString(undefined, {minimumFractionDigits: 2});
 
+        // Render Pending Transfers
         if (allPending.length === 0) {
           transListEl.innerHTML = `
             <div class="text-center py-12 text-slate-500 bg-slate-950/40 rounded-2xl border border-slate-800/80">
@@ -481,6 +484,7 @@
     }
 
     window.loadAdminPanel = () => {
+      // Retained for manual refresh triggers if needed
       if (!unsubscribeSnapshot) {
         initRealtimeListener();
       }
@@ -736,7 +740,7 @@
         await updateDoc(doc(db, 'cashflow_accounts', usr.id), {
           checkingBalance: checkingBal,
           balance: checkingBal,
-          savingsBalance: savingsBal,
+      savingsBalance: savingsBal,
           investmentBalance: investBal,
           history: [...(usr.history || []), historyItem]
         });
