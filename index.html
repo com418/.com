@@ -68,8 +68,12 @@
                         <input type="email" id="signup-email" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" placeholder="john@example.com">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Initial Deposit Amount ($)</label>
-                        <input type="number" id="signup-balance" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" placeholder="1000.00">
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Account Type</label>
+                        <select id="signup-account-type" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 text-gray-700">
+                            <option value="Checking Account">Checking Account</option>
+                            <option value="Savings Account">Savings Account</option>
+                            <option value="Business Account">Business Account</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Create Password</label>
@@ -148,7 +152,7 @@
 
                 <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100">
                     <div>
-                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Checking Account Balance</p>
+                        <p id="account-type-label" class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Checking Account Balance</p>
                         <div class="flex items-center space-x-3 mt-1">
                             <h1 id="account-balance" class="text-3xl font-extrabold text-gray-900">$0.00</h1>
                         </div>
@@ -244,7 +248,7 @@
 
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
-            const balance = parseFloat(document.getElementById('signup-balance').value);
+            const accountType = document.getElementById('signup-account-type').value;
             
             try {
                 const accountId = "ACC-" + Math.floor(100000 + Math.random() * 900000);
@@ -253,8 +257,9 @@
                 await setDoc(doc(db, "clients", accountId), {
                     clientName: name,
                     email: email,
+                    accountType: accountType,
                     accountNumber: accountId,
-                    balance: balance,
+                    balance: 0.00, // Default opening balance
                     createdAt: today,
                     status: "Pending Approval"
                 });
@@ -306,8 +311,10 @@
             document.getElementById('auth-view').classList.add('hidden');
             document.getElementById('dashboard-view').classList.remove('hidden');
 
+            const accType = data.accountType || "Checking Account";
             document.getElementById('user-display-name').innerText = `Welcome, ${data.clientName}`;
             document.getElementById('welcome-title').innerText = `Welcome back, ${data.clientName}`;
+            document.getElementById('account-type-label').innerText = `${accType} Balance`;
             document.getElementById('account-balance').innerText = '$' + Number(data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('account-number-display').innerText = data.accountNumber;
             document.getElementById('account-date-display').innerText = data.createdAt || 'N/A';
