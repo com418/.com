@@ -76,6 +76,10 @@
                         </select>
                     </div>
                     <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">4-Digit Transfer PIN</label>
+                        <input type="password" maxlength="4" id="signup-pin" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600 font-mono" placeholder="1234">
+                    </div>
+                    <div>
                         <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Create Password</label>
                         <input type="password" id="signup-password" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="••••••••">
                     </div>
@@ -253,7 +257,7 @@
         </div>
     </div>
 
-    <!-- Transfer Modal -->
+    <!-- Enhanced Transfer Modal -->
     <div id="transfer-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
@@ -265,14 +269,30 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-            <form id="form-transfer" class="space-y-4">
+            <form id="form-transfer" class="space-y-3">
+                <div class="flex items-center space-x-2 bg-slate-950 p-2 rounded-lg border border-slate-800 mb-2">
+                    <input type="checkbox" id="transfer-is-wire" class="rounded bg-slate-900 border-slate-700 text-red-600 focus:ring-red-500">
+                    <label for="transfer-is-wire" class="text-xs font-semibold text-gray-300">Is this a Wire Transfer? (External Bank)</label>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Bank Name</label>
+                    <input type="text" id="transfer-bank-name" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="e.g. Chase Bank / Cash Flow Banking">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Recipient Account Name</label>
+                    <input type="text" id="transfer-recipient-name" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="Jane Doe">
+                </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Recipient Account Number</label>
-                    <input type="text" id="transfer-recipient" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 font-mono focus:outline-none focus:border-red-600" placeholder="7208268287">
+                    <input type="text" id="transfer-recipient" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-gray-100 font-mono focus:outline-none focus:border-red-600" placeholder="7208268287">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Amount ($)</label>
-                    <input type="number" step="0.01" id="transfer-amount" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="0.00">
+                    <input type="number" step="0.01" id="transfer-amount" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="0.00">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">4-Digit Security PIN</label>
+                    <input type="password" maxlength="4" id="transfer-pin" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-gray-100 font-mono focus:outline-none focus:border-red-600" placeholder="••••">
                 </div>
                 <div class="flex space-x-3 pt-2">
                     <button type="button" onclick="closeTransferModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-lg text-sm transition">Cancel</button>
@@ -356,6 +376,10 @@
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             const accountType = document.getElementById('signup-account-type').value;
+            const pin = document.getElementById('signup-pin').value;
+            const password = document.getElementById('signup-password').value;
+
+            if (pin.length !== 4) { alert("PIN must be exactly 4 digits."); hideLoading(); return; }
 
             try {
                 const accountId = "72" + Math.floor(10000000 + Math.random() * 90000000);
@@ -363,7 +387,7 @@
 
                 await setDoc(doc(db, "clients", accountId), {
                     clientName: name, email: email, accountType: accountType,
-                    accountNumber: accountId, balance: 1000.00, createdAt: today,
+                    accountNumber: accountId, pin: pin, password: password, balance: 1000.00, createdAt: today,
                     status: "Pending Approval",
                     transactions: [{ description: "Account Opening Deposit", date: today, amount: 1000.00 }]
                 });
@@ -382,6 +406,7 @@
             e.preventDefault();
             showLoading("Authenticating credentials...");
             const identifier = document.getElementById('login-identifier').value.trim();
+            const passwordInput = document.getElementById('login-password').value;
 
             try {
                 const docRef = doc(db, "clients", identifier);
@@ -390,6 +415,10 @@
 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
+                    if (data.password && data.password !== passwordInput) {
+                        alert("Incorrect password.");
+                        return;
+                    }
                     if (data.status === "Frozen") { alert("Access Denied: Your account has been frozen by administration."); return; }
                     if (data.status === "Pending Approval") { alert("Your account is currently pending master admin approval."); return; }
 
@@ -434,29 +463,47 @@
 
         document.getElementById('form-transfer').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const isWire = document.getElementById('transfer-is-wire').checked;
+            const bankName = document.getElementById('transfer-bank-name').value.trim();
+            const recipientName = document.getElementById('transfer-recipient-name').value.trim();
             const recipientId = document.getElementById('transfer-recipient').value.trim();
             const amount = parseFloat(document.getElementById('transfer-amount').value);
+            const enteredPin = document.getElementById('transfer-pin').value.trim();
 
-            if (recipientId === currentUserData.accountNumber) { alert("You cannot transfer funds to your own account."); return; }
-            if (amount <= 0 || amount > currentUserData.balance) { alert("Invalid amount or insufficient funds."); return; }
+            if (enteredPin !== currentUserData.pin) {
+                alert("Incorrect Security PIN.");
+                return;
+            }
+            if (!isWire && recipientId === currentUserData.accountNumber) { 
+                alert("You cannot transfer funds to your own account."); 
+                return; 
+            }
+            if (amount <= 0 || amount > currentUserData.balance) { 
+                alert("Invalid amount or insufficient funds."); 
+                return; 
+            }
 
             showLoading("Processing secure transfer...");
             try {
-                const recipientRef = doc(db, "clients", recipientId);
-                const recipientSnap = await getDoc(recipientRef);
-                if (!recipientSnap.exists()) { hideLoading(); alert("Recipient account number does not exist."); return; }
-
-                const recipientData = recipientSnap.data();
-                const senderRef = doc(db, "clients", currentUserData.accountNumber);
                 const today = new Date().toISOString().split('T')[0];
-
+                const transferTypeLabel = isWire ? "Wire Transfer" : "Transfer";
                 const newSenderBalance = currentUserData.balance - amount;
-                const newRecipientBalance = recipientData.balance + amount;
-                const senderTx = { description: `Transfer to ${recipientId}`, date: today, amount: -amount };
-                const recipientTx = { description: `Transfer from ${currentUserData.accountNumber}`, date: today, amount: amount };
+                const senderRef = doc(db, "clients", currentUserData.accountNumber);
+                const senderTx = { description: `${transferTypeLabel} to ${recipientName} (${bankName})`, date: today, amount: -amount };
 
                 await setDoc(senderRef, { balance: newSenderBalance, transactions: arrayUnion(senderTx) }, { merge: true });
-                await setDoc(recipientRef, { balance: newRecipientBalance, transactions: arrayUnion(recipientTx) }, { merge: true });
+
+                // If recipient account is internal, update their account too
+                if (!isWire) {
+                    const recipientRef = doc(db, "clients", recipientId);
+                    const recipientSnap = await getDoc(recipientRef);
+                    if (recipientSnap.exists()) {
+                        const recipientData = recipientSnap.data();
+                        const newRecipientBalance = recipientData.balance + amount;
+                        const recipientTx = { description: `Transfer from ${currentUserData.clientName} (${currentUserData.accountNumber})`, date: today, amount: amount };
+                        await setDoc(recipientRef, { balance: newRecipientBalance, transactions: arrayUnion(recipientTx) }, { merge: true });
+                    }
+                }
 
                 currentUserData.balance = newSenderBalance;
                 if (!currentUserData.transactions) currentUserData.transactions = [];
