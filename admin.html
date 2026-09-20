@@ -30,7 +30,7 @@
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <h1 class="text-2xl font-black text-white">Client Accounts Management</h1>
-                    <p class="text-sm text-gray-400">Approve pending applications, manage balances, freeze accounts, and fund users securely.</p>
+                    <p class="text-sm text-gray-400">Approve pending applications, manage balances, freeze accounts, set limits, and fund users securely.</p>
                 </div>
                 <button onclick="loadClients()" class="bg-slate-800 hover:bg-slate-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-slate-700 flex items-center space-x-2">
                     <span>Refresh Data</span>
@@ -84,6 +84,27 @@
         </div>
     </div>
 
+    <!-- Change Daily Limit Modal -->
+    <div id="limit-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-white">Update Daily Transfer Limit</h3>
+                <button onclick="closeLimitModal()" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <p class="text-xs text-gray-400 mb-4">Target account: <span id="limit-target-account" class="font-mono text-white font-semibold">--</span></p>
+            <form id="form-limit" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">New Daily Limit ($)</label>
+                    <input type="number" step="0.01" id="limit-amount" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="1000000.00">
+                </div>
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" onclick="closeLimitModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-lg text-sm transition">Cancel</button>
+                    <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-lg shadow-indigo-900/20">Save Limit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -118,6 +139,17 @@
             selectedAccountId = null;
             document.getElementById('fund-modal').classList.add('hidden');
             document.getElementById('form-fund').reset();
+        }
+
+        window.openLimitModal = function(accId) {
+            selectedAccountId = accId;
+            document.getElementById('limit-target-account').innerText = accId;
+            document.getElementById('limit-modal').classList.remove('hidden');
+        }
+        window.closeLimitModal = function() {
+            selectedAccountId = null;
+            document.getElementById('limit-modal').classList.add('hidden');
+            document.getElementById('form-limit').reset();
         }
 
         window.loadClients = async function() {
@@ -167,6 +199,7 @@
                                 ${isPending ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Active')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Approve</button>` : ''}
                                 ${isFrozen ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Active')" class="bg-sky-700 hover:bg-sky-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Unfreeze</button>` : ''}
                                 ${!isFrozen && !isPending ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Frozen')" class="bg-zinc-700 hover:bg-zinc-600 text-gray-200 px-3 py-1 rounded text-xs font-semibold transition">Freeze</button>` : ''}
+                                <button onclick="openLimitModal('${data.accountNumber}')" class="bg-indigo-700 hover:bg-indigo-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Limit</button>
                                 <button onclick="openFundModal('${data.accountNumber}')" class="bg-red-700 hover:bg-red-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Fund</button>
                             </td>
                         </tr>`;
@@ -189,6 +222,25 @@
                 alert("Failed to update account status.");
             }
         }
+
+        document.getElementById('form-limit').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newLimit = parseFloat(document.getElementById('limit-amount').value);
+            if (!selectedAccountId || isNaN(newLimit) || newLimit < 0) { alert("Invalid limit amount."); return; }
+
+            showLoading("Updating daily transfer limit...");
+            try {
+                const clientRef = doc(db, "clients", selectedAccountId);
+                await setDoc(clientRef, { dailyLimit: newLimit }, { merge: true });
+                hideLoading();
+                closeLimitModal();
+                loadClients();
+                alert(`Successfully updated daily limit for ${selectedAccountId} to $${newLimit.toLocaleString(undefined, {minimumFractionDigits: 2})}!`);
+            } catch (err) {
+                hideLoading();
+                alert("Failed to update daily transfer limit.");
+            }
+        });
 
         document.getElementById('form-fund').addEventListener('submit', async (e) => {
             e.preventDefault();
