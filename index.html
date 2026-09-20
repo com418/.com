@@ -204,13 +204,6 @@
         <span id="userStatus" class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">Active</span>
       </div>
 
-      <!-- ACCOUNT TYPE TAB SELECTOR -->
-      <div class="flex bg-slate-200/70 p-1 rounded-xl text-xs font-bold gap-1">
-        <button id="tabChecking" onclick="switchAccount('checking')" class="flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all font-extrabold">Checking</button>
-        <button id="tabSavings" onclick="switchAccount('savings')" class="flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">Savings</button>
-        <button id="tabInvestment" onclick="switchAccount('investment')" class="flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">Investment</button>
-      </div>
-
       <!-- VIRTUAL CARD / BALANCE BOARD -->
       <div class="bg-gradient-to-tr from-slate-900 via-[#0e223f] to-[#12315c] rounded-2xl p-5 text-white shadow-xl relative overflow-hidden border border-slate-800">
         <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-cyan-500/10 rounded-full blur-3xl"></div>
@@ -357,8 +350,6 @@
           <label class="block text-xs font-bold text-slate-700 mb-1">Source Account</label>
           <select id="trSourceAcc" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600">
             <option value="checking">Checking Account</option>
-            <option value="savings">Savings Account</option>
-            <option value="investment">Investment Account</option>
           </select>
         </div>
 
@@ -461,7 +452,6 @@
 
     let currentUserData = null;
     let currentDocId = null;
-    let activeAccountTab = 'checking';
     let userUnsubscribe = null;
     let isBalanceHidden = false;
 
@@ -482,14 +472,7 @@
 
     function updateBalanceDisplay() {
       if (!currentUserData) return;
-      let bal = 0;
-      if (activeAccountTab === 'checking') {
-        bal = currentUserData.checkingBalance || currentUserData.balance || 0;
-      } else if (activeAccountTab === 'savings') {
-        bal = currentUserData.savingsBalance || 0;
-      } else if (activeAccountTab === 'investment') {
-        bal = currentUserData.investmentBalance || 0;
-      }
+      let bal = currentUserData.checkingBalance || currentUserData.balance || 0;
 
       if (isBalanceHidden) {
         document.getElementById('userBalance').textContent = '••••••••';
@@ -526,9 +509,7 @@
         title.textContent = "Account Financial Summary";
         body.innerHTML = `
           <div class="space-y-2.5 font-mono text-xs">
-            <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">Checking Balance:</span> <span class="font-bold text-slate-900">$${(currentUserData?.checkingBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
-            <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">Savings Balance:</span> <span class="font-bold text-slate-900">$${(currentUserData?.savingsBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
-            <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">Investment Balance:</span> <span class="font-bold text-slate-900">$${(currentUserData?.investmentBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
+            <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">Checking Balance:</span> <span class="font-bold text-slate-900">$${(currentUserData?.checkingBalance || currentUserData?.balance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
             <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">ABA Routing Number:</span> <span class="font-bold text-slate-900">${currentUserData?.routingNo || 'N/A'}</span></div>
           </div>`;
       } else if (type === 'creditScore') {
@@ -720,8 +701,6 @@
         await addDoc(collection(db, 'cashflow_accounts'), {
           name, email, pass, pin, accNo,
           checkingBalance: 0,
-          savingsBalance: 0,
-          investmentBalance: 0,
           dailyLimit: 10000,
           creditScore: 785,
           routingNo: '021000' + (100 + Math.floor(Math.random() * 899)),
@@ -826,33 +805,8 @@
       }
 
       renderTransactions();
-      switchAccount(activeAccountTab);
-    }
-
-    window.switchAccount = (type) => {
-      if (!currentUserData) return;
-      activeAccountTab = type;
-      const btnC = document.getElementById('tabChecking');
-      const btnS = document.getElementById('tabSavings');
-      const btnI = document.getElementById('tabInvestment');
-
-      btnC.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold";
-      btnS.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold";
-      btnI.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold";
-
-      if (type === 'checking') {
-        btnC.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
-        document.getElementById('accTypeLabel').textContent = "Checking Balance";
-      } else if (type === 'savings') {
-        btnS.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
-        document.getElementById('accTypeLabel').textContent = "Savings Balance";
-      } else if (type === 'investment') {
-        btnI.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
-        document.getElementById('accTypeLabel').textContent = "Investment Balance";
-      }
-
       updateBalanceDisplay();
-    };
+    }
 
     function renderTransactions() {
       const list = document.getElementById('activityList');
@@ -927,13 +881,12 @@
       if (!tx) return;
 
       const maskedAcc = tx.accNo ? '•••• ' + tx.accNo.slice(-4) : '•••• 0000';
-      const sourceLabel = tx.sourceAcc ? (tx.sourceAcc.charAt(0).toUpperCase() + tx.sourceAcc.slice(1) + ' Account') : 'Checking Account';
 
       document.getElementById('recAmount').textContent = '$' + parseFloat(tx.amount || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
       document.getElementById('recRef').textContent = tx.ref || ('CFB-' + Math.floor(1000000 + Math.random() * 9000000));
       document.getElementById('recDate').textContent = tx.date || new Date().toLocaleDateString();
       document.getElementById('recType').textContent = tx.type || 'Local Domestic Transfer';
-      document.getElementById('recSource').textContent = sourceLabel;
+      document.getElementById('recSource').textContent = 'Checking Account';
       document.getElementById('recRecipient').textContent = tx.recipient || 'N/A';
       document.getElementById('recBank').textContent = tx.bank || 'N/A';
       document.getElementById('recAccNo').textContent = maskedAcc;
@@ -988,7 +941,6 @@
       errBox.classList.add('hidden');
 
       const trType = document.getElementById('trType').value;
-      const sourceAcc = document.getElementById('trSourceAcc').value;
       const recipient = document.getElementById('trRecipient').value.trim();
       const bank = document.getElementById('trBank').value.trim();
       const accNo = document.getElementById('trAccountNo').value.trim();
@@ -1021,10 +973,10 @@
         return;
       }
 
-      let currentBal = sourceAcc === 'savings' ? (currentUserData.savingsBalance || 0) : sourceAcc === 'investment' ? (currentUserData.investmentBalance || 0) : (currentUserData.checkingBalance || currentUserData.balance || 0);
+      let currentBal = currentUserData.checkingBalance || currentUserData.balance || 0;
 
       if (amount > currentBal) {
-        errBox.textContent = `Insufficient funds in selected ${sourceAcc} account.`;
+        errBox.textContent = 'Insufficient funds in checking account.';
         errBox.classList.remove('hidden');
         return;
       }
@@ -1044,7 +996,7 @@
           bank,
           accNo,
           type: trType === 'WIRE' ? 'International SWIFT Wire' : 'Local Domestic Transfer',
-          sourceAcc,
+          sourceAcc: 'checking',
           ref: refNo
         };
 
@@ -1059,17 +1011,16 @@
         btn.disabled = false;
         btn.textContent = 'Authorize & Send Payment';
         closeTransferModal();
-        switchAccount(activeAccountTab);
+        updateBalanceDisplay();
         renderTransactions();
 
         const maskedAcc = '•••• ' + accNo.slice(-4);
-        const sourceLabel = sourceAcc.charAt(0).toUpperCase() + sourceAcc.slice(1) + ' Account';
 
         document.getElementById('recAmount').textContent = '$' + amount.toLocaleString(undefined, {minimumFractionDigits: 2});
         document.getElementById('recRef').textContent = refNo;
         document.getElementById('recDate').textContent = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         document.getElementById('recType').textContent = trType === 'WIRE' ? 'International SWIFT Wire Transfer' : 'Local Domestic Transfer';
-        document.getElementById('recSource').textContent = sourceLabel;
+        document.getElementById('recSource').textContent = 'Checking Account';
         document.getElementById('recRecipient').textContent = recipient;
         document.getElementById('recBank').textContent = bank;
         document.getElementById('recAccNo').textContent = maskedAcc;
