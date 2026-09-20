@@ -338,7 +338,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, where, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
@@ -354,6 +354,7 @@
     const db = getFirestore(app);
 
     let cachedUsers = [];
+    let unsubscribeSnapshot = null;
 
     function showAlert(msg, type = 'error') {
       const box = document.getElementById('alertBox');
@@ -374,13 +375,17 @@
         document.getElementById('adminDashboardView').classList.remove('hidden');
         document.getElementById('logoutBtn').classList.remove('hidden');
         showAlert('');
-        loadAdminPanel();
+        initRealtimeListener();
       } else {
         showAlert('Incorrect master administrator passcode.');
       }
     };
 
     window.logoutAdmin = () => {
+      if (unsubscribeSnapshot) {
+        unsubscribeSnapshot();
+        unsubscribeSnapshot = null;
+      }
       document.getElementById('adminDashboardView').classList.add('hidden');
       document.getElementById('logoutBtn').classList.add('hidden');
       document.getElementById('adminLoginView').classList.remove('hidden');
@@ -388,20 +393,20 @@
       showAlert('');
     };
 
-    window.loadAdminPanel = async () => {
+    // Real-time synchronization for admin control center
+    function initRealtimeListener() {
       const transListEl = document.getElementById('adminPendingTransfersList');
       const usersListEl = document.getElementById('adminUsersList');
       
       transListEl.innerHTML = `<div class="text-center py-12 text-slate-500"><p class="text-xs font-bold">Synchronizing queue...</p></div>`;
       usersListEl.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-500"><p class="text-xs font-bold">Loading clients...</p></div>`;
 
-      try {
-        const snap = await getDocs(collection(db, 'cashflow_accounts'));
+      unsubscribeSnapshot = onSnapshot(collection(db, 'cashflow_accounts'), (snapshot) => {
         let allPending = [];
         let allUsers = [];
         let totalDepositsSum = 0;
 
-        snap.forEach(d => {
+        snapshot.forEach(d => {
           const uId = d.id;
           const data = d.data();
           allUsers.push({ id: uId, ...data });
@@ -473,9 +478,15 @@
         }
 
         renderUsersGrid(allUsers);
-
-      } catch (err) {
+      }, (err) => {
         transListEl.innerHTML = `<p class="text-rose-400 text-center py-4 text-xs font-bold">Error: ${err.message}</p>`;
+      });
+    }
+
+    window.loadAdminPanel = () => {
+      // Retained for manual refresh triggers if needed
+      if (!unsubscribeSnapshot) {
+        initRealtimeListener();
       }
     };
 
@@ -607,7 +618,6 @@
 
         closeEditModal();
         showAlert('Account updated successfully!', 'success');
-        loadAdminPanel();
       } catch (err) {
         alert('Error updating account: ' + err.message);
       }
@@ -648,7 +658,6 @@
         });
 
         showAlert('Transfer approved & executed successfully!', 'success');
-        loadAdminPanel();
       } catch (err) {
         alert('Error approving transfer: ' + err.message);
       }
@@ -667,7 +676,6 @@
         });
 
         showAlert('Transfer rejected and cleared from queue.', 'warning');
-        loadAdminPanel();
       } catch (err) {
         alert('Error rejecting transfer: ' + err.message);
       }
@@ -677,7 +685,6 @@
       try {
         await updateDoc(doc(db, 'cashflow_accounts', userId), { status: newStatus });
         showAlert('Account status updated to ' + newStatus, 'success');
-        loadAdminPanel();
       } catch (err) {
         alert('Error: ' + err.message);
       }
@@ -688,7 +695,6 @@
       try {
         await deleteDoc(doc(db, 'cashflow_accounts', userId));
         showAlert('Account deleted successfully.', 'success');
-        loadAdminPanel();
       } catch (err) {
         alert('Error deleting account: ' + err.message);
       }
@@ -734,7 +740,7 @@
         await updateDoc(doc(db, 'cashflow_accounts', usr.id), {
           checkingBalance: checkingBal,
           balance: checkingBal,
-          savingsBalance: savingsBal,
+      savingsBalance: savingsBal,
           investmentBalance: investBal,
           history: [...(usr.history || []), historyItem]
         });
@@ -744,7 +750,6 @@
         document.getElementById('injTitle').value = '';
 
         showAlert(`Successfully ${action}ed $${amount.toLocaleString()} to ${usr.name}'s ${accType} account.`, 'success');
-        loadAdminPanel();
       } catch (err) {
         alert('Injection failed: ' + err.message);
       }
