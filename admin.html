@@ -3,130 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cash Flow Banking - Master Admin Portal</title>
+    <title>Cash Flow Banking - Admin Control Center</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-zinc-900 to-red-950 font-sans text-gray-100 min-h-screen flex flex-col justify-between relative selection:bg-red-600 selection:text-white">
+<body class="bg-[#0b0f19] font-sans text-gray-100 min-h-screen flex flex-col justify-between relative selection:bg-red-600 selection:text-white">
 
     <!-- FULL-SCREEN LOADING OVERLAY -->
     <div id="loading-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center space-y-4 transition-opacity">
         <div class="relative w-16 h-16 flex items-center justify-center">
             <div class="absolute inset-0 border-4 border-red-500/30 border-t-red-600 rounded-full animate-spin"></div>
-            <svg class="w-6 h-6 text-red-500 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <svg class="w-6 h-6 text-red-500 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         </div>
-        <p id="loading-text" class="text-sm font-semibold text-gray-300 tracking-wide">Processing admin action...</p>
+        <p id="loading-text" class="text-sm font-semibold text-gray-300 tracking-wide">Processing securely...</p>
     </div>
 
-    <div class="flex flex-col min-h-screen justify-between">
-        <header class="bg-slate-950/80 backdrop-blur-md border-b border-slate-800 shadow-lg py-4">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span class="font-bold text-xl tracking-wide text-white">Master Admin Portal</span>
+    <!-- ADMIN DASHBOARD PANEL SCREEN -->
+    <div id="admin-view" class="flex flex-col min-h-screen justify-between">
+        <div>
+            <nav class="bg-slate-950/90 backdrop-blur-md border-b border-slate-800 shadow-md sticky top-0 z-40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <span class="font-bold text-lg text-white">Admin Control Center</span>
+                    </div>
+                    <button onclick="logoutAdmin()" class="bg-slate-900 hover:bg-slate-800 text-gray-300 hover:text-white px-3 py-1.5 rounded text-sm transition font-medium border border-slate-700 flex items-center space-x-1.5">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                        <span>Exit Admin</span>
+                    </button>
                 </div>
-                <a href="index.html" class="text-xs text-red-400 hover:text-red-300 underline font-medium transition flex items-center space-x-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    <span>Return to Client Portal</span>
-                </a>
-            </div>
-        </header>
+            </nav>
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-            <div class="flex justify-between items-center mb-8">
-                <div>
-                    <h1 class="text-2xl font-black text-white">Client Accounts Management</h1>
-                    <p class="text-sm text-gray-400">Approve pending applications, manage balances, freeze accounts, set limits, and fund users securely.</p>
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">Registered Client Accounts</h1>
+                        <p class="text-xs text-gray-400 mt-1">Manage platform users, verify identity approvals, update balances, and backdate account creation timestamps.</p>
+                    </div>
+                    <button onclick="loadAdminClients()" class="bg-slate-800 hover:bg-slate-700 text-gray-200 text-xs px-3.5 py-2 rounded-lg font-semibold transition flex items-center space-x-1.5 border border-slate-700">
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        <span>Refresh List</span>
+                    </button>
                 </div>
-                <button onclick="loadClients()" class="bg-slate-800 hover:bg-slate-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-slate-700 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                    <span>Refresh Data</span>
-                </button>
-            </div>
 
-            <div class="bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-800 overflow-hidden">
-                <div class="p-6 border-b border-slate-800 flex items-center space-x-2">
-                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                    <h3 class="font-bold text-white">Registered Clients Directory</h3>
+                <div class="bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-800 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-950/60 text-gray-400 uppercase text-[11px] font-bold tracking-wider border-b border-slate-800">
+                                    <th class="py-3 px-6">Account / Name</th>
+                                    <th class="py-3 px-6">Email / Type</th>
+                                    <th class="py-3 px-6">Created (Backdate)</th>
+                                    <th class="py-3 px-6">Balance ($)</th>
+                                    <th class="py-3 px-6">Status</th>
+                                    <th class="py-3 px-6 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-clients-table-body" class="divide-y divide-slate-800 text-gray-300">
+                                <tr><td colspan="6" class="py-8 text-center text-gray-500 text-xs">Loading clients database...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr class="bg-slate-950/60 text-gray-400 uppercase text-[11px] font-bold tracking-wider border-b border-slate-800">
-                                <th class="py-3 px-6">Account / Name</th>
-                                <th class="py-3 px-6">Type & Email</th>
-                                <th class="py-3 px-6">Balance</th>
-                                <th class="py-3 px-6">Status</th>
-                                <th class="py-3 px-6 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-clients-table" class="divide-y divide-slate-800 text-gray-300">
-                            <tr><td colspan="5" class="py-6 text-center text-gray-500 text-xs">Loading client records...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
-
-        <footer class="text-center py-6 text-xs text-gray-500">&copy; 2026 Cash Flow Banking. Secure Master Control Panel.</footer>
-    </div>
-
-    <!-- Fund Account Modal -->
-    <div id="fund-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center space-x-2">
-                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <h3 class="font-bold text-lg text-white">Fund Account</h3>
-                </div>
-                <button onclick="closeFundModal()" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <p class="text-xs text-gray-400 mb-4">Adding funds to account: <span id="fund-target-account" class="font-mono text-white font-semibold">--</span></p>
-            <form id="form-fund" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Deposit Amount ($)</label>
-                    <input type="number" step="0.01" id="fund-amount" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="0.00">
-                </div>
-                <div class="flex space-x-3 pt-2">
-                    <button type="button" onclick="closeFundModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-lg text-sm transition">Cancel</button>
-                    <button type="submit" class="flex-1 bg-red-700 hover:bg-red-800 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-lg shadow-red-900/20">Confirm Deposit</button>
-                </div>
-            </form>
+            </main>
         </div>
+        <footer class="text-center py-6 text-xs text-gray-500 flex items-center justify-center space-x-1.5">
+            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>&copy; 2026 Cash Flow Banking. Secure 256-Bit SSL Encryption.</span>
+        </footer>
     </div>
 
-    <!-- Change Daily Limit Modal -->
-    <div id="limit-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center space-x-2">
-                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                    <h3 class="font-bold text-lg text-white">Update Daily Transfer Limit</h3>
-                </div>
-                <button onclick="closeLimitModal()" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <p class="text-xs text-gray-400 mb-4">Target account: <span id="limit-target-account" class="font-mono text-white font-semibold">--</span></p>
-            <form id="form-limit" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">New Daily Limit ($)</label>
-                    <input type="number" step="0.01" id="limit-amount" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:border-red-600" placeholder="1000000.00">
-                </div>
-                <div class="flex space-x-3 pt-2">
-                    <button type="button" onclick="closeLimitModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold py-2.5 rounded-lg text-sm transition">Cancel</button>
-                    <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-lg shadow-indigo-900/20">Save Limit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Script Logic -->
+    <!-- Admin Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDocs, collection, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDuYtiY8VISaRA0dHvxgzVGPOcI_DilAH0",
@@ -140,155 +90,138 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        let selectedAccountId = null;
 
-        function showLoading(msg = "Processing...") {
+        function showLoading(msg = "Processing securely...") {
             document.getElementById('loading-text').innerText = msg;
             document.getElementById('loading-overlay').classList.remove('hidden');
         }
         function hideLoading() { document.getElementById('loading-overlay').classList.add('hidden'); }
 
-        window.openFundModal = function(accId) {
-            selectedAccountId = accId;
-            document.getElementById('fund-target-account').innerText = accId;
-            document.getElementById('fund-modal').classList.remove('hidden');
-        }
-        window.closeFundModal = function() {
-            selectedAccountId = null;
-            document.getElementById('fund-modal').classList.add('hidden');
-            document.getElementById('form-fund').reset();
+        window.logoutAdmin = function() {
+            localStorage.removeItem("isAdminLoggedIn");
+            window.location.href = "index.html";
         }
 
-        window.openLimitModal = function(accId) {
-            selectedAccountId = accId;
-            document.getElementById('limit-target-account').innerText = accId;
-            document.getElementById('limit-modal').classList.remove('hidden');
-        }
-        window.closeLimitModal = function() {
-            selectedAccountId = null;
-            document.getElementById('limit-modal').classList.add('hidden');
-            document.getElementById('form-limit').reset();
+        // Security check on load: Kick back to index.html if not logged in as admin
+        function checkAdminSession() {
+            if (localStorage.getItem("isAdminLoggedIn") !== "true") {
+                window.location.href = "index.html";
+                return;
+            }
+            loadAdminClients();
         }
 
-        window.loadClients = async function() {
+        // Load all clients into Admin Panel
+        window.loadAdminClients = async function() {
             showLoading("Fetching client database...");
-            const tableBody = document.getElementById('admin-clients-table');
-            tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-500 text-xs">Loading client records...</td></tr>`;
-
             try {
                 const querySnapshot = await getDocs(collection(db, "clients"));
-                tableBody.innerHTML = '';
+                const tbody = document.getElementById('admin-clients-table-body');
+                tbody.innerHTML = '';
 
                 if (querySnapshot.empty) {
-                    tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-500 text-xs">No client accounts found.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-gray-500 text-xs">No client accounts found.</td></tr>`;
                     hideLoading();
                     return;
                 }
 
                 querySnapshot.forEach((documentSnap) => {
-                    const data = documentSnap.data();
-                    const status = data.status || "Active";
-                    const isPending = status === "Pending Approval";
-                    const isFrozen = status === "Frozen";
+                    const client = documentSnap.data();
+                    const statusColor = client.status === 'Active' ? 'text-emerald-400 bg-emerald-950/60 border-emerald-800' :
+                                        client.status === 'Frozen' ? 'text-red-400 bg-red-950/60 border-red-800' :
+                                        'text-yellow-400 bg-yellow-950/60 border-yellow-800';
 
-                    let statusBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/25";
-                    if (isPending) statusBadgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/25";
-                    if (isFrozen) statusBadgeClass = "bg-red-500/10 text-red-400 border border-red-500/25";
-
-                    tableBody.innerHTML += `
-                        <tr class="hover:bg-slate-800/50 transition">
-                            <td class="py-3 px-6">
-                                <div class="font-bold text-white">${data.clientName}</div>
-                                <div class="font-mono text-xs text-gray-400">${data.accountNumber}</div>
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-4 px-6">
+                                <div class="font-bold text-white">${client.clientName}</div>
+                                <div class="font-mono text-xs text-red-400">${client.accountNumber}</div>
                             </td>
-                            <td class="py-3 px-6">
-                                <div class="text-gray-200">${data.accountType || 'Checking'}</div>
-                                <div class="text-xs text-gray-400">${data.email}</div>
+                            <td class="py-4 px-6">
+                                <div class="text-gray-300 text-xs">${client.email}</div>
+                                <div class="text-gray-500 text-[11px]">${client.accountType || 'Checking Account'}</div>
                             </td>
-                            <td class="py-3 px-6 font-mono font-semibold text-white">
-                                $${Number(data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                            <td class="py-4 px-6">
+                                <div class="flex items-center space-x-2">
+                                    <input type="date" id="date-${client.accountNumber}" value="${client.createdAt || '2026-01-01'}" class="bg-slate-950 border border-slate-800 text-xs text-gray-200 px-2 py-1 rounded focus:outline-none focus:border-red-600 font-mono">
+                                    <button onclick="updateBackdate('${client.accountNumber}')" class="bg-slate-800 hover:bg-slate-700 text-gray-300 hover:text-white px-2 py-1 rounded text-xs font-semibold transition border border-slate-700">Set</button>
+                                </div>
                             </td>
-                            <td class="py-3 px-6">
-                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${statusBadgeClass}">
-                                    ${status}
-                                </span>
+                            <td class="py-4 px-6 font-mono font-semibold text-emerald-400">
+                                $<span id="bal-${client.accountNumber}">${Number(client.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
                             </td>
-                            <td class="py-3 px-6 text-right space-x-2">
-                                ${isPending ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Active')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Approve</button>` : ''}
-                                ${isFrozen ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Active')" class="bg-sky-700 hover:bg-sky-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Unfreeze</button>` : ''}
-                                ${!isFrozen && !isPending ? `<button onclick="updateClientStatus('${data.accountNumber}', 'Frozen')" class="bg-zinc-700 hover:bg-zinc-600 text-gray-200 px-3 py-1 rounded text-xs font-semibold transition">Freeze</button>` : ''}
-                                <button onclick="openLimitModal('${data.accountNumber}')" class="bg-indigo-700 hover:bg-indigo-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Limit</button>
-                                <button onclick="openFundModal('${data.accountNumber}')" class="bg-red-700 hover:bg-red-800 text-white px-3 py-1 rounded text-xs font-semibold transition">Fund</button>
+                            <td class="py-4 px-6">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${statusColor}">${client.status || 'Active'}</span>
                             </td>
-                        </tr>`;
+                            <td class="py-4 px-6 text-right space-x-1.5">
+                                <button onclick="adminToggleStatus('${client.accountNumber}', '${client.status}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold rounded border border-slate-700 transition">
+                                    ${client.status === 'Frozen' ? 'Unfreeze' : client.status === 'Pending Approval' ? 'Approve' : 'Freeze'}
+                                </button>
+                                <button onclick="adminEditBalance('${client.accountNumber}', ${client.balance})" class="px-2.5 py-1 bg-red-700 hover:bg-red-800 text-white text-xs font-semibold rounded transition shadow">
+                                    Edit Bal
+                                </button>
+                            </td>
+                        </tr>
+                    `;
                 });
                 hideLoading();
             } catch (err) {
                 hideLoading();
-                alert("Failed to load client accounts.");
+                alert("Failed to load admin client list.");
             }
-        }
+        };
 
-        window.updateClientStatus = async function(accId, newStatus) {
-            showLoading(`Updating status to ${newStatus}...`);
+        window.updateBackdate = async function(accountNumber) {
+            const dateInput = document.getElementById(`date-${accountNumber}`).value;
+            if (!dateInput) { alert("Please pick a valid date."); return; }
+
+            showLoading("Updating creation timestamp...");
             try {
-                await setDoc(doc(db, "clients", accId), { status: newStatus }, { merge: true });
+                const clientRef = doc(db, "clients", accountNumber);
+                await setDoc(clientRef, { createdAt: dateInput }, { merge: true });
                 hideLoading();
-                loadClients();
+                alert(`Account ${accountNumber} backdated successfully to ${dateInput}!`);
+                loadAdminClients();
             } catch (err) {
                 hideLoading();
-                alert("Failed to update account status.");
+                alert("Failed to update backdate.");
             }
-        }
+        };
 
-        document.getElementById('form-limit').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const newLimit = parseFloat(document.getElementById('limit-amount').value);
-            if (!selectedAccountId || isNaN(newLimit) || newLimit < 0) { alert("Invalid limit amount."); return; }
-
-            showLoading("Updating daily transfer limit...");
+        window.adminToggleStatus = async function(accountNumber, currentStatus) {
+            let newStatus = (currentStatus === 'Pending Approval' || currentStatus === 'Frozen') ? 'Active' : 'Frozen';
+            showLoading(`Updating account status to ${newStatus}...`);
             try {
-                const clientRef = doc(db, "clients", selectedAccountId);
-                await setDoc(clientRef, { dailyLimit: newLimit }, { merge: true });
+                await setDoc(doc(db, "clients", accountNumber), { status: newStatus }, { merge: true });
                 hideLoading();
-                closeLimitModal();
-                loadClients();
-                alert(`Successfully updated daily limit for ${selectedAccountId} to $${newLimit.toLocaleString(undefined, {minimumFractionDigits: 2})}!`);
+                loadAdminClients();
             } catch (err) {
                 hideLoading();
-                alert("Failed to update daily transfer limit.");
+                alert("Status change failed.");
             }
-        });
+        };
 
-        document.getElementById('form-fund').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const amount = parseFloat(document.getElementById('fund-amount').value);
-            if (!selectedAccountId || isNaN(amount) || amount <= 0) { alert("Invalid amount."); return; }
+        window.adminEditBalance = async function(accountNumber, currentBal) {
+            const newBalStr = prompt(`Enter new balance for account ${accountNumber}:`, currentBal);
+            if (newBalStr === null) return;
+            const newBal = parseFloat(newBalStr);
+            if (isNaN(newBal) || newBal < 0) { alert("Invalid amount entered."); return; }
 
-            showLoading("Processing deposit transaction...");
+            showLoading("Updating balance...");
             try {
-                const clientRef = doc(db, "clients", selectedAccountId);
-                const snap = await getDoc(clientRef);
-                
-                if (snap.exists()) {
-                    const currentData = snap.data();
-                    const newBalance = (currentData.balance || 0) + amount;
-                    const today = new Date().toISOString().split('T')[0];
-                    const depositTx = { description: "Admin Deposit / Funding", date: today, amount: amount };
-
-                    await setDoc(clientRef, { balance: newBalance, transactions: arrayUnion(depositTx) }, { merge: true });
-                    hideLoading();
-                    closeFundModal();
-                    loadClients();
-                    alert(`Successfully funded account ${selectedAccountId} with $${amount.toFixed(2)}!`);
-                }
+                const today = new Date().toISOString().split('T')[0];
+                const tx = { description: "Admin Balance Adjustment", date: today, amount: newBal - currentBal };
+                await setDoc(doc(db, "clients", accountNumber), { balance: newBal, transactions: arrayUnion(tx) }, { merge: true });
+                hideLoading();
+                loadAdminClients();
+                alert("Balance updated successfully!");
             } catch (err) {
                 hideLoading();
-                alert("Failed to fund account.");
+                alert("Balance update failed.");
             }
-        });
+        };
 
-        loadClients();
+        checkAdminSession();
     </script>
 </body>
 </html>
