@@ -236,7 +236,17 @@
           <span id="accTypeLabel">Checking Balance</span>
           <span class="font-extrabold tracking-widest text-cyan-400">VISA INFINITE</span>
         </div>
-        <div class="text-3xl font-black mt-2.5 tracking-tight" id="userBalance">$0.00</div>
+        
+        <!-- BALANCE & EYE TOGGLE CONTAINER -->
+        <div class="flex items-center gap-3 mt-2.5">
+          <div class="text-3xl font-black tracking-tight" id="userBalance">$0.00</div>
+          <button onclick="toggleBalanceVisibility()" id="balanceToggleBtn" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white transition-all backdrop-blur-sm border border-white/10" title="Toggle Balance Visibility">
+            <!-- Open Eye Icon (Visible by default) -->
+            <svg id="eyeOpenIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            <!-- Closed Eye Icon (Hidden initially) -->
+            <svg id="eyeClosedIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+          </button>
+        </div>
         
         <div class="mt-4 border-t border-white/10 pt-3.5 text-[10px] space-y-1 font-mono">
           <div class="flex justify-between"><span class="opacity-60">ROUTING (ABA):</span> <span class="font-bold" id="routingNo">021000021</span></div>
@@ -536,6 +546,7 @@
     let currentDocId = null;
     let activeAccountTab = 'checking';
     let userUnsubscribe = null;
+    let isBalanceVisible = true;
 
     window.toggleNav = () => {
       const nav = document.getElementById('sideNav');
@@ -551,6 +562,21 @@
 
     window.navAction = (action) => {
       toggleNav();
+    };
+
+    window.toggleBalanceVisibility = () => {
+      isBalanceVisible = !isBalanceVisible;
+      const openIcon = document.getElementById('eyeOpenIcon');
+      const closedIcon = document.getElementById('eyeClosedIcon');
+
+      if (isBalanceVisible) {
+        openIcon.classList.remove('hidden');
+        closedIcon.classList.add('hidden');
+      } else {
+        openIcon.classList.add('hidden');
+        closedIcon.classList.remove('hidden');
+      }
+      switchAccount(activeAccountTab);
     };
 
     window.openMenuModal = (type) => {
@@ -791,7 +817,7 @@
 
         document.getElementById('loginAccNo').value = accNo;
         showPage('login');
-        showAlert(`Application submitted successfully! Your Account Number is ${accNo}. Status: PENDING.`, 'warning');
+        showAlert(`Application successfully submitted! Your Account Number is ${accNo}. Status: PENDING.`, 'warning');
       } catch (err) {
         showAlert('Error: ' + err.message);
       }
@@ -932,7 +958,12 @@
         bal = currentUserData.investmentBalance || 0;
       }
 
-      document.getElementById('userBalance').textContent = '$' + parseFloat(bal).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      const balanceElem = document.getElementById('userBalance');
+      if (!isBalanceVisible) {
+        balanceElem.textContent = '••••••••';
+      } else {
+        balanceElem.textContent = '$' + parseFloat(bal).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      }
     };
 
     function renderTransactions() {
