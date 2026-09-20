@@ -19,7 +19,7 @@
     <div class="w-full max-w-sm bg-gray-50 h-[844px] flex flex-col justify-between shadow-2xl rounded-[40px] overflow-hidden relative border-[10px] border-slate-800">
         
         <!-- ================= VIEW 1: AUTH / LOGIN SCREEN ================= -->
-        <div id="view-login" class="absolute inset-0 bg-[#0b1b3d] text-white z-20 flex flex-col justify-between p-6 overflow-y-auto no-scrollbar">
+        <div id="view-login" class="absolute inset-0 bg-[#0b1b3d] text-white z-30 flex flex-col justify-between p-6 overflow-y-auto no-scrollbar">
             <div class="pt-10 text-center">
                 <div class="w-16 h-16 bg-blue-600/30 border border-blue-400/40 rounded-2xl mx-auto flex items-center justify-center text-2xl text-blue-400 mb-4 shadow-lg">
                     <i class="fa-solid fa-shield-halved"></i>
@@ -50,7 +50,7 @@
         </div>
 
         <!-- ================= VIEW 2: CREATE ACCOUNT / SIGN UP SCREEN ================= -->
-        <div id="view-signup" class="absolute inset-0 bg-[#0b1b3d] text-white z-20 flex flex-col justify-between p-6 overflow-y-auto no-scrollbar hidden">
+        <div id="view-signup" class="absolute inset-0 bg-[#0b1b3d] text-white z-30 flex flex-col justify-between p-6 overflow-y-auto no-scrollbar hidden">
             <div class="pt-6 flex items-center">
                 <button id="link-back-login" class="text-slate-300 hover:text-white text-sm focus:outline-none"><i class="fa-solid fa-chevron-left mr-1"></i> Back</button>
             </div>
@@ -93,10 +93,7 @@
                     <div>
                         <label class="text-[11px] font-medium text-blue-200">Account Type</label>
                         <select id="signup-account-type" class="w-full mt-1 px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-blue-400">
-                            <option value="Checking">Checking</option>
-                            <option value="Savings">Savings</option>
-                            <option value="Business Checking">Business Checking</option>
-                            <option value="Platinum Rewards">Platinum Rewards</option>
+                            <option value="Checking">Checking Account</option>
                         </select>
                     </div>
                     <div>
@@ -141,15 +138,20 @@
                     <p class="text-xs text-slate-500 mt-0.5">Here's your financial overview • <span id="current-date">Oct 5, 2024</span></p>
                 </div>
 
-                <!-- Available Balance Card -->
-                <div class="bg-gradient-to-br from-[#0b1b3d] to-[#1e3a8a] text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
-                    <div class="absolute -right-10 -bottom-10 w-36 h-36 bg-blue-600/20 rounded-full blur-2xl pointer-events-none"></div>
-                    <p class="text-xs text-blue-200 font-medium tracking-wide uppercase">Available Balance</p>
-                    <h2 id="balance-display" class="text-3xl font-extrabold tracking-tight mt-1">$12,450.00</h2>
-                    
-                    <div class="flex justify-between items-center mt-5 pt-4 border-t border-blue-900/50 text-xs text-blue-200">
-                        <span>Account <span id="account-number-display">......2847</span></span>
-                        <span id="account-type-badge" class="bg-white/10 px-3 py-1 rounded-full font-medium text-white backdrop-blur-sm">Checking ....2847</span>
+                <!-- Checking Account Card Only -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Checking Account</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 id="balance-display" class="text-2xl font-extrabold text-slate-900 tracking-tight">$24,850.40</h2>
+                        <div class="flex justify-between items-center mt-1">
+                            <span class="text-xs text-emerald-600 font-semibold"><i class="fa-solid fa-arrow-trend-up mr-1"></i> +4.2% this month</span>
+                            <span class="text-[11px] text-slate-400 font-mono" id="account-number-display">....2847</span>
+                        </div>
                     </div>
                 </div>
 
@@ -191,28 +193,19 @@
                     </div>
                 </div>
 
-                <!-- Recent Transactions -->
+                <!-- Recent Transactions / Transfer History (Empty as requested) -->
                 <div>
                     <div class="flex justify-between items-center mb-3">
-                        <h3 class="text-sm font-bold text-slate-900">Recent Transactions</h3>
+                        <h3 class="text-sm font-bold text-slate-900">Transfer & Transaction History</h3>
                         <button id="btn-view-all" class="text-xs font-semibold text-blue-600 hover:underline focus:outline-none">View all</button>
                     </div>
                     
-                    <div id="transaction-list" class="bg-white rounded-2xl border border-slate-100 shadow-sm divide-y divide-slate-100">
-                        <div class="p-3.5 flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold"><i class="fa-solid fa-mug-hot text-sm"></i></div>
-                                <div><h4 class="text-xs font-bold text-slate-900">Starbucks</h4><p class="text-[11px] text-slate-400">Today • 8:32 AM • Card</p></div>
-                            </div>
-                            <span class="text-xs font-bold text-rose-600">-$5.42</span>
+                    <div id="transaction-list" class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 text-center">
+                        <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-2 text-lg">
+                            <i class="fa-solid fa-receipt"></i>
                         </div>
-                        <div class="p-3.5 flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold"><i class="fa-solid fa-arrow-down text-sm"></i></div>
-                                <div><h4 class="text-xs font-bold text-slate-900">Paycheck - ACME CORP</h4><p class="text-[11px] text-slate-400">Yesterday • 9:15 AM • Direct Deposit</p></div>
-                            </div>
-                            <span class="text-xs font-bold text-emerald-600">+$2,340.00</span>
-                        </div>
+                        <p class="text-xs font-semibold text-slate-700">No recent transactions</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Your transfer history and deposits will appear here.</p>
                     </div>
                 </div>
             </div>
@@ -236,9 +229,9 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="text-[11px] uppercase tracking-wider font-semibold text-slate-400">Net Cash Flow</span>
-                            <h2 id="cf-net-amount" class="text-2xl font-extrabold text-emerald-600 mt-0.5">+$3,420.50</h2>
+                            <h2 id="cf-net-amount" class="text-2xl font-extrabold text-emerald-600 mt-0.5">+$0.00</h2>
                         </div>
-                        <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-arrow-trend-up mr-1"></i> +24.8% vs last mo</span>
+                        <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-arrow-trend-up mr-1"></i> 0.0%</span>
                     </div>
 
                     <!-- Inflow vs Outflow Bars -->
@@ -246,79 +239,20 @@
                         <div>
                             <div class="flex justify-between text-xs font-semibold mb-1">
                                 <span class="text-slate-600 flex items-center"><i class="fa-solid fa-circle-arrow-down text-emerald-500 mr-1.5"></i> Total Inflow (Income)</span>
-                                <span id="cf-inflow-total" class="text-slate-900 font-bold">$5,840.00</span>
+                                <span id="cf-inflow-total" class="text-slate-900 font-bold">$0.00</span>
                             </div>
                             <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                                <div id="cf-inflow-bar" class="bg-emerald-500 h-full rounded-full" style="width: 100%"></div>
+                                <div id="cf-inflow-bar" class="bg-emerald-500 h-full rounded-full" style="width: 0%"></div>
                             </div>
                         </div>
 
                         <div>
                             <div class="flex justify-between text-xs font-semibold mb-1">
                                 <span class="text-slate-600 flex items-center"><i class="fa-solid fa-circle-arrow-up text-rose-500 mr-1.5"></i> Total Outflow (Expenses)</span>
-                                <span id="cf-outflow-total" class="text-slate-900 font-bold">$2,419.50</span>
+                                <span id="cf-outflow-total" class="text-slate-900 font-bold">$0.00</span>
                             </div>
                             <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                                <div id="cf-outflow-bar" class="bg-rose-500 h-full rounded-full" style="width: 41.4%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Savings Health Indicator -->
-                <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-4 rounded-2xl shadow-sm flex items-center justify-between">
-                    <div>
-                        <span class="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Savings Rate</span>
-                        <h3 class="text-xl font-bold mt-0.5">58.6%</h3>
-                        <p class="text-[11px] text-blue-300 mt-0.5">Great job! You are saving above average.</p>
-                    </div>
-                    <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-blue-300 text-xl backdrop-blur-sm">
-                        <i class="fa-solid fa-piggy-bank"></i>
-                    </div>
-                </div>
-
-                <!-- Expense Categories Breakdown -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3.5">
-                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Top Expense Categories</h3>
-                    
-                    <div class="space-y-3">
-                        <div>
-                            <div class="flex justify-between text-xs mb-1 font-medium">
-                                <span class="text-slate-700 flex items-center"><i class="fa-solid fa-house-chimney text-blue-500 w-5"></i> Housing & Utilities</span>
-                                <span class="text-slate-900 font-bold">$1,200.00 <span class="text-[10px] text-slate-400 font-normal">(49.6%)</span></span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-blue-600 h-full rounded-full" style="width: 50%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between text-xs mb-1 font-medium">
-                                <span class="text-slate-700 flex items-center"><i class="fa-solid fa-cart-shopping text-amber-500 w-5"></i> Groceries & Shopping</span>
-                                <span class="text-slate-900 font-bold">$640.50 <span class="text-[10px] text-slate-400 font-normal">(26.5%)</span></span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-amber-500 h-full rounded-full" style="width: 26.5%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between text-xs mb-1 font-medium">
-                                <span class="text-slate-700 flex items-center"><i class="fa-solid fa-car text-purple-500 w-5"></i> Transport & Fuel</span>
-                                <span class="text-slate-900 font-bold">$325.00 <span class="text-[10px] text-slate-400 font-normal">(13.4%)</span></span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-purple-500 h-full rounded-full" style="width: 13.4%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between text-xs mb-1 font-medium">
-                                <span class="text-slate-700 flex items-center"><i class="fa-solid fa-film text-rose-500 w-5"></i> Entertainment & Dining</span>
-                                <span class="text-slate-900 font-bold">$254.00 <span class="text-[10px] text-slate-400 font-normal">(10.5%)</span></span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-rose-500 h-full rounded-full" style="width: 10.5%"></div>
+                                <div id="cf-outflow-bar" class="bg-rose-500 h-full rounded-full" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
@@ -335,6 +269,112 @@
             <button id="nav-insights" class="flex flex-col items-center hover:text-slate-600 focus:outline-none transition"><i class="fa-solid fa-chart-column text-lg"></i><span class="text-[10px] font-medium mt-1">Cash Flow</span></button>
             <button id="nav-more" class="flex flex-col items-center hover:text-slate-600 focus:outline-none transition"><i class="fa-solid fa-ellipsis text-lg"></i><span class="text-[10px] font-medium mt-1">More</span></button>
         </nav>
+
+        <!-- ================= SIDEBAR MENU DRAWER ================= -->
+        <div id="sidebar-overlay" class="absolute inset-0 bg-black/50 z-40 hidden transition-opacity"></div>
+        <div id="sidebar-drawer" class="absolute inset-y-0 left-0 w-72 bg-white text-slate-800 z-50 transform -translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between overflow-y-auto no-scrollbar">
+            <div>
+                <!-- Drawer Header -->
+                <div class="px-5 pt-6 pb-4 border-b border-slate-100 flex justify-between items-center">
+                    <div class="w-10 h-10 rounded-xl bg-rose-900 text-white flex items-center justify-center text-lg shadow-md">
+                        <i class="fa-solid fa-landmark"></i>
+                    </div>
+                    <button id="sidebar-close" class="text-slate-400 hover:text-slate-600 text-lg focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <!-- Drawer Content Links -->
+                <div class="px-3 py-3 space-y-6 text-xs font-semibold">
+                    
+                    <!-- MAIN Section -->
+                    <div class="space-y-1">
+                        <p class="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Main</p>
+                        
+                        <button id="menu-dashboard" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-rose-50 text-rose-900 transition">
+                            <i class="fa-solid fa-house text-sm w-5"></i>
+                            <span>Dashboard</span>
+                        </button>
+                        
+                        <button id="menu-account-summary" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-clock-rotate-left text-sm w-5 text-slate-500"></i>
+                            <span>Account Summary</span>
+                        </button>
+                        
+                        <button id="menu-transfer" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-credit-card text-sm w-5 text-slate-500"></i>
+                                <span>Transfer</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+                        </button>
+                        
+                        <button id="menu-deposit-check" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-money-bill-transfer text-sm w-5 text-slate-500"></i>
+                            <span>Deposit Check</span>
+                        </button>
+                        
+                        <button id="menu-deposit-crypto" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-brands fa-bitcoin text-sm w-5 text-slate-500"></i>
+                            <span>Deposit Crypto</span>
+                        </button>
+                    </div>
+
+                    <!-- SERVICES Section -->
+                    <div class="space-y-1">
+                        <p class="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Services</p>
+                        
+                        <button id="menu-loans" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-hand-holding-dollar text-sm w-5 text-slate-500"></i>
+                            <span>Loans</span>
+                        </button>
+                        
+                        <button id="menu-cards" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-credit-card text-sm w-5 text-slate-500"></i>
+                            <span>Cards</span>
+                        </button>
+                    </div>
+
+                    <!-- ACCOUNT Section -->
+                    <div class="space-y-1">
+                        <p class="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Account</p>
+                        
+                        <button id="menu-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-user-shield text-sm w-5 text-slate-500"></i>
+                            <span>KYC Verification</span>
+                        </button>
+                        
+                        <button id="menu-profile" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-user text-sm w-5 text-slate-500"></i>
+                            <span>Profile</span>
+                        </button>
+                        
+                        <button id="menu-settings" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-gear text-sm w-5 text-slate-500"></i>
+                            <span>Settings</span>
+                        </button>
+                        
+                        <button id="menu-account-status" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-circle-user text-sm w-5 text-slate-500"></i>
+                            <span>Account Status</span>
+                        </button>
+                        
+                        <button id="menu-support" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-headset text-sm w-5 text-slate-500"></i>
+                            <span>Support</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Drawer Footer / Sign Out -->
+            <div class="p-4 border-t border-slate-100">
+                <button id="menu-signout" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-rose-900 font-bold hover:bg-rose-50 transition text-xs">
+                    <i class="fa-solid fa-right-from-bracket text-sm w-5"></i>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </div>
+
     </div>
 
     <!-- Generic Interactive Modal Overlay -->
@@ -369,6 +409,23 @@
         const tabCashflow = document.getElementById('tab-cashflow');
         const navHome = document.getElementById('nav-home');
         const navInsights = document.getElementById('nav-insights');
+
+        const sidebarDrawer = document.getElementById('sidebar-drawer');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar(open) {
+            if (open) {
+                sidebarOverlay.classList.remove('hidden');
+                setTimeout(() => sidebarDrawer.classList.remove('-translate-x-full'), 10);
+            } else {
+                sidebarDrawer.classList.add('-translate-x-full');
+                setTimeout(() => sidebarOverlay.classList.add('hidden'), 300);
+            }
+        }
+
+        document.getElementById('btn-menu').addEventListener('click', () => toggleSidebar(true));
+        sidebarOverlay.addEventListener('click', () => toggleSidebar(false));
+        document.getElementById('sidebar-close').addEventListener('click', () => toggleSidebar(false));
 
         // Tab Switching Logic
         function switchTab(tabName) {
@@ -432,7 +489,7 @@
                 accountNumber,
                 accountType,
                 password,
-                balance: 12450.00,
+                balance: 24850.40,
                 status: 'pending',
                 createdAt: new Date().toISOString()
             }).then(() => {
@@ -492,33 +549,10 @@
 
                 document.getElementById('greeting-name').innerText = `Good morning, ${foundAccount.fullName.split(' ')[0]}`;
                 document.getElementById('balance-display').innerText = `$${Number(foundAccount.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-                document.getElementById('account-number-display').innerText = `......${foundAccount.accountNumber.slice(-4)}`;
-                document.getElementById('account-type-badge').innerText = `${foundAccount.accountType} ....${foundAccount.accountNumber.slice(-4)}`;
+                document.getElementById('account-number-display').innerText = `....${foundAccount.accountNumber.slice(-4)}`;
                 
                 viewLogin.classList.add('hidden');
             }, { onlyOnce: true });
-        });
-
-        // Dynamic Cash Flow Period Filter Simulation
-        document.getElementById('cashflow-period').addEventListener('change', (e) => {
-            const val = e.target.value;
-            const netEl = document.getElementById('cf-net-amount');
-            const inflowEl = document.getElementById('cf-inflow-total');
-            const outflowEl = document.getElementById('cf-outflow-total');
-
-            if (val === 'lastmonth') {
-                netEl.innerText = "+$2,890.00";
-                inflowEl.innerText = "$5,100.00";
-                outflowEl.innerText = "$2,210.00";
-            } else if (val === 'ytd') {
-                netEl.innerText = "+$24,580.00";
-                inflowEl.innerText = "$42,500.00";
-                outflowEl.innerText = "$17,920.00";
-            } else {
-                netEl.innerText = "+$3,420.50";
-                inflowEl.innerText = "$5,840.00";
-                outflowEl.innerText = "$2,419.50";
-            }
         });
 
         // Interactive Modal Helpers & UI Buttons
@@ -531,8 +565,9 @@
             modal.classList.remove('hidden');
         }
 
-        // Updated Transfer Modal matching the requested design
-        document.getElementById('action-transfer').addEventListener('click', () => {
+        // Transfer Modal
+        function triggerTransferModal() {
+            toggleSidebar(false);
             openModal(`
                 <div class="space-y-3">
                     <h3 class="font-bold text-slate-900 text-sm text-center mb-1">Fund Transfer</h3>
@@ -550,7 +585,6 @@
                         <label class="text-[11px] font-semibold text-slate-600 block mb-1">Source Account</label>
                         <select class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-medium focus:outline-none focus:border-blue-500">
                             <option>Checking Account (....2847)</option>
-                            <option>Savings Account (....9120)</option>
                         </select>
                     </div>
 
@@ -585,19 +619,39 @@
                     <button onclick="alert('Transfer successfully initiated!'); document.getElementById('app-modal').classList.add('hidden');" class="w-full bg-[#0b1b3d] hover:bg-blue-900 text-white py-2.5 rounded-xl text-xs font-bold transition shadow-md mt-1">Send Transfer</button>
                 </div>
             `);
-        });
+        }
+
+        document.getElementById('action-transfer').addEventListener('click', triggerTransferModal);
+        document.getElementById('menu-transfer').addEventListener('click', triggerTransferModal);
+
+        // Sidebar Navigation Links Functionality
+        document.getElementById('menu-dashboard').addEventListener('click', () => { toggleSidebar(false); switchTab('home'); });
+        document.getElementById('menu-account-summary').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="space-y-2 text-xs"><h3 class="font-bold text-sm mb-2">Account Summary</h3><p>Checking Account: <strong>$24,850.40</strong></p><p class="text-slate-400 mt-2">Account active and in good standing.</p></div>`); });
+        
+        document.getElementById('menu-deposit-check').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">Deposit Check</h3><p class="text-xs text-slate-500 mb-3">Upload your scanned front & back check photos.</p><button onclick="alert('Check submitted for review!'); document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-blue-900 text-white py-2 rounded-xl text-xs font-bold">Upload Photos</button></div>`); });
+        document.getElementById('menu-deposit-crypto').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">Deposit Crypto</h3><p class="text-xs text-slate-500 mb-2">Send USDT/BTC to your dedicated vault address.</p><div class="bg-slate-100 p-2 rounded-xl text-[10px] font-mono select-all mb-3 text-slate-700">0x71C...39a8B</div><button onclick="alert('Deposit address copied!'); document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-blue-900 text-white py-2 rounded-xl text-xs font-bold">Copy Address</button></div>`); });
+        
+        document.getElementById('menu-loans').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">Loans & Credit</h3><p class="text-xs text-slate-500 mb-3">Pre-qualified for Personal Loan up to $25,000.</p><button onclick="alert('Loan application started'); document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-blue-900 text-white py-2 rounded-xl text-xs font-bold">Apply Now</button></div>`); });
+        document.getElementById('menu-cards').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-center"><h3 class="font-bold text-sm mb-2">Card Management</h3><p class="text-xs text-slate-500 mb-3">Platinum Debit Card Active.</p><button onclick="alert('Card locked'); document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-slate-100 text-slate-800 py-2 rounded-xl font-bold text-xs">Lock Card</button></div>`); });
+        
+        document.getElementById('menu-kyc').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">KYC Verification</h3><p class="text-xs text-emerald-600 font-semibold mb-3"><i class="fa-solid fa-circle-check mr-1"></i> Level 2 Verified (Fully Approved)</p><p class="text-[11px] text-slate-400">Government ID & Proof of Address verified.</p></div>`); });
+        document.getElementById('menu-profile').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-xs space-y-2"><h3 class="font-bold text-sm mb-2">Profile Details</h3><p><strong>Name:</strong> Alex Morgan</p><p><strong>Email:</strong> alex@example.com</p><p><strong>Phone:</strong> +1 (555) 382-9100</p></div>`); });
+        document.getElementById('menu-settings').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-xs space-y-2"><h3 class="font-bold text-sm mb-2">Settings</h3><p><label><input type="checkbox" checked class="mr-2"> Push Notifications</label></p><p><label><input type="checkbox" checked class="mr-2"> Biometric FaceID Login</label></p></div>`); });
+        document.getElementById('menu-account-status').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">Account Status</h3><p class="text-xs text-emerald-600 font-bold mb-2">Active & Good Standing</p><p class="text-[11px] text-slate-500">No restrictions or flags on your account.</p></div>`); });
+        document.getElementById('menu-support').addEventListener('click', () => { toggleSidebar(false); openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">Customer Support</h3><p class="text-xs text-slate-500 mb-3">Reach out 24/7 to our dedicated banking agents.</p><button onclick="alert('Live chat connecting...'); document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-blue-900 text-white py-2 rounded-xl text-xs font-bold">Start Live Chat</button></div>`); });
+        
+        document.getElementById('menu-signout').addEventListener('click', () => { toggleSidebar(false); location.reload(); });
 
         document.getElementById('action-billpay').addEventListener('click', () => { openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">Bill Payment</h3><p class="text-xs text-slate-500 mb-3">All utility bills are up to date.</p><button onclick="document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-blue-900 text-white py-2 rounded-xl text-xs font-bold">Close</button></div>`); });
-        document.getElementById('action-deposit').addEventListener('click', () => { openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">Deposit Check</h3><p class="text-xs text-slate-500 mb-3">Upload your scanned check images to process deposit.</p><button onclick="alert('Submitted!'); document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-blue-900 text-white py-2 rounded-xl text-xs font-bold">Upload Check</button></div>`); });
+        document.getElementById('action-deposit').addEventListener('click', () => { document.getElementById('menu-deposit-check').click(); });
         document.getElementById('action-statements').addEventListener('click', () => { openModal(`<div class="text-center"><h3 class="font-bold text-base mb-2">Statements</h3><p class="text-xs text-slate-500 mb-3">Latest PDF statements ready for download.</p><button onclick="alert('Downloading statement PDF...'); document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-blue-900 text-white py-2 rounded-xl text-xs font-bold">Download PDF</button></div>`); });
-        document.getElementById('btn-menu').addEventListener('click', () => { openModal(`<div class="space-y-2 text-xs"><h3 class="font-bold text-sm border-b pb-2">Menu</h3><p class="cursor-pointer hover:text-blue-600" onclick="window.location.href='admin.html'">Admin Panel</p><p class="cursor-pointer hover:text-blue-600" onclick="location.reload()">Sign Out</p></div>`); });
         document.getElementById('btn-notifications').addEventListener('click', () => { openModal(`<div class="space-y-2 text-xs"><h3 class="font-bold text-sm mb-2">Notifications</h3><p>Your account is active and secure.</p></div>`); });
-        document.getElementById('btn-profile').addEventListener('click', () => { openModal(`<div class="text-center space-y-2"><h3 class="font-bold text-sm">Account Settings</h3><button onclick="location.reload()" class="w-full bg-rose-50 text-rose-600 py-2 rounded-xl font-bold text-xs">Sign Out</button></div>`); });
-        document.getElementById('btn-view-all').addEventListener('click', () => { openModal(`<div class="text-xs space-y-2"><h3 class="font-bold text-sm mb-2">All Transactions</h3><p>Starbucks (-$5.42)</p><p>Paycheck (+$2,340.00)</p></div>`); });
+        document.getElementById('btn-profile').addEventListener('click', () => { document.getElementById('menu-profile').click(); });
+        document.getElementById('btn-view-all').addEventListener('click', () => { openModal(`<div class="text-xs space-y-2 text-center py-4"><p class="text-slate-400">No transaction records found.</p></div>`); });
         
-        document.getElementById('nav-pay').addEventListener('click', () => document.getElementById('action-transfer').click());
-        document.getElementById('nav-cards').addEventListener('click', () => openModal(`<div class="text-center"><h3 class="font-bold text-sm mb-2">Card Management</h3><p class="text-xs text-slate-500 mb-3">Platinum Debit Card Active.</p><button onclick="alert('Card locked'); document.getElementById('app-modal').classList.add('hidden')" class="w-full bg-slate-100 text-slate-800 py-2 rounded-xl font-bold text-xs">Lock Card</button></div>`));
-        document.getElementById('nav-more').addEventListener('click', () => document.getElementById('btn-menu').click());
+        document.getElementById('nav-pay').addEventListener('click', triggerTransferModal);
+        document.getElementById('nav-cards').addEventListener('click', () => document.getElementById('menu-cards').click());
+        document.getElementById('nav-more').addEventListener('click', () => toggleSidebar(true));
     </script>
 </body>
 </html>
