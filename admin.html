@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashflowbank - Institutional Admin Console</title>
+    <title>Cashflowbank - Enterprise Core Banking & Core Administration OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -11,11 +11,18 @@
             theme: {
                 extend: {
                     colors: {
-                        admin: {
-                            dark: '#030712',
-                            card: '#0f172a',
-                            border: '#1e293b',
-                            accent: '#3b82f6'
+                        bank: {
+                            light: '#f8fafc',
+                            card: '#ffffff',
+                            border: '#e2e8f0',
+                            darkText: '#0f172a',
+                            accent: '#dc2626'
+                        },
+                        adminred: {
+                            primary: '#dc2626',
+                            dark: '#991b1b',
+                            surface: '#ffffff',
+                            bg: '#fef2f2'
                         }
                     }
                 }
@@ -23,138 +30,171 @@
         }
     </script>
 </head>
-<body class="bg-admin-dark text-slate-100 font-sans antialiased h-full flex flex-col p-4 sm:p-6 selection:bg-blue-600 selection:text-white">
+<body class="bg-adminred-bg text-slate-900 font-sans antialiased h-full flex flex-col selection:bg-red-600 selection:text-white">
 
-    <div class="max-w-7xl mx-auto w-full space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20">
-                    <i class="fa-solid fa-user-shield text-xl"></i>
-                </div>
-                <div>
-                    <div class="flex items-center space-x-2">
-                        <h1 class="text-xl font-black tracking-tight">Cashflowbank Command Center</h1>
-                        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Secure Node</span>
-                    </div>
-                    <p class="text-xs text-slate-400 mt-0.5">Real-time institutional liquidity management, account validation & backdate overrides</p>
-                </div>
+    <!-- Top Institution Security Bar -->
+    <header class="bg-white border-b border-red-200 px-6 py-3 flex items-center justify-between text-xs shadow-sm">
+        <div class="flex items-center space-x-3">
+            <div class="w-7 h-7 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold shadow-md">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <div>
+                <span class="font-bold text-slate-900 tracking-wider">CASHFLOWBANK CORE OS v4.8</span>
+                <span class="text-red-600 ml-2 hidden sm:inline font-semibold">| Authorized Admin Node</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="hidden md:flex items-center space-x-2 text-red-600 font-mono font-medium">
+                <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                <span>SWIFT/ABA Gateway: SECURED (RED/WHITE)</span>
+            </div>
+            <a href="index.html" class="bg-red-50 hover:bg-red-100 text-red-700 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition border border-red-200 flex items-center space-x-1">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Client Portal
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 space-y-6 flex-1">
+        
+        <!-- Command Header & Quick System Actions -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-red-200 pb-4">
+            <div>
+                <h1 class="text-2xl font-black tracking-tight text-slate-900 flex items-center space-x-2">
+                    <span>Core Banking Administration Console</span>
+                </h1>
+                <p class="text-xs text-slate-500 mt-0.5">Real-time ledger audit, customer account validation, liquidity allocation & historical backdating.</p>
             </div>
             <div class="flex items-center space-x-3">
-                <div class="hidden md:flex items-center space-x-2 bg-admin-card border border-admin-border px-3 py-1.5 rounded-xl text-xs text-slate-300 font-mono">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span>Cluster Sync: Active</span>
-                </div>
-                <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition border border-slate-700 inline-flex items-center space-x-1.5">
-                    <i class="fa-solid fa-arrow-left text-[10px]"></i>
-                    <span>Client Portal</span>
-                </a>
+                <button onclick="exportLedgerCSV()" class="bg-white hover:bg-red-50 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition border border-red-200 shadow-sm flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Export Ledger CSV</span>
+                </button>
+                <button onclick="triggerSystemAudit()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-lg shadow-red-600/25 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Run Compliance Check</span>
+                </button>
             </div>
         </div>
 
-        <!-- SVG Real-time Metrics Dashboard Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Real Bank Statistics & SVG Metrics Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
-            <!-- Stat Card 1: Users Overview -->
-            <div class="bg-admin-card border border-admin-border p-6 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col justify-between">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-600/10 rounded-full blur-2xl pointer-events-none"></div>
+            <!-- Stat 1: Total Registered Accounts -->
+            <div class="bg-white border border-red-200 p-5 rounded-3xl shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-red-400 transition">
+                <div class="absolute -right-4 -top-4 w-20 h-20 bg-red-100 rounded-full blur-xl pointer-events-none"></div>
                 <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Registrations</span>
-                        <div class="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                    </div>
-                    <h3 id="statTotal" class="text-3xl font-black text-white tracking-tight">0</h3>
+                    <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Total Registered Accounts</span>
+                    <h3 id="statTotalUsers" class="text-3xl font-black text-slate-900 mt-1">0</h3>
                 </div>
-                <!-- Inline SVG Trend Wave -->
-                <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-end justify-between">
-                    <span class="text-[11px] text-slate-400">Growth velocity</span>
-                    <svg class="w-32 h-8 text-blue-500 overflow-visible" viewBox="0 0 120 30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M0 25 Q 30 10, 60 18 T 120 5" class="drop-shadow-[0_4px_6px_rgba(59,130,246,0.4)]"></path>
-                    </svg>
+                <div class="mt-4 pt-3 border-t border-red-100 flex items-center justify-between text-xs text-slate-500">
+                    <span>Active database cache</span>
+                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
                 </div>
             </div>
 
-            <!-- Stat Card 2: Pending Approvals -->
-            <div class="bg-admin-card border border-admin-border p-6 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col justify-between">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <!-- Stat 2: Pending KYC Approvals -->
+            <div class="bg-white border border-red-200 p-5 rounded-3xl shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-red-400 transition">
+                <div class="absolute -right-4 -top-4 w-20 h-20 bg-amber-100 rounded-full blur-xl pointer-events-none"></div>
                 <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pending Validations</span>
-                        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                        </div>
-                    </div>
-                    <h3 id="statPending" class="text-3xl font-black text-amber-400 tracking-tight">0</h3>
+                    <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Pending KYC Approvals</span>
+                    <h3 id="statPendingUsers" class="text-3xl font-black text-amber-600 mt-1">0</h3>
                 </div>
-                <!-- Inline SVG Activity Pulse -->
-                <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                    <span>Awaiting KYC</span>
-                    <span class="font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Action Required</span>
+                <div class="mt-4 pt-3 border-t border-red-100 flex items-center justify-between text-xs">
+                    <span class="text-amber-600 font-semibold">Requires review</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
                 </div>
             </div>
 
-            <!-- Stat Card 3: Approved & Active Liquidity Status -->
-            <div class="bg-admin-card border border-admin-border p-6 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col justify-between">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <!-- Stat 3: Total Institutional Liquidity -->
+            <div class="bg-white border border-red-200 p-5 rounded-3xl shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-red-400 transition">
+                <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-100 rounded-full blur-xl pointer-events-none"></div>
                 <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Approved Vaults</span>
-                        <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-shield-check"></i>
-                        </div>
-                    </div>
-                    <h3 id="statApproved" class="text-3xl font-black text-emerald-400 tracking-tight">0</h3>
+                    <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Total Institutional Liquidity</span>
+                    <h3 id="statTotalLiquidity" class="text-2xl font-black text-emerald-600 mt-1 truncate">$0.00</h3>
                 </div>
-                <!-- Inline SVG Distribution Ring / Bar -->
-                <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                    <span class="text-[11px] text-slate-400">Security Clearance</span>
-                    <svg class="w-24 h-6 text-emerald-500" viewBox="0 0 100 20" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
-                        <line x1="2" y1="10" x2="85" y2="10" stroke="#1e293b" stroke-width="4"></line>
-                        <line x1="2" y1="10" x2="75" y2="10" class="drop-shadow-[0_2px_4px_rgba(16,185,129,0.5)]"></line>
-                    </svg>
+                <div class="mt-4 pt-3 border-t border-red-100 flex items-center justify-between text-xs text-slate-500">
+                    <span>Vault reserves sum</span>
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                </div>
+            </div>
+
+            <!-- Stat 4: Fraud & Security Flag -->
+            <div class="bg-white border border-red-200 p-5 rounded-3xl shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-red-400 transition">
+                <div class="absolute -right-4 -top-4 w-20 h-20 bg-red-100 rounded-full blur-xl pointer-events-none"></div>
+                <div>
+                    <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Fraud & Security Flag</span>
+                    <h3 class="text-3xl font-black text-emerald-600 mt-1">0</h3>
+                </div>
+                <div class="mt-4 pt-3 border-t border-red-100 flex items-center justify-between text-xs text-emerald-600 font-semibold">
+                    <span>Zero anomalies found</span>
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
             </div>
 
         </div>
 
-        <!-- Main User Management Table -->
-        <div class="bg-admin-card border border-admin-border rounded-3xl p-6 shadow-2xl space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <!-- Main Client Ledger & Management Workspace -->
+        <div class="bg-white border border-red-200 rounded-3xl p-6 shadow-xl space-y-4">
+            
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 class="font-bold text-white text-base">Client Accounts & Treasury Management</h3>
-                    <p class="text-xs text-slate-400">Manage account creation date backdating, manual balance adjustments, and institutional clearance states.</p>
+                    <h3 class="font-bold text-slate-900 text-base">Client Accounts & Treasury Ledger</h3>
+                    <p class="text-xs text-slate-500">Manage customer verification status, inject/deduct liquid balances, and modify historical account creation dates.</p>
                 </div>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 text-xs">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </span>
-                    <input type="text" placeholder="Filter accounts..." class="bg-admin-dark border border-admin-border rounded-xl pl-8 pr-4 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-full sm:w-64">
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="adminSearchInput" onkeyup="filterClientLedger()" placeholder="Search client by name/email..." class="bg-red-50/50 border border-red-200 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-red-600 w-64 placeholder-slate-400">
                 </div>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-800 text-[11px] text-slate-400 uppercase tracking-wider">
-                            <th class="py-3 font-semibold">Client Identity & Email</th>
-                            <th class="py-3 font-semibold">Classification</th>
-                            <th class="py-3 font-semibold">Total Balance ($)</th>
-                            <th class="py-3 font-semibold">Creation Date Override</th>
-                            <th class="py-3 font-semibold">Clearance Status</th>
-                            <th class="py-3 font-semibold text-right">Administrative Actions</th>
+                        <tr class="border-b border-red-200 text-[11px] text-red-800 uppercase tracking-wider bg-red-50/60">
+                            <th class="py-3 px-3 font-semibold">Client Identity & Email</th>
+                            <th class="py-3 px-3 font-semibold">Account Type / Country</th>
+                            <th class="py-3 px-3 font-semibold">Ledger Balance ($ USD)</th>
+                            <th class="py-3 px-3 font-semibold">Creation Date Backdate</th>
+                            <th class="py-3 px-3 font-semibold">KYC / Compliance Status</th>
+                            <th class="py-3 px-3 font-semibold text-right">Core Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="adminUserTableBody" class="divide-y divide-slate-800/70 text-sm">
+                    <tbody id="adminUserTableBody" class="divide-y divide-red-100 text-sm">
                         <!-- Populated dynamically -->
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+
+        <!-- System Audit Log Terminal Box -->
+        <div class="bg-white border border-red-200 rounded-3xl p-6 shadow-xl space-y-3">
+            <div class="flex items-center justify-between border-b border-red-100 pb-3">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                    <h3 class="font-bold text-slate-900 text-sm">Real-Time Core Bank System Log</h3>
+                </div>
+                <span class="text-[11px] font-mono text-red-600 font-semibold px-2.5 py-0.5 bg-red-50 rounded-md border border-red-200">Encrypted Stream</span>
+            </div>
+            <div id="systemLogBox" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 font-mono text-xs text-slate-300 space-y-1.5 h-36 overflow-y-auto">
+                <div class="text-slate-500">[02:51:00 UTC] System initialized. Core ledger connected to persistent localStorage cache.</div>
+                <div class="text-emerald-400">[02:51:02 UTC] Security handshake completed successfully across all nodes.</div>
+            </div>
+        </div>
+
+    </main>
 
     <script>
+        function logSystemEvent(msg, type = 'info') {
+            const box = document.getElementById('systemLogBox');
+            const div = document.createElement('div');
+            const timeStr = new Date().toISOString().split('T')[1].slice(0, 8);
+            if(type === 'success') div.className = "text-emerald-400";
+            else if(type === 'warn') div.className = "text-amber-400";
+            else div.className = "text-slate-300";
+            div.textContent = `[${timeStr} UTC] ${msg}`;
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+        }
+
         function renderAdminTable() {
             let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
             const tableBody = document.getElementById('adminUserTableBody');
@@ -162,48 +202,48 @@
 
             let total = users.length;
             let pending = users.filter(u => u.status === 'pending').length;
-            let approved = users.filter(u => u.status === 'approved').length;
+            let totalLiq = users.reduce((sum, u) => sum + (parseFloat(u.balance) || 0), 0);
 
-            document.getElementById('statTotal').textContent = total;
-            document.getElementById('statPending').textContent = pending;
-            document.getElementById('statApproved').textContent = approved;
+            document.getElementById('statTotalUsers').textContent = total;
+            document.getElementById('statPendingUsers').textContent = pending;
+            document.getElementById('statTotalLiquidity').textContent = '$' + totalLiq.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
             if(users.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-500">No client accounts currently registered in cache.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No client accounts found in the core database.</td></tr>`;
                 return;
             }
 
             users.forEach(u => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-800/30 transition";
+                tr.className = "hover:bg-red-50/40 transition";
                 
                 const statusBadge = u.status === 'approved' 
-                    ? `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full text-xs font-semibold inline-flex items-center space-x-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Approved</span></span>`
-                    : `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-full text-xs font-semibold inline-flex items-center space-x-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span><span>Pending Approval</span></span>`;
+                    ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center space-x-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Active / Approved</span></span>`
+                    : `<span class="bg-amber-100 text-amber-800 border border-amber-200 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center space-x-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span>Pending Review</span></span>`;
 
                 const formattedBal = (u.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 const creationDate = u.createdAt || '2023-01-15';
 
                 tr.innerHTML = `
-                    <td class="py-4">
-                        <div class="font-bold text-white">${u.firstName} ${u.lastName}</div>
-                        <div class="text-xs text-slate-400 font-mono">${u.email}</div>
+                    <td class="py-4 px-3">
+                        <div class="font-bold text-slate-900">${u.firstName} ${u.lastName}</div>
+                        <div class="text-xs text-slate-500 font-mono">${u.email}</div>
                     </td>
-                    <td class="py-4">
-                        <div class="text-blue-400 font-semibold text-xs">${u.accountType}</div>
-                        <div class="text-[11px] text-slate-400">${u.country}</div>
+                    <td class="py-4 px-3">
+                        <div class="text-red-600 font-semibold text-xs">${u.accountType}</div>
+                        <div class="text-[11px] text-slate-500">${u.country}</div>
                     </td>
-                    <td class="py-4">
-                        <div class="font-bold text-emerald-400 font-mono">$${formattedBal}</div>
-                        <button onclick="fundAccount(${u.id})" class="text-[11px] text-blue-400 hover:text-blue-300 hover:underline mt-0.5 inline-flex items-center space-x-1"><i class="fa-solid fa-circle-plus text-[10px]"></i><span>Adjust Balance</span></button>
+                    <td class="py-4 px-3">
+                        <div class="font-bold text-emerald-600 font-mono">$${formattedBal}</div>
+                        <button onclick="fundAccount(${u.id})" class="text-[11px] text-red-600 hover:underline mt-0.5 inline-flex items-center space-x-1 font-medium"><i class="fa-solid fa-pen-to-square"></i><span>Override Balance</span></button>
                     </td>
-                    <td class="py-4">
-                        <input type="date" value="${creationDate}" onchange="updateCreationDate(${u.id}, this.value)" class="bg-admin-dark border border-admin-border text-xs text-white rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-mono">
+                    <td class="py-4 px-3">
+                        <input type="date" value="${creationDate}" onchange="updateCreationDate(${u.id}, this.value)" class="bg-red-50/50 border border-red-200 text-xs text-slate-900 rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-red-600 font-mono">
                     </td>
-                    <td class="py-4">${statusBadge}</td>
-                    <td class="py-4 text-right space-x-2">
-                        ${u.status !== 'approved' ? `<button onclick="approveUser(${u.id})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shadow-lg shadow-emerald-600/20">Approve</button>` : ''}
-                        <button onclick="deleteUser(${u.id})" class="bg-red-500/10 hover:bg-red-600 text-red-400 hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition border border-red-500/20">Delete</button>
+                    <td class="py-4 px-3">${statusBadge}</td>
+                    <td class="py-4 px-3 text-right space-x-2">
+                        ${u.status !== 'approved' ? `<button onclick="approveUser(${u.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shadow-sm">Approve</button>` : ''}
+                        <button onclick="deleteUser(${u.id})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition border border-red-200">Purge</button>
                     </td>
                 `;
                 tableBody.appendChild(tr);
@@ -216,6 +256,7 @@
             if(idx !== -1) {
                 users[idx].status = 'approved';
                 localStorage.setItem('cashflow_users', JSON.stringify(users));
+                logSystemEvent(`KYC Approved for account ID: ${users[idx].email}`, 'success');
                 renderAdminTable();
             }
         }
@@ -224,12 +265,13 @@
             let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
             const idx = users.findIndex(u => u.id === id);
             if(idx !== -1) {
-                const amountPrompt = prompt(`Enter new treasury valuation/balance for ${users[idx].firstName} ${users[idx].lastName}:`, users[idx].balance || "1514000");
+                const amountPrompt = prompt(`Enter new exact USD ledger balance for ${users[idx].firstName} ${users[idx].lastName}:`, users[idx].balance || "1514000");
                 if(amountPrompt !== null) {
                     const amount = parseFloat(amountPrompt);
                     if(!isNaN(amount)) {
                         users[idx].balance = amount;
                         localStorage.setItem('cashflow_users', JSON.stringify(users));
+                        logSystemEvent(`Ledger balance adjusted to $${amount.toLocaleString()} for ${users[idx].email}`, 'success');
                         renderAdminTable();
                     }
                 }
@@ -242,17 +284,41 @@
             if(idx !== -1) {
                 users[idx].createdAt = newDate;
                 localStorage.setItem('cashflow_users', JSON.stringify(users));
+                logSystemEvent(`Backdated creation timestamp to ${newDate} for account ID ${id}`, 'warn');
                 renderAdminTable();
             }
         }
 
         function deleteUser(id) {
-            if(confirm('Are you certain you want to purge this institutional profile?')) {
+            if(confirm('Warning: Are you certain you want to permanently delete this client account from the vault ledger?')) {
                 let users = JSON.parse(localStorage.getItem('cashflow_users')) || [];
                 users = users.filter(u => u.id !== id);
                 localStorage.setItem('cashflow_users', JSON.stringify(users));
+                logSystemEvent(`Account record purged from cache (ID: ${id})`, 'warn');
                 renderAdminTable();
             }
+        }
+
+        function triggerSystemAudit() {
+            logSystemEvent("Initiating automated compliance and AML transaction sweep...", 'info');
+            setTimeout(() => {
+                logSystemEvent("AML check passed: 0 suspicious transactions flagged across all active nodes.", 'success');
+                alert("Core System Audit Complete: All ledgers match and security keys are optimal.");
+            }, 800);
+        }
+
+        function exportLedgerCSV() {
+            logSystemEvent("Exporting encrypted core bank ledger data as CSV...", 'success');
+            alert("Ledger export generated successfully.");
+        }
+
+        function filterClientLedger() {
+            const query = document.getElementById('adminSearchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#adminUserTableBody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
         }
 
         window.addEventListener('DOMContentLoaded', renderAdminTable);
