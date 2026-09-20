@@ -425,7 +425,7 @@
         <div id="recHeaderIcon" class="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2.5 shadow-lg shadow-amber-500/30">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
-        <h3 id="recHeaderTitle" class="font-black text-lg text-slate-900 tracking-tight">Transfer Pending Approval</h3>
+        <h3 id="recHeaderTitle" class="font-black text-lg text-slate-900 tracking-tight">Transfer Pending</h3>
         <p class="text-xs text-slate-400 mt-0.5">Cash Flow Bank Official Transaction Receipt</p>
       </div>
 
@@ -433,7 +433,7 @@
       <div class="py-4 text-center bg-slate-50 rounded-2xl my-4 border border-slate-100">
         <p class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Total Transfer Amount</p>
         <p class="text-3xl font-black text-slate-900 mt-1 font-mono" id="recAmount">$0.00</p>
-        <span id="recBadge" class="inline-block mt-2 bg-amber-100 text-amber-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Pending Admin Approval</span>
+        <span id="recBadge" class="inline-block mt-2 bg-amber-100 text-amber-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Pending</span>
       </div>
 
       <!-- Detailed Breakdown -->
@@ -538,7 +538,7 @@
         let listHtml = `<div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">`;
         
         if (pendingList.length > 0) {
-          listHtml += `<p class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider">Pending Approvals</p>`;
+          listHtml += `<p class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider">Pending</p>`;
           pendingList.slice().reverse().forEach(p => {
             listHtml += `
               <div class="flex justify-between items-center bg-amber-50/70 p-3 rounded-xl border border-amber-200">
@@ -548,7 +548,7 @@
                   </div>
                   <div>
                     <p class="font-bold text-slate-900 text-xs">${p.title}</p>
-                    <p class="text-[10px] text-amber-700 font-semibold">${p.date} • Pending Admin Approval</p>
+                    <p class="text-[10px] text-amber-700 font-semibold">${p.date} • Pending</p>
                   </div>
                 </div>
                 <span class="font-bold font-mono text-amber-700 text-xs">-$${parseFloat(p.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
@@ -722,7 +722,7 @@
 
         document.getElementById('loginAccNo').value = accNo;
         showPage('login');
-        showAlert(`Application submitted successfully! Your Account Number is ${accNo}. Status: PENDING approval.`, 'warning');
+        showAlert(`Application submitted successfully! Your Account Number is ${accNo}. Status: PENDING.`, 'warning');
       } catch (err) {
         showAlert('Error: ' + err.message);
       }
@@ -748,7 +748,7 @@
         if (currentUserData.pass !== pass) { showAlert('Incorrect password entered.'); return; }
 
         if (currentUserData.status === 'PENDING') {
-          showAlert('Your account registration is currently PENDING administrative review.', 'warning');
+          showAlert('Your account registration is currently PENDING review.', 'warning');
           return;
         }
 
@@ -859,7 +859,7 @@
               </div>
               <div>
                 <p class="font-bold text-slate-900">${p.title}</p>
-                <p class="text-[10px] text-amber-700 font-bold">Pending Admin Approval</p>
+                <p class="text-[10px] text-amber-700 font-bold">Pending</p>
               </div>
             </div>
             <span class="font-bold text-amber-700 font-mono">-$${parseFloat(p.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
@@ -976,7 +976,7 @@
 
       const btn = document.getElementById('trSubmitBtn');
       btn.disabled = true;
-      btn.textContent = 'Submitting for Approval...';
+      btn.textContent = 'Submitting...';
 
       try {
         const formattedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -1017,8 +1017,8 @@
         document.getElementById('recRecipient').textContent = recipient;
         document.getElementById('recBank').textContent = bank;
         document.getElementById('recAccNo').textContent = maskedAcc;
-        document.getElementById('recHeaderTitle').textContent = "Transfer Pending Approval";
-        document.getElementById('recBadge').textContent = "Pending Admin Approval";
+        document.getElementById('recHeaderTitle').textContent = "Transfer Pending";
+        document.getElementById('recBadge').textContent = "Pending";
         document.getElementById('recBadge').className = "inline-block mt-2 bg-amber-100 text-amber-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider";
         document.getElementById('recHeaderIcon').className = "w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2.5 shadow-lg shadow-amber-500/30";
 
