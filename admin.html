@@ -43,7 +43,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 class="text-2xl font-bold text-white tracking-tight">Registered Client Accounts</h1>
-                        <p class="text-xs text-gray-400 mt-1">Manage platform users, approve or decline profiles, update balances, backdate timestamps, or delete accounts.</p>
+                        <p class="text-xs text-gray-400 mt-1">Manage platform users, approve or decline profiles, update balances, configure daily limits, or delete accounts.</p>
                     </div>
                     <button onclick="loadAdminClients()" class="bg-slate-900 hover:bg-slate-800 text-gray-200 text-xs px-4 py-2.5 rounded-xl font-semibold transition flex items-center space-x-2 border border-slate-800 shadow-sm">
                         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -60,12 +60,13 @@
                                     <th class="py-3.5 px-6">Email / Type</th>
                                     <th class="py-3.5 px-6">Created (Backdate)</th>
                                     <th class="py-3.5 px-6">Balance ($)</th>
+                                    <th class="py-3.5 px-6">Daily Limit ($)</th>
                                     <th class="py-3.5 px-6">Status</th>
                                     <th class="py-3.5 px-6 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-clients-table-body" class="divide-y divide-slate-800/60 text-gray-300">
-                                <tr><td colspan="6" class="py-12 text-center text-gray-500 text-xs">Loading clients database...</td></tr>
+                                <tr><td colspan="7" class="py-12 text-center text-gray-500 text-xs">Loading clients database...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -198,7 +199,7 @@
                 tbody.innerHTML = '';
 
                 if (querySnapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-gray-500 text-xs">No client accounts found.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="7" class="py-12 text-center text-gray-500 text-xs">No client accounts found.</td></tr>`;
                     hideLoading();
                     return;
                 }
@@ -209,6 +210,8 @@
                                         client.status === 'Frozen' ? 'text-blue-400 bg-blue-950/60 border-blue-800/80' :
                                         client.status === 'Declined' ? 'text-red-400 bg-red-950/60 border-red-800/80' :
                                         'text-yellow-400 bg-yellow-950/60 border-yellow-800/80';
+
+                    const dailyLimit = client.dailyLimit !== undefined ? client.dailyLimit : 10000.00;
 
                     tbody.innerHTML += `
                         <tr class="hover:bg-slate-800/40 transition">
@@ -229,6 +232,9 @@
                             <td class="py-4 px-6 font-mono font-semibold text-emerald-400 text-xs">
                                 $<span id="bal-${client.accountNumber}">${Number(client.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
                             </td>
+                            <td class="py-4 px-6 font-mono font-semibold text-indigo-400 text-xs">
+                                $<span id="limit-${client.accountNumber}">${Number(dailyLimit).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                            </td>
                             <td class="py-4 px-6">
                                 <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide uppercase border ${statusColor}">${client.status || 'Active'}</span>
                             </td>
@@ -244,6 +250,9 @@
                                 </button>
                                 <button onclick="adminEditBalance('${client.accountNumber}', ${client.balance})" class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold rounded-lg transition shadow">
                                     Edit Bal
+                                </button>
+                                <button onclick="adminEditLimit('${client.accountNumber}', ${dailyLimit})" class="px-2.5 py-1 bg-indigo-700 hover:bg-indigo-600 text-white text-xs font-semibold rounded-lg transition shadow">
+                                    Edit Limit
                                 </button>
                                 <button onclick="adminDeleteAccount('${client.accountNumber}', '${client.clientName}')" class="px-2.5 py-1 bg-red-800 hover:bg-red-900 text-white text-xs font-semibold rounded-lg transition shadow">
                                     Delete
@@ -321,6 +330,24 @@
             }
         };
 
+        window.adminEditLimit = async function(accountNumber, currentLimit) {
+            const newLimitStr = prompt(`Enter new daily transfer limit for account ${accountNumber}:`, currentLimit);
+            if (newLimitStr === null) return;
+            const newLimit = parseFloat(newLimitStr);
+            if (isNaN(newLimit) || newLimit < 0) { alert("Invalid limit entered."); return; }
+
+            showLoading("Updating daily limit...");
+            try {
+                await setDoc(doc(db, "clients", accountNumber), { dailyLimit: newLimit }, { merge: true });
+                hideLoading();
+                loadAdminClients();
+                alert("Daily limit updated successfully!");
+            } catch (err) {
+                hideLoading();
+                alert("Daily limit update failed.");
+            }
+        };
+
         window.adminDeleteAccount = async function(accountNumber, clientName) {
             const confirmed = confirm(`Are you sure you want to permanently delete the account for ${clientName} (${accountNumber})? This action cannot be undone.`);
             if (!confirmed) return;
@@ -347,6 +374,7 @@
             const amount = parseFloat(document.getElementById('transfer-amount').value);
             const enteredPin = document.getElementById('transfer-pin').value.trim();
 
+            let clientDailyLimit = 10000.00;
             if (typeof currentUserData !== 'undefined') {
                 if (enteredPin !== currentUserData.pin) {
                     alert("Incorrect Security PIN.");
@@ -356,9 +384,12 @@
                     alert("Invalid amount or insufficient funds."); 
                     return; 
                 }
+                if (currentUserData.dailyLimit !== undefined) {
+                    clientDailyLimit = currentUserData.dailyLimit;
+                }
             }
-            if (amount > 10000.00) {
-                alert("Transfer amount exceeds the $10,000.00 single transaction limit.");
+            if (amount > clientDailyLimit) {
+                alert(`Transfer amount exceeds the $${clientDailyLimit.toLocaleString(undefined, {minimumFractionDigits: 2})} single/daily transaction limit.`);
                 return;
             }
 
